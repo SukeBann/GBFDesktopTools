@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7CA4BA35-709B-4A9A-AAB0-1432C9CB5BCB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GBFDesktopTools.Model</RootNamespace>
+    <AssemblyName>GBFDesktopTools.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Aspose.Cells">
+      <HintPath>..\..\project\Code\TempTest\TempTest\Aspose.Cells.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Library\ExcelReader.cs" />
+    <Compile Include="ToolAndHelper\DownLoadMessage.cs" />
+    <Compile Include="Models\Abstract\GBFMessageAbstractModel.cs" />
+    <Compile Include="Models\Abstract\Model.cs" />
+    <Compile Include="ToolAndHelper\Helper.cs" />
+    <Compile Include="ToolAndHelper\ObjectResult.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Models\Weapon\SkillMethod.cs" />
+    <Compile Include="Models\Weapon\SkillTarget.cs" />
+    <Compile Include="Models\Weapon\Weapon.cs" />
+    <Compile Include="Models\Weapon\WeaponSkill.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\Character\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Excel\WeaponSkill.xls">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Include="Resources\Excel\召唤石列表.xlsx" />
+    <EmbeddedResource Include="Resources\Excel\武器列表.xls">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Include="Resources\Excel\武器列表.xlsx" />
+    <None Include="Resources\Excel\角色列表.xlsx" />
+    <None Include="Resources\Excel\角色档案.xlsx" />
+    <None Include="Resources\Icon\CharacterSkill.rar" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Gif\Loading.gif" />
+    <Content Include="Resources\Gif\Loading2.gif" />
+    <Content Include="Resources\Icon\favicon.ico" />
+    <Content Include="Resources\Icon\MainWindow.ico" />
+    <Content Include="Resources\Icon\SpiderProgramA.ico" />
+    <Content Include="Resources\Lua\Skill - 副本.txt" />
+    <Content Include="Resources\Lua\Skill.txt" />
+    <EmbeddedResource Include="Resources\Txt\FsSeries_Name.txt" />
+    <EmbeddedResource Include="Resources\Txt\SpecialSkillList.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

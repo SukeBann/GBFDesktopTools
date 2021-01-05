@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyVersion>2.1.6.4</AssemblyVersion>
+    <FileVersion>2.1.6.4</FileVersion>
+  </PropertyGroup>
+
+  <Import Project="..\..\SharedResources\Panuon.UI.Silver\Panuon.UI.Silver.projitems" Label="Shared" />
+
+  <Import Project="..\..\SharedResources\Panuon.UI.Silver.Core\Panuon.UI.Silver.Core.projitems" Label="Shared" />
+
+  <Import Project="..\..\SharedResources\Panuon.UI.Silver.Internal\Panuon.UI.Silver.Internal.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <None Remove="Resources\Fonts\PanuonIcon.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Fonts\PanuonIcon.ttf" />
+  </ItemGroup>
+
+</Project>

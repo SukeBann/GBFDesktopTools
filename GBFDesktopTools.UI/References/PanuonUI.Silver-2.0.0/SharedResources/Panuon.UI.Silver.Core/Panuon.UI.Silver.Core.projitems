@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>1de353d2-029f-4738-86ba-2212db9c71a6</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Panuon.UI.Silver.Core</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\ColumnBindingAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\ColumnSortAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\ColumnTemplateAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\ColumnIgnoreAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\ColumnWidthAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EventArgs\SelectedDatesChangedRoutedEventHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EventArgs\SelectionChangingRoutedEventHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EventArgs\CancelRoutedEventHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EventArgs\RemovedRoutedEventHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EventArgs\RemovingRoutedEventHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EventArgs\SelectedDateChangedEventHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EventArgs\SelectedDateChangedRoutedEventHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ArrayExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\BrushExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ColorExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\IEnumerableExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\BrushAnimation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\MessageBoxXSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NumberRange.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NoticeXSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\PendingBoxXSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\RelayCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SharedResourceDictionary.cs" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,46 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:rs="clr-namespace:Panuon.UI.Silver.Resources"
+                    xmlns:icv="clr-namespace:Panuon.UI.Silver.Internal.Converters"
+                    xmlns:irs="clr-namespace:Panuon.UI.Silver.Internal.Resources">
+
+
+    <icv:DateTimePickerTextStringFormatConverterConverter x:Key="{x:Static irs:Converters.DateTimePickerTextStringFormatConverterConverter}" />
+    <icv:DropShadowEffectCoverter x:Key="{x:Static irs:Converters.DropShadowEffectCoverter}" />
+    <icv:DoubleMinusConverter x:Key="{x:Static rs:Converters.DoubleMinusConverter}" />
+    <icv:DoublePlusConverter x:Key="{x:Static rs:Converters.DoublePlusConverter}" />
+    <icv:DoubleMultiplyByConverter x:Key="{x:Static rs:Converters.DoubleMultiplyByConverter}" />
+    <icv:DoubleDivideByConverter x:Key="{x:Static rs:Converters.DoubleDivideByConverter}" />
+    <icv:IsNullConverter x:Key="{x:Static rs:Converters.IsNullConverter}"/>
+    <icv:IsNotNullConverter x:Key="{x:Static rs:Converters.IsNotNullConverter}" />
+    <icv:NullableColorToColorConverter x:Key="{x:Static irs:Converters.NullableColorToColorConverter}" />
+    <icv:StringNullOrEmptyToVisibleConverter x:Key="{x:Static irs:Converters.StringNullOrEmptyToVisibleConverter}" />
+    <icv:TrueToVisibleConverter x:Key="{x:Static rs:Converters.TrueToVisibleConverter}" />
+    <icv:TrueToCollapseConverter x:Key="{x:Static rs:Converters.TrueToCollapseConverter}" />
+    <icv:BadgePlacementMarginConverter x:Key="{x:Static irs:Converters.BadgePlacementMarginConverter}" />
+    <icv:NullToCollapseConverter x:Key="{x:Static rs:Converters.NullToCollapseConverter}" />
+    <icv:NullToVisibleConverter x:Key="{x:Static rs:Converters.NullToVisibleConverter}" />
+    <icv:SwitchCheckBoxToggleMarginConverter x:Key="{x:Static irs:Converters.SwitchCheckBoxToggleMarginConverter}" />
+    <icv:SwitchCheckBoxToggleShadowEffectConverter x:Key="{x:Static irs:Converters.SwitchCheckBoxToggleShadowEffectConverter}" />
+    <icv:CombineToArrayConverter x:Key="{x:Static irs:Converters.CombineToArrayConverter}" />
+    <icv:RoundCornerConverter x:Key="{x:Static irs:Converters.RoundCornerConverter}" />
+    <icv:ArcConverter x:Key="{x:Static irs:Converters.ArcConverter}" />
+    <icv:LoadingClassicRenderTransformOriginConverter x:Key="{x:Static irs:Converters.LoadingClassicRenderTransformOriginConverter}" />
+    <icv:DoubleToRightMarginConverter x:Key="{x:Static irs:Converters.DoubleToRightMarginConverter}" />
+    <icv:DoubleEqualsConverter x:Key="{x:Static irs:Converters.DoubleEqualsConverter}" />
+    <icv:TreeViewChainVerticalMarginConverter x:Key="{x:Static irs:Converters.TreeViewChainVerticalMarginConverter}"/>
+    <icv:TreeViewChainHorizontalMarginConverter x:Key="{x:Static irs:Converters.TreeViewChainHorizontalMarginConverter}"/>
+    <icv:TreeViewChainWidthConverter x:Key="{x:Static irs:Converters.TreeViewChainWidthConverter}" />
+    <icv:TreeViewPaddingConverter x:Key="{x:Static irs:Converters.TreeViewPaddingConverter}" />
+    <icv:ThicknessLeftSpacingConverter x:Key="{x:Static irs:Converters.ThicknessLeftSpacingConverter}" />
+    <icv:ThicknessWithoutLeftConverter x:Key="{x:Static irs:Converters.ThicknessWithoutLeftConverter}" />
+    <icv:GridLengthToDoubleConverter x:Key="{x:Static irs:Converters.GridLengthToDoubleConverter}" />
+    <icv:DoubleToBottomThicknessConverter x:Key="{x:Static irs:Converters.DoubleToBottomThicknessConverter}" />
+    <icv:IsGridLengthAbsoluteConverter x:Key="{x:Static irs:Converters.IsGridLengthAbsoluteConverter}" />
+    <icv:TabPanelMaxWidthConverter x:Key="{x:Static irs:Converters.TabPanelMaxWidthConverter}" />
+    <icv:TabControlSideButtonVisibilityConverter x:Key="{x:Static irs:Converters.TabControlSideButtonVisibilityConverter}" />
+
+    <icv:DropDownPathDataConverter x:Key="{x:Static irs:Converters.DropDownPathDataConverter}" />
+    <icv:DropShadowEffectWithDepthConverter x:Key="{x:Static irs:Converters.DropShadowEffectWithDepthConverter}" />
+    
+</ResourceDictionary> 

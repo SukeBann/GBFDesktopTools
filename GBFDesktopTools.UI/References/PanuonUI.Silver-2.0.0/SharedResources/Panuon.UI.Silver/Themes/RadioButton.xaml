@@ -1,0 +1,208 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Panuon.UI.Silver"
+                    xmlns:core="clr-namespace:Panuon.UI.Silver.Core"
+                    xmlns:irs="clr-namespace:Panuon.UI.Silver.Internal.Resources"
+                    xmlns:rs="clr-namespace:Panuon.UI.Silver.Resources">
+    <ResourceDictionary.MergedDictionaries>
+        <core:SharedResourceDictionary Source="pack://application:,,,/Panuon.UI.Silver;component/Resources/Converters.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style x:Key="{x:Static irs:StyleKeys.RadioButtonStyle}"
+           TargetType="RadioButton">
+        <Setter Property="Padding"
+                Value="5,0,0,0" />
+        <Setter Property="BorderBrush"
+                Value="Gray" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="local:RadioButtonHelper.CheckedGlyphBrush"
+                Value="#3E3E3E" />
+        <Setter Property="local:RadioButtonHelper.NullableGlyphBrush"
+                Value="#3E3E3E" />
+        <Setter Property="local:RadioButtonHelper.BoxHeight"
+                Value="16" />
+        <Setter Property="local:RadioButtonHelper.BoxWidth"
+                Value="16" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <StackPanel Orientation="Horizontal"
+                                Background="Transparent"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
+                        <Border x:Name="BdrBox"
+                                Opacity="0.8"
+                                Height="{Binding Path=(local:RadioButtonHelper.BoxHeight),RelativeSource={RelativeSource AncestorType=RadioButton}, Mode=OneWay}"
+                                Width="{Binding Path=(local:RadioButtonHelper.BoxWidth),RelativeSource={RelativeSource AncestorType=RadioButton}, Mode=OneWay}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="{Binding ActualHeight, Converter={StaticResource {x:Static rs:Converters.DoubleDivideByConverter}}, ConverterParameter=2,RelativeSource={RelativeSource Self}, Mode=OneWay}">
+                            <Ellipse x:Name="EllToggle"
+                                     Fill="{Binding Path=(local:RadioButtonHelper.GlyphBrush),RelativeSource={RelativeSource AncestorType=RadioButton}, Mode=OneWay}"
+                                     RenderTransformOrigin="0.5,0.5">
+                                <Ellipse.RenderTransform>
+                                    <ScaleTransform x:Name="ScaleToggle"
+                                                    ScaleX="0.4"
+                                                    ScaleY="0.4" />
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                        </Border>
+                        <ContentPresenter x:Name="CpContent"
+                                          RecognizesAccessKey="True"
+                                          Margin="{TemplateBinding Padding}"
+                                          VerticalAlignment="Center" />
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver"
+                                           Value="True" />
+                                <Condition Property="IsChecked"
+                                           Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="BdrBox"
+                                    Property="Opacity"
+                                    Value="1" />
+                            <MultiTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="ScaleToggle"
+                                                         Storyboard.TargetProperty="ScaleX"
+                                                         To="0.45"
+                                                         Duration="0:0:0.1" />
+                                        <DoubleAnimation Storyboard.TargetName="ScaleToggle"
+                                                         Storyboard.TargetProperty="ScaleY"
+                                                         To="0.45"
+                                                         Duration="0:0:0.1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.EnterActions>
+                            <MultiTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="ScaleToggle"
+                                                         Storyboard.TargetProperty="ScaleX"
+                                                         Duration="0:0:0.1" />
+                                        <DoubleAnimation Storyboard.TargetName="ScaleToggle"
+                                                         Storyboard.TargetProperty="ScaleY"
+                                                         Duration="0:0:0.1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.ExitActions>
+                        </MultiTrigger>
+                        <Trigger Property="IsChecked"
+                                 Value="True">
+                            <Setter TargetName="BdrBox"
+                                    Property="Opacity"
+                                    Value="1" />
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="ScaleToggle"
+                                                         Storyboard.TargetProperty="ScaleX"
+                                                         To="0.55"
+                                                         Duration="0:0:0.3">
+                                            <DoubleAnimation.EasingFunction>
+                                                <BackEase EasingMode="EaseOut"></BackEase>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation Storyboard.TargetName="ScaleToggle"
+                                                         Storyboard.TargetProperty="ScaleY"
+                                                         To="0.55"
+                                                         Duration="0:0:0.3">
+                                            <DoubleAnimation.EasingFunction>
+                                                <BackEase EasingMode="EaseOut"></BackEase>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="ScaleToggle"
+                                                         Storyboard.TargetProperty="ScaleX"
+                                                         Duration="0:0:0.3">
+                                            <DoubleAnimation.EasingFunction>
+                                                <BackEase EasingMode="EaseOut"></BackEase>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation Storyboard.TargetName="ScaleToggle"
+                                                         Storyboard.TargetProperty="ScaleY"
+                                                         Duration="0:0:0.3">
+                                            <DoubleAnimation.EasingFunction>
+                                                <BackEase EasingMode="EaseOut"></BackEase>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsChecked, RelativeSource={RelativeSource Self},Mode=OneWay}"
+                                           Value="True" />
+                                <Condition Binding="{Binding Path=(local:RadioButtonHelper.CheckedGlyphBrush), Converter={StaticResource {x:Static rs:Converters.IsNotNullConverter}}, RelativeSource={RelativeSource Self}, Mode=OneWay}"
+                                           Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter  TargetName="EllToggle"
+                                     Property="Fill"
+                                     Value="{Binding Path=(local:RadioButtonHelper.CheckedGlyphBrush),RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
+                                           Value="True" />
+                                <Condition Binding="{Binding Path=(local:RadioButtonHelper.CheckedForeground), Converter={StaticResource {x:Static rs:Converters.IsNotNullConverter}}, RelativeSource={RelativeSource Self}, Mode=OneWay}"
+                                           Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="CpContent"
+                                    Property="TextElement.Foreground"
+                                    Value="{Binding Path=(local:RadioButtonHelper.CheckedForeground),RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" />
+                            <Setter TargetName="CpContent"
+                                    Property="TextBlock.Foreground"
+                                    Value="{Binding Path=(local:RadioButtonHelper.CheckedForeground),RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}, Mode=OneWay}"
+                                           Value="True" />
+                                <Condition Binding="{Binding Path=(local:RadioButtonHelper.CheckedContent), Converter={StaticResource {x:Static rs:Converters.IsNotNullConverter}}, RelativeSource={RelativeSource Self}, Mode=OneWay}"
+                                           Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="CpContent"
+                                    Property="Content"
+                                    Value="{Binding Path=(local:RadioButtonHelper.CheckedContent),RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
+                                           Value="True" />
+                                <Condition Binding="{Binding Path=(local:RadioButtonHelper.CheckedBackground), Converter={StaticResource {x:Static rs:Converters.IsNotNullConverter}}, RelativeSource={RelativeSource Self}, Mode=OneWay}"
+                                           Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="BdrBox"
+                                    Property="Background"
+                                    Value="{Binding Path=(local:RadioButtonHelper.CheckedBackground),RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
+                                           Value="True" />
+                                <Condition Binding="{Binding Path=(local:RadioButtonHelper.CheckedBorderBrush), Converter={StaticResource {x:Static rs:Converters.IsNotNullConverter}}, RelativeSource={RelativeSource Self},Mode=OneWay}"
+                                           Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="BdrBox"
+                                    Property="BorderBrush"
+                                    Value="{Binding Path=(local:RadioButtonHelper.CheckedBorderBrush),RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" />
+                        </MultiDataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+</ResourceDictionary>
