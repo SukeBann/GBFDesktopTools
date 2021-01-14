@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
+using static GBFDesktopTools.Model.Weapon;
 
 namespace GBFDesktopTools.Model.ToolAndHelper
-{   
-    using Model.abstractModel;
+{
+    using abstractModel;
 
     /// <summary>
     /// 编程工具
     /// </summary>
     public static class ToolsAndHelper
-    {   
+    {
         /// <summary>
         /// 获取特殊技能列表
         /// </summary>
@@ -22,18 +23,22 @@ namespace GBFDesktopTools.Model.ToolAndHelper
         public static List<string> GetSpecialSkillList()
         {
             var asm = System.Reflection.Assembly.GetCallingAssembly();
-            string resoureeName = asm.GetName().Name + ".Resources.Txt.SpecialSkillList.txt";
-          
-            string TempStr = null;
+            var resourcesName = asm.GetName().Name + ".Resources.Txt.SpecialSkillList.txt";
 
-            using (Stream stream = asm.GetManifestResourceStream(resoureeName))
+            string tempStr;
+
+            using (var stream = asm.GetManifestResourceStream(resourcesName))
             {
-                StreamReader sr = new StreamReader(stream);
-                TempStr = sr.ReadToEnd();
+                if (stream == null)
+                {
+                    throw new Exception("读取特殊技能列表错误");
+                }
+                var sr = new StreamReader(stream);
+                tempStr = sr.ReadToEnd();
                 sr.Close();
             }
-            var list = SplitString(TempStr.Trim(), 2, IsHaveEmpty: StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < list.Count; i++ )
+            var list = SplitString(tempStr.Trim(), 2, isHaveEmpty: StringSplitOptions.RemoveEmptyEntries);
+            for (var i = 0; i < list.Count; i++)
             {
                 list[i] = list[i].Replace("\n", "").Replace("\r", "");
             }
@@ -43,118 +48,108 @@ namespace GBFDesktopTools.Model.ToolAndHelper
         /// <summary>
         /// 按预设的符号分割字符串 -->  ; ；
         /// </summary>
-        /// <param name="Target">目标字符串</param>
+        /// <param name="target">目标字符串</param>
         /// <param name="splitType">预设分割符号类型 1(；;) 2:(,) 3:(_) </param>
-        /// <param name="CustomStr">自定义单分隔符 如果同时使用CustomArray参数 以CustomStr为优先</param>
-        /// <param name="CustomArray">自定义分隔符列表 如果同时使用CustomStr参数 以CustomStr为优先</param>
-        /// <param name="IsHaveEmpty">返回的数组是否包含空字符串</param>
+        /// <param name="customStr">自定义单分隔符 如果同时使用CustomArray参数 以CustomStr为优先</param>
+        /// <param name="customArray">自定义分隔符列表 如果同时使用CustomStr参数 以CustomStr为优先</param>
+        /// <param name="isHaveEmpty">返回的数组是否包含空字符串</param>
         /// <returns></returns>
-        public static List<string> SplitString(string Target, short splitType = 1,string CustomStr = null,string[] CustomArray = null,StringSplitOptions IsHaveEmpty = StringSplitOptions.None)
+        public static List<string> SplitString(string target, short splitType = 1, string customStr = null, string[] customArray = null, StringSplitOptions isHaveEmpty = StringSplitOptions.None)
         {
-            string[] Delimiter = null;
+            string[] delimiter = null;
             //自定义单个分隔符
-            if (CustomStr != null)
+            if (customStr != null)
             {
-                Delimiter = new string[] { CustomStr };
+                delimiter = new[] { customStr };
             }
             //自定义分隔符数组
-            if (CustomArray != null && CustomStr == null)
+            if (customArray != null && customStr == null)
             {
-                Delimiter = CustomArray;
+                delimiter = customArray;
             }
             //预设分隔符
-            if (CustomStr == null && CustomArray == null)
-            {   
-                switch (splitType)
-                {
-                    case 1: Delimiter = new string[2] { ";", "；" };
-                        break;
-                    case 2: Delimiter = new string[1] { "," };
-                        break;
-                    case 3: Delimiter = new string[1] { "_" };
-                        break;
-                }
+            if (customStr != null || customArray != null) return target.Split(delimiter, isHaveEmpty).ToList();
+            switch (splitType)
+            {
+                case 1:
+                    delimiter = new[] { ";", "；" };
+                    break;
+                case 2:
+                    delimiter = new[] { "," };
+                    break;
+                case 3:
+                    delimiter = new[] { "_" };
+                    break;
             }
-            return Target.Split(Delimiter, IsHaveEmpty).ToList(); ;
+            return target.Split(delimiter, isHaveEmpty).ToList();
         }
 
         /// <summary>
         /// 获取技能副名称
         /// </summary>
-        /// <param name="MainName">技能主名称</param>
-        /// <param name="ExtraName">技能副名称</param>
-        /// <param name="Dic">技能字典集</param>
+        /// <param name="mainName">技能主名称</param>
+        /// <param name="extraName">技能副名称</param>
+        /// <param name="dic">技能字典集</param>
         /// <returns>如果找到副名称则返回 主名称+副名称 否则返回空字符串</returns>
-        public static string FoundSkillExtraName(string MainName, string ExtraName, Dictionary<string, List<WeaponSkill>> Dic)
+        public static string FoundSkillExtraName(string mainName, string extraName, Dictionary<string, List<WeaponSkill>> dic)
         {
-            var DicKey = Dic.Keys.Where(x => StringContentType(x, CustomReg: MainName));
-            if (DicKey != null)
-            {
-                ExtraName = DicKey.FirstOrDefault(f => f.Replace(MainName + "_","") == ExtraName);
-            }
-            else
-            {
-                ExtraName = null;
-            }
-            return (ExtraName == null || ExtraName == "") ? "" : ExtraName;
+            var dicKey = dic.Keys.Where(x => StringContentType(x, customReg: mainName)).ToList();
+            extraName = dicKey.Any() ? dicKey.FirstOrDefault(f => f.Replace(mainName + "_", "") == extraName) : null;
+            return string.IsNullOrEmpty(extraName) ? "" : extraName;
         }
 
         /// <summary>
         /// 验证技能后缀是否存在
         /// </summary>
-        /// <param name="MainName">技能名称</param>
-        /// <param name="Suffix">技能后缀</param>
-        /// <param name="Dic">技能字典集</param>
+        /// <param name="mainName">技能名称</param>
+        /// <param name="suffix">技能后缀</param>
+        /// <param name="dic">技能字典集</param>
         /// <returns>如果不存在则返回空字符串，存在则返回技能后缀</returns>
-        public static string FoundSkillSuffix(string MainName, string Suffix, Dictionary<string, List<WeaponSkill>> Dic)
+        public static string FoundSkillSuffix(string mainName, string suffix, Dictionary<string, List<WeaponSkill>> dic)
         {
-            var DicValue = Dic.Where(x => x.Key == MainName).FirstOrDefault().Value;
-            if (DicValue != null)
-            {   
-                var skill = DicValue.FirstOrDefault(x => x.Extra_Name == Suffix);
-                Suffix = skill == null ? "" : skill.Extra_Name;
-            }
-            else
-            {
-                Suffix = "";
-            }
-            return Suffix;
+            var dicValue = dic.FirstOrDefault(x => x.Key == mainName).Value;
+            var skill = dicValue.FirstOrDefault(x => x.Extra_Name == suffix);
+            suffix = skill == null ? "" : skill.Extra_Name;
+            return suffix;
         }
 
         /// <summary>
-        /// 判断目标字符串类型
+        /// 判断目标字符串类型 或正则匹配
         /// </summary>
-        /// <param name="TargetStr">目标字符串</param>
-        /// <param name="RegType">要判断的类型 1： 数字, 2： 整数, 3:电话 </param>
-        /// <param name="CustomReg">自定义正则式 </param>
+        /// <param name="targetStr">目标字符串</param>
+        /// <param name="regType">要判断的类型 1： 数字, 2： 整数, 3:电话 </param>
+        /// <param name="customReg">自定义正则式 </param>
         /// <returns>是否为要判断的类型</returns>
-        public static bool StringContentType(string TargetStr ,short RegType = 1,string CustomReg = null)
+        public static bool StringContentType(string targetStr, short regType = 1, string customReg = null)
         {
-            string RegStr = "";
-            if (CustomReg != null)
+            string regStr;
+            if (customReg != null)
             {
-                RegStr = CustomReg;
+                regStr = customReg;
             }
             else
             {
-                switch (RegType)
+                switch (regType)
                 {
                     //IsNumeric
-                    case 1: RegStr = @"^[+-]?\d*[.]?\d*$";
+                    case 1:
+                        regStr = @"^[+-]?\d*[.]?\d*$";
                         break;
                     //isInt
-                    case 2: RegStr = @"^[+-]?\d*$";
+                    case 2:
+                        regStr = @"^[+-]?\d*$";
                         break;
                     //isTel
-                    case 3: RegStr = @"\d{3}-\d{8}|\d{4}-\d{7}";
+                    case 3:
+                        regStr = @"\d{3}-\d{8}|\d{4}-\d{7}";
                         break;
-                    default: RegStr = "";
+                    default:
+                        regStr = "";
                         break;
                 }
             }
-            return Regex.IsMatch(TargetStr, RegStr);
+            return Regex.IsMatch(targetStr, regStr);
         }
-
 
     }
 
@@ -171,167 +166,188 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             Construction();
         }
 
-        public List<Weapon> TargetList = new List<Weapon>();
-        public List<string> SearchTip = new List<string>();
+        /// <summary>
+        /// 当前页码变更时在property中触发
+        /// </summary>
+        public EventHandler loadWeaponListHandler;
+
 
         #region Property
 
-        private int _NowPage;
-        private int _PageCount;
+        private int _nowPage;
+        private int _pageCount;
         private int _pageContentCount;
-        private string _SearchName;
-
+        private string _searchName;
 
         /// <summary>
         /// 搜索名称
         /// </summary>
         public string SearchName
         {
-            get { return _SearchName; }
-            set { _SearchName = value; this.RaisePropertyChanged(x => x.SearchName); }
+            get => _searchName;
+            set { _searchName = value; this.RaisePropertyChanged(x => x.SearchName); }
         }
         /// <summary>
         /// 每页有多少内容
         /// </summary>
-        public int pageContentCount
+        public int PageContentCount
         {
-            get { return _pageContentCount; }
-            set { _pageContentCount = value; this.RaisePropertyChanged(x => x.pageContentCount); }
+            get => _pageContentCount;
+            set { _pageContentCount = value; this.RaisePropertyChanged(x => x.PageContentCount); }
         }
         /// <summary>
         /// 总页数
         /// </summary>
         public int PageCount
         {
-            get { return _PageCount; }
-            set { _PageCount = value; this.RaisePropertyChanged(x => x.PageCount); }
+            get => _pageCount;
+            set { _pageCount = value; this.RaisePropertyChanged(x => x.PageCount); }
         }
         /// <summary>
         /// 当前是第几页
         /// </summary>
         public int NowPage
         {
-            get { return _NowPage; }
-            set { _NowPage = value; this.RaisePropertyChanged(x => x.NowPage); }
+            get => _nowPage;
+            set
+            {
+                _nowPage = value; this.RaisePropertyChanged(x => x.NowPage);
+                if (value == 0)
+                {
+                    return;
+                }
+                loadWeaponListHandler?.Invoke(new object(), new EventArgs());
+            }
         }
-        
 
+
+        #region List
+
+        /// <summary>
+        /// 武器源列表
+        /// </summary>
+        public List<Weapon> TargetList = new List<Weapon>();
+        /// <summary>
+        /// 搜索提示列表
+        /// </summary>
+        public List<string> SearchTip = new List<string>();
         /// <summary>
         /// 武器类型列表
         /// </summary>
-        public List<Weapon.WeaponKind> WeanponKindList = new List<Weapon.WeaponKind>();
+        public List<WeaponKind> WeaponKindList = new List<WeaponKind>();
         /// <summary>
         /// 武器属性列表
         /// </summary>
-        public List<Weapon.GBFElementCHSEnum> WeaponElementList = new List<GBFMessageAbstractModel.GBFElementCHSEnum>();
+        public List<GBFMessageAbstractModel.GBFElementCHSEnum> WeaponElementList = new List<GBFMessageAbstractModel.GBFElementCHSEnum>();
         /// <summary>
         /// 稀有度列表
         /// </summary>
-        public List<Weapon.GBFRarityEnum> WeaponRarityList = new List<GBFMessageAbstractModel.GBFRarityEnum>();
+        public List<GBFMessageAbstractModel.GBFRarityEnum> WeaponRarityList = new List<GBFMessageAbstractModel.GBFRarityEnum>();
         /// <summary>
         /// 武器系列日文对照
         /// </summary>
-        public Dictionary<string, Weapon.GBFSeriesNameEnum> WeaponJPSeriesNameDic = new Dictionary<string, Weapon.GBFSeriesNameEnum>();
+        public Dictionary<string, GBFSeriesNameEnum> WeaponJpSeriesNameDic = new Dictionary<string, GBFSeriesNameEnum>();
         /// <summary>
         /// 武器系列列表
         /// </summary>
-        public List<Weapon.GBFSeriesNameEnum> WeaponSeriesNameList = new List<Weapon.GBFSeriesNameEnum>();
+        public List<GBFSeriesNameEnum> WeaponSeriesNameList = new List<GBFSeriesNameEnum>();
         /// <summary>
         /// 武器卡池列表
         /// </summary>
-        public List<Weapon.GBFCategoryEnum> WeaponCategoryList = new List<GBFMessageAbstractModel.GBFCategoryEnum>();
+        public List<GBFMessageAbstractModel.GBFCategoryEnum> WeaponCategoryList = new List<GBFMessageAbstractModel.GBFCategoryEnum>();
         /// <summary>
         /// 武器终突次数筛选列表
         /// </summary>
-        public List<Weapon.GFBSearchEvoCounEnum> WeaponSearchEvoCounList = new List<Weapon.GFBSearchEvoCounEnum>();
+        public List<GFBSearchEvoCountEnum> WeaponSearchEvoCountList = new List<GFBSearchEvoCountEnum>();
         /// <summary>
         /// 武器排序类型列表
         /// </summary>
-        public List<Weapon.SearchSortTypeEnum> SearchSortTypeList = new List<GBFMessageAbstractModel.SearchSortTypeEnum>();
+        public List<GBFMessageAbstractModel.SearchSortTypeEnum> SearchSortTypeList = new List<GBFMessageAbstractModel.SearchSortTypeEnum>();
 
+        #endregion
 
-        private short _FnGBF_MaxEvo;
-        private int _WeaponSkillID;
-        private Weapon.GBFCategoryEnum _WeaponCategory;
-        private Weapon.GBFSeriesNameEnum _Fc_SeriesName;
-        private Weapon.GBFRarityEnum _Fc_WeaponRarity;
-        private Weapon.GBFElementCHSEnum _Fc_WeaponElement;
-        private Weapon.WeaponKind _Fc_WeanponKind;
-        private Weapon.GFBSearchEvoCounEnum _SearchEvoCount;
-        private Weapon.SearchSortTypeEnum _SearchSortType;
+        private short _fnGbfMaxEvo;
+        private string _weaponSkillName;
+        private GBFMessageAbstractModel.GBFCategoryEnum _weaponCategory;
+        private GBFSeriesNameEnum _fcSeriesName;
+        private GBFMessageAbstractModel.GBFRarityEnum _fcWeaponRarity;
+        private GBFMessageAbstractModel.GBFElementCHSEnum _fcWeaponElement;
+        private WeaponKind _fcWeaponKind;
+        private GFBSearchEvoCountEnum _searchEvoCount;
+        private GBFMessageAbstractModel.SearchSortTypeEnum _searchSortType;
 
 
         /// <summary>
         /// 武器排序类型
         /// </summary>
-        public Weapon.SearchSortTypeEnum SearchSortType
+        public GBFMessageAbstractModel.SearchSortTypeEnum SearchSortType
         {
-            get { return _SearchSortType; }
-            set { _SearchSortType = value; this.RaisePropertyChanged(x => x.SearchSortType); }
+            get => _searchSortType;
+            set { _searchSortType = value; this.RaisePropertyChanged(x => x.SearchSortType); }
         }
         /// <summary>
         /// 武器终突次数
         /// </summary>
-        public Weapon.GFBSearchEvoCounEnum SearchEvoCount
+        public GFBSearchEvoCountEnum SearchEvoCount
         {
-            get { return _SearchEvoCount; }
-            set { _SearchEvoCount = value; this.RaisePropertyChanged(x => x.SearchEvoCount); }
+            get => _searchEvoCount;
+            set { _searchEvoCount = value; this.RaisePropertyChanged(x => x.SearchEvoCount); }
         }
         /// <summary>
         /// 武器类型
         /// </summary>
-        public Weapon.WeaponKind Fc_WeanponKind
+        public WeaponKind FcWeaponKind
         {
-            get { return _Fc_WeanponKind; }
-            set { _Fc_WeanponKind = value; this.RaisePropertyChanged(x => x.Fc_WeanponKind); }
+            get => _fcWeaponKind;
+            set { _fcWeaponKind = value; this.RaisePropertyChanged(x => x.FcWeaponKind); }
         }
         /// <summary>
         /// 武器属性
         /// </summary>
-        public Weapon.GBFElementCHSEnum Fc_WeaponElement
+        public GBFMessageAbstractModel.GBFElementCHSEnum FcWeaponElement
         {
-            get { return _Fc_WeaponElement; }
-            set { _Fc_WeaponElement = value; this.RaisePropertyChanged(x => x.Fc_WeaponElement); }
+            get => _fcWeaponElement;
+            set { _fcWeaponElement = value; this.RaisePropertyChanged(x => x.FcWeaponElement); }
         }
         /// <summary>
         /// 稀有度
         /// </summary>
-        public Weapon.GBFRarityEnum Fc_WeaponRarity
+        public GBFMessageAbstractModel.GBFRarityEnum FcWeaponRarity
         {
-            get { return _Fc_WeaponRarity; }
-            set { _Fc_WeaponRarity = value; this.RaisePropertyChanged(x => x.Fc_WeaponRarity); }
+            get => _fcWeaponRarity;
+            set { _fcWeaponRarity = value; this.RaisePropertyChanged(x => x.FcWeaponRarity); }
         }
         /// <summary>
         /// 武器系列
         /// </summary>
-        public Weapon.GBFSeriesNameEnum Fc_SeriesName
+        public GBFSeriesNameEnum FcSeriesName
         {
-            get { return _Fc_SeriesName; }
-            set { _Fc_SeriesName = value; this.RaisePropertyChanged(x => x.Fc_SeriesName); }
+            get => _fcSeriesName;
+            set { _fcSeriesName = value; this.RaisePropertyChanged(x => x.FcSeriesName); }
         }
         /// <summary>
         /// 武器所属卡池
         /// </summary>
-        public Weapon.GBFCategoryEnum WeaponCategory
+        public GBFMessageAbstractModel.GBFCategoryEnum WeaponCategory
         {
-            get { return _WeaponCategory; }
-            set { _WeaponCategory = value; this.RaisePropertyChanged(x => x.WeaponCategory); }
+            get => _weaponCategory;
+            set { _weaponCategory = value; this.RaisePropertyChanged(x => x.WeaponCategory); }
         }
         /// <summary>
         /// 技能ID
         /// </summary>
-        public int WeaponSkillID
+        public string WeaponSkillName
         {
-            get { return _WeaponSkillID; }
-            set { _WeaponSkillID = value; this.RaisePropertyChanged(x => x.WeaponSkillID); }
+            get => _weaponSkillName;
+            set { _weaponSkillName = value; this.RaisePropertyChanged(x => x.WeaponSkillName); }
         }
         /// <summary>
         /// 武器突破次数
         /// </summary>
-        public short FnGBF_MaxEvo
+        public short FnGbfMaxEvo
         {
-            get { return _FnGBF_MaxEvo; }
-            set { _FnGBF_MaxEvo = value; this.RaisePropertyChanged(x => x.FnGBF_MaxEvo); }
+            get => _fnGbfMaxEvo;
+            set { _fnGbfMaxEvo = value; this.RaisePropertyChanged(x => x.FnGbfMaxEvo); }
         }
 
         #endregion
@@ -346,80 +362,83 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             #region 加载列表
 
             //加载武器类型列表
-            foreach (var item in Enum.GetNames(typeof(Weapon.WeaponKind)))
+            foreach (var item in Enum.GetNames(typeof(WeaponKind)))
             {
-                WeanponKindList.Add((Weapon.WeaponKind)Enum.Parse(typeof(Weapon.WeaponKind), item));
+                WeaponKindList.Add((WeaponKind)Enum.Parse(typeof(WeaponKind), item));
             }
             //加载属性列表
-            foreach (var item in Enum.GetNames(typeof(Weapon.GBFElementCHSEnum)))
+            foreach (var item in Enum.GetNames(typeof(GBFMessageAbstractModel.GBFElementCHSEnum)))
             {
-                WeaponElementList.Add((Weapon.GBFElementCHSEnum)Enum.Parse(typeof(Weapon.GBFElementCHSEnum), item));
+                WeaponElementList.Add((GBFMessageAbstractModel.GBFElementCHSEnum)Enum.Parse(typeof(GBFMessageAbstractModel.GBFElementCHSEnum), item));
             }
             //加载稀有度列表
-            foreach (var item in Enum.GetNames(typeof(Weapon.GBFRarityEnum)))
+            foreach (var item in Enum.GetNames(typeof(GBFMessageAbstractModel.GBFRarityEnum)))
             {
-                WeaponRarityList.Add((Weapon.GBFRarityEnum)Enum.Parse(typeof(Weapon.GBFRarityEnum), item));
+                WeaponRarityList.Add((GBFMessageAbstractModel.GBFRarityEnum)Enum.Parse(typeof(GBFMessageAbstractModel.GBFRarityEnum), item));
             }
             //加载武器系列列表
             var asm = System.Reflection.Assembly.GetExecutingAssembly();
-            var a = asm.GetManifestResourceNames();
-            using (System.IO.Stream stream = asm.GetManifestResourceStream(asm.GetName().Name + ".Resources.Txt.FsSeries_Name.txt"))
+            using (var stream = asm.GetManifestResourceStream(asm.GetName().Name + ".Resources.Txt.FsSeries_Name.txt"))
             {
-                System.IO.StreamReader sr = new System.IO.StreamReader(stream);
-                var Str = sr.ReadToEnd();
-                var StrList = GBFDesktopTools.Model.ToolAndHelper.ToolsAndHelper.SplitString(Str, 2);
-                foreach (var item in StrList)
+                if (stream == null)
                 {
-                    var s = item.Replace("\n", "").Replace("\r", "");
-                    var SeriesNameList = GBFDesktopTools.Model.ToolAndHelper.ToolsAndHelper.SplitString(s, CustomStr: "=");
-                    WeaponJPSeriesNameDic.Add(SeriesNameList[0], (Weapon.GBFSeriesNameEnum)Enum.Parse(typeof(Weapon.GBFSeriesNameEnum), SeriesNameList[1]));
-                    WeaponSeriesNameList.Add((Weapon.GBFSeriesNameEnum)Enum.Parse(typeof(Weapon.GBFSeriesNameEnum), SeriesNameList[1]));
+                    return;
                 }
-                WeaponSeriesNameList.Add(Weapon.GBFSeriesNameEnum.六限武器_月底);
-                WeaponSeriesNameList.Add(Weapon.GBFSeriesNameEnum.六限武器_月中);
+                var sr = new StreamReader(stream);
+                var str = sr.ReadToEnd();
+                var strList = ToolsAndHelper.SplitString(str, 2);
+                foreach (var seriesNameList in strList.Select(item => item.Replace("\n", "").Replace("\r", "")).Select(s => ToolsAndHelper.SplitString(s, customStr: "=")))
+                {
+                    WeaponJpSeriesNameDic.Add(seriesNameList[0], (GBFSeriesNameEnum)Enum.Parse(typeof(GBFSeriesNameEnum), seriesNameList[1]));
+                    WeaponSeriesNameList.Add((GBFSeriesNameEnum)Enum.Parse(typeof(GBFSeriesNameEnum), seriesNameList[1]));
+                }
                 WeaponSeriesNameList.Sort();
+                WeaponSeriesNameList.Insert(0, Weapon.GBFSeriesNameEnum.全部系列);
                 sr.Close();
             }
             //加载武器卡池列表
-            foreach (var item in Enum.GetNames(typeof(Weapon.GBFCategoryEnum)))
+            foreach (var item in Enum.GetNames(typeof(GBFMessageAbstractModel.GBFCategoryEnum)))
             {
-                WeaponCategoryList.Add((Weapon.GBFCategoryEnum)Enum.Parse(typeof(Weapon.GBFCategoryEnum), item));
+                WeaponCategoryList.Add((GBFMessageAbstractModel.GBFCategoryEnum)Enum.Parse(typeof(GBFMessageAbstractModel.GBFCategoryEnum), item));
             }
             //加载武器突破次数列表
-            foreach (var item in Enum.GetNames(typeof(Weapon.GFBSearchEvoCounEnum)))
+            foreach (var item in Enum.GetNames(typeof(GFBSearchEvoCountEnum)))
             {
-                WeaponSearchEvoCounList.Add((Weapon.GFBSearchEvoCounEnum)Enum.Parse(typeof(Weapon.GFBSearchEvoCounEnum), item));
+                WeaponSearchEvoCountList.Add((GFBSearchEvoCountEnum)Enum.Parse(typeof(GFBSearchEvoCountEnum), item));
             }
             //加载武器排序类型列表
-            foreach (var item in Enum.GetNames(typeof(Weapon.SearchSortTypeEnum)))
+            foreach (var item in Enum.GetNames(typeof(GBFMessageAbstractModel.SearchSortTypeEnum)))
             {
-                SearchSortTypeList.Add((Weapon.SearchSortTypeEnum)Enum.Parse(typeof(Weapon.SearchSortTypeEnum), item));
+                SearchSortTypeList.Add((GBFMessageAbstractModel.SearchSortTypeEnum)Enum.Parse(typeof(GBFMessageAbstractModel.SearchSortTypeEnum), item));
             }
 
             #endregion
 
             //查询条件初始化
-            Fc_WeaponElement = GBFMessageAbstractModel.GBFElementCHSEnum.全部;
-            Fc_WeaponRarity = GBFMessageAbstractModel.GBFRarityEnum.SSR;
+            FcWeaponElement = GBFMessageAbstractModel.GBFElementCHSEnum.全部;
+            FcWeaponRarity = GBFMessageAbstractModel.GBFRarityEnum.SSR;
             SearchSortType = GBFMessageAbstractModel.SearchSortTypeEnum.最新登场;
-            Fc_SeriesName = Weapon.GBFSeriesNameEnum.全部系列;
-            Fc_WeanponKind = Weapon.WeaponKind.ALL;
-            FnGBF_MaxEvo = 1;
-            WeaponSkillID = -1;
+            FcWeaponRarity = GBFMessageAbstractModel.GBFRarityEnum.all;
+            FcSeriesName = GBFSeriesNameEnum.全部系列;
+            FcWeaponKind = WeaponKind.全部;
+            WeaponSkillName = "全部技能";
+            WeaponCategory = GBFMessageAbstractModel.GBFCategoryEnum.全部;
+            SearchEvoCount = GFBSearchEvoCountEnum.全部;
+            WeaponSkillName = "";
 
             //分页属性初始化
-            NowPage = 0;
-            pageContentCount = 50;
+            NowPage = 1;
+            PageContentCount = 36;
             PageCount = 0;
         }
 
         /// <summary>
         /// 获取一个搜索提示列表
         /// </summary>
-        /// <param name="_WeaponList"></param>
-        public void GetSearchTipList(List<Weapon> _WeaponList)
+        /// <param name="weaponList"></param>
+        public void GetSearchTipList(List<Weapon> weaponList)
         {
-            TargetList = _WeaponList;
+            TargetList = weaponList;
             if (TargetList == null || TargetList.Count < 1)
             {
                 return;
@@ -433,12 +452,12 @@ namespace GBFDesktopTools.Model.ToolAndHelper
                 {
                     SearchTip.Add(nikeName);
                 }
-                foreach (var SnikeName in wp.FsSearch_Nickname)
+                foreach (var nikeName in wp.FsSearch_Nickname)
                 {
-                    SearchTip.Add(SnikeName);
+                    SearchTip.Add(nikeName);
                 }
             }
-           SearchTip = SearchTip.GroupBy(p => p).Select(s => s.Key).ToList();
+            SearchTip = SearchTip.GroupBy(p => p).Select(s => s.Key).ToList();
         }
 
         /// <summary>
@@ -446,9 +465,9 @@ namespace GBFDesktopTools.Model.ToolAndHelper
         /// </summary>
         public class SearchTipListReverserClass : IComparer<string>
         {
-            public SearchTipListReverserClass(String _RegexStr)
+            public SearchTipListReverserClass(string regexStr)
             {
-                RegexStr = _RegexStr;
+                RegexStr = regexStr;
             }
 
             public string RegexStr { get; set; }
@@ -456,17 +475,14 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             // Call CaseInsensitiveComparer.Compare with the parameters reversed.
             int IComparer<string>.Compare(string x, string y)
             {
-                if (x == null|| x == string.Empty || y == null || y == string.Empty)
+                if (string.IsNullOrEmpty(x) || y == null || y == string.Empty)
                 {
                     return 0;
                 }
-                int xIndex = 0;
-                int yIndex = 0;
 
-                xIndex = x.IndexOf(RegexStr, StringComparison.OrdinalIgnoreCase);
-                yIndex = y.IndexOf(RegexStr, StringComparison.OrdinalIgnoreCase);
-                
-                return xIndex < yIndex ? 1 : xIndex > yIndex ? -1 :0 ;
+                var xIndex = x.IndexOf(RegexStr, StringComparison.OrdinalIgnoreCase);
+                var yIndex = y.IndexOf(RegexStr, StringComparison.OrdinalIgnoreCase);
+                return xIndex < yIndex ? 1 : xIndex > yIndex ? -1 : 0;
             }
         }
 
@@ -475,10 +491,13 @@ namespace GBFDesktopTools.Model.ToolAndHelper
         /// </summary>
         public class WeaponListReverserClass : IComparer<Weapon>
         {
-            public WeaponListReverserClass(GBFMessageAbstractModel.SearchSortTypeEnum _SortType)
+            //根据排序类型排序
+            public WeaponListReverserClass(GBFMessageAbstractModel.SearchSortTypeEnum sortType)
             {
-                SortType = _SortType;
+                SortType = sortType;
             }
+
+            public bool IsNameSort;
 
             public GBFMessageAbstractModel.SearchSortTypeEnum SortType { get; set; }
 
@@ -489,9 +508,13 @@ namespace GBFDesktopTools.Model.ToolAndHelper
                 {
                     return 0;
                 }
-                DateTime xDate = new DateTime();
-                DateTime yDate = new DateTime();
-                List<DateTime> DateTimeList = new List<DateTime>();
+                if (IsNameSort)
+                {
+                    return ((new System.Collections.CaseInsensitiveComparer()).Compare(y.GetCanUseName, x.GetCanUseName));
+                }
+                DateTime xDate;
+                DateTime yDate;
+                var dateTimeList = new List<DateTime>();
                 switch (SortType)
                 {
                     case GBFMessageAbstractModel.SearchSortTypeEnum.最新登场:
@@ -499,61 +522,51 @@ namespace GBFDesktopTools.Model.ToolAndHelper
                     case GBFMessageAbstractModel.SearchSortTypeEnum.最早登场:
                         return ((new System.Collections.CaseInsensitiveComparer()).Compare(y.FdGBF_ReleaseDate, x.FdGBF_ReleaseDate));
                     case GBFMessageAbstractModel.SearchSortTypeEnum.最近更新:
-                        DateTimeList.AddRange(new List<DateTime>() { x.FdGBF_ReleaseDate, x.FdGBF_Star4, x.FdGBF_Star5, x.FdGBF_LastDate });
-                        xDate = DateTimeList.Max();
-                        DateTimeList.AddRange(new List<DateTime>() { y.FdGBF_ReleaseDate, y.FdGBF_Star4, y.FdGBF_Star5, y.FdGBF_LastDate });
-                        yDate = DateTimeList.Max();
+                        dateTimeList.AddRange(new List<DateTime>() { x.FdGBF_ReleaseDate, x.FdGBF_Star4, x.FdGBF_Star5, x.FdGBF_LastDate });
+                        xDate = dateTimeList.Max();
+                        dateTimeList.AddRange(new List<DateTime>() { y.FdGBF_ReleaseDate, y.FdGBF_Star4, y.FdGBF_Star5, y.FdGBF_LastDate });
+                        yDate = dateTimeList.Max();
                         return ((new System.Collections.CaseInsensitiveComparer()).Compare(xDate, yDate));
                     case GBFMessageAbstractModel.SearchSortTypeEnum.远古更新:
-                        DateTimeList.AddRange(new List<DateTime>() { x.FdGBF_ReleaseDate, x.FdGBF_Star4, x.FdGBF_Star5, x.FdGBF_LastDate });
-                        xDate = DateTimeList.Max();
-                        DateTimeList.AddRange(new List<DateTime>() { y.FdGBF_ReleaseDate, y.FdGBF_Star4, y.FdGBF_Star5, y.FdGBF_LastDate });
-                        yDate = DateTimeList.Max();
+                        dateTimeList.AddRange(new List<DateTime>() { x.FdGBF_ReleaseDate, x.FdGBF_Star4, x.FdGBF_Star5, x.FdGBF_LastDate });
+                        xDate = dateTimeList.Max();
+                        dateTimeList.AddRange(new List<DateTime>() { y.FdGBF_ReleaseDate, y.FdGBF_Star4, y.FdGBF_Star5, y.FdGBF_LastDate });
+                        yDate = dateTimeList.Max();
                         return ((new System.Collections.CaseInsensitiveComparer()).Compare(xDate, yDate));
                     case GBFMessageAbstractModel.SearchSortTypeEnum.属性:
                         return ((new System.Collections.CaseInsensitiveComparer()).Compare((int)y.FeGBF_Element, (int)x.FeGBF_Element));
                     case GBFMessageAbstractModel.SearchSortTypeEnum.类型:
                         return ((new System.Collections.CaseInsensitiveComparer()).Compare((int)y.FeWeapon_Kind, (int)x.FeWeapon_Kind));
-                    default:
-                        break;
                 }
                 return 0;
             }
         }
 
-        public void ClearPageCount()
-        {
-            NowPage = 0;
-            PageCount = 0;
-        }
 
         /// <summary>
         /// 筛选器查询方法
         /// </summary>
-        /// <param name="Page">查询的页数</param>
-        /// <param name="SearchName">搜索名称</param>
         /// <returns></returns>
         public ObjectResult<Weapon> FilterRun()
-        {   
-            var ResultObj = new ObjectResult<Weapon>();
-            
+        {
+            var resultObj = new ObjectResult<Weapon>();
+
             if (NowPage <= 0)
             {
-                ClearPageCount();
-                return ResultObj.SetError("页码不正确");
+                NowPage = 1;
             }
             if (TargetList.Count < 1 || TargetList == null)
             {
-                return ResultObj.SetError("武器数据库中无数据");
+                return resultObj.SetError("武器数据库中无数据");
             }
-            List<Weapon> ResultList = TargetList;
+            var resultList = TargetList;
 
             //搜索
-            if (SearchName != "" && SearchName != null)
+            if (!string.IsNullOrEmpty(SearchName))
             {
-                ResultList = ResultList.Where(x =>
-                                          Regex.IsMatch(x.FsName_CHS,SearchName) ||
-                                          Regex.IsMatch(x.FsName_EN,SearchName) ||
+                resultList = resultList.Where(x =>
+                                          Regex.IsMatch(x.FsName_CHS, SearchName) ||
+                                          Regex.IsMatch(x.FsName_EN, SearchName) ||
                                           Regex.IsMatch(x.FsName_JP, SearchName) ||
                                           x.FsSearch_Nickname.Exists(n => Regex.IsMatch(n, SearchName)) ||
                                           x.FsGBF_Nickname.Exists(n => Regex.IsMatch(n, SearchName))).ToList();
@@ -562,81 +575,110 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             try
             {
                 //筛选器筛选操作
-                if (Fc_WeaponElement != GBFMessageAbstractModel.GBFElementCHSEnum.全部)
+                if (FcWeaponRarity != GBFMessageAbstractModel.GBFRarityEnum.all)
                 {
-                    ResultList = ResultList.Where(x => x.FeGBF_Element == Fc_WeaponElement).ToList();
+                    resultList = resultList.Where(x => x.FeGBF_Rarity == FcWeaponRarity).ToList();
                 }
-                if (Fc_WeaponRarity != GBFMessageAbstractModel.GBFRarityEnum.all)
+                if (FcWeaponElement != GBFMessageAbstractModel.GBFElementCHSEnum.全部)
                 {
-                    ResultList = ResultList.Where(x => x.FeGBF_Rarity == Fc_WeaponRarity).ToList();
+                    resultList = resultList.Where(x => x.FeGBF_Element == FcWeaponElement).ToList();
                 }
-                if (Fc_WeanponKind != Weapon.WeaponKind.ALL)
+                if (FcSeriesName != GBFSeriesNameEnum.全部系列)
                 {
-                    ResultList = ResultList.Where(x => x.FeWeapon_Kind == Fc_WeanponKind).ToList();
+                    resultList = resultList.Where(x => x.FsSeries_Name == FcSeriesName).ToList();
                 }
-                if (Fc_SeriesName != Weapon.GBFSeriesNameEnum.全部系列)
+                if (WeaponCategory != GBFMessageAbstractModel.GBFCategoryEnum.全部)
                 {
-                    ResultList = ResultList.Where(x => x.FsSeries_Name == Fc_SeriesName).ToList();
+                    if (WeaponCategory == GBFMessageAbstractModel.GBFCategoryEnum.月中 || WeaponCategory == GBFMessageAbstractModel.GBFCategoryEnum.月底)
+                    {
+                        resultList = resultList.Where(x => x.FsGBF_Tag == WeaponCategory.ToString()).ToList();
+                    }
+                    else
+                    {
+                        resultList = resultList.Where(x => x.FsGBF_Category == WeaponCategory).ToList();
+                    }
                 }
-                if (WeaponSkillID != -1)
+                if (FcWeaponKind != WeaponKind.全部)
                 {
-                    ResultList = ResultList.Where(x => x.WeaponSkill.Exists(s => s.Skill_ID == WeaponSkillID)).ToList();
+                    resultList = resultList.Where(x => x.FeWeapon_Kind == FcWeaponKind).ToList();
                 }
-                if (FnGBF_MaxEvo != 1)
+                if (WeaponSkillName != "全部技能")
                 {
-                    ResultList = ResultList.Where(x => x.FnGBF_MaxEvo == FnGBF_MaxEvo).ToList();
+                    resultList = resultList.Where(x => x.WeaponSkill.Exists(s => s.Main_Description == WeaponSkillName)).ToList();
+                }
+                if (SearchEvoCount != GFBSearchEvoCountEnum.全部)
+                {
+                    FnGbfMaxEvo = (short)SearchEvoCount;
+                    switch (FnGbfMaxEvo)
+                    {
+                        case 1:
+                            resultList = resultList.Where(x => x.FnGBF_MaxEvo >= 4).ToList();
+                            break;
+                        case 3:
+                        case 4:
+                        case 5:
+                            resultList = resultList.Where(x => x.FnGBF_MaxEvo == FnGbfMaxEvo).ToList();
+                            break;
+                    }
+
                 }
             }
             catch (Exception ex)
             {
-                return ResultObj.SetError("筛选器错误：" + ex.Message);
+                return resultObj.SetError("筛选器错误：" + ex.Message);
             }
-            
+
             //排序前的判空
-            if (ResultList.Count < 1 || ResultList == null)
+            if (resultList.Count < 1 || resultList == null)
             {
-                ClearPageCount();
-                return ResultObj;
+                NowPage = 0;
+                PageCount = 0;
+                resultObj.ObjList = resultList;
+                return resultObj;
             }
-            //传入排序类型 排序
-            ResultList.Sort(new WeaponListReverserClass(SearchSortType));
+            //传入排序类型 先按名称排序 再按排序类型排序
+            var weaponListReverser = new WeaponListReverserClass(SearchSortType) {IsNameSort = true};
+            resultList.Sort(weaponListReverser);
+            weaponListReverser.IsNameSort = false;
+            resultList.Sort(weaponListReverser);
+            
             //升序降序的反转
             if (SearchSortType == GBFMessageAbstractModel.SearchSortTypeEnum.最近更新 ||
                 SearchSortType == GBFMessageAbstractModel.SearchSortTypeEnum.属性 ||
                 SearchSortType == GBFMessageAbstractModel.SearchSortTypeEnum.最早登场)
             {
-                ResultList.Reverse();
+                resultList.Reverse();
             }
 
             //分页设置
-            if (ResultList.Count > 0)
+            if (resultList.Count > 0)
             {
-                PageCount = (ResultList.Count % pageContentCount > 0) ? ResultList.Count / pageContentCount + 1 : ResultList.Count / pageContentCount;
+                PageCount = (resultList.Count % PageContentCount > 0) ? resultList.Count / PageContentCount + 1 : resultList.Count / PageContentCount;
                 if (NowPage > PageCount)
                 {
-                    ClearPageCount();
-                    return ResultObj.SetError("页码超出范围");
+                    //ClearPageCount();
+                    return resultObj.SetError("页码超出范围");
                 }
                 else
                 {
                     if (NowPage == PageCount)
                     {
-                        int LastPageCount = ResultList.Count - (PageCount - 1) * pageContentCount;
-                        ResultObj.ObjList = ResultList.GetRange(ResultList.Count - LastPageCount, LastPageCount);
-                        return ResultObj;
+                        var lastPageCount = resultList.Count - (PageCount - 1) * PageContentCount;
+                        resultObj.ObjList = resultList.GetRange(resultList.Count - lastPageCount, lastPageCount);
+                        return resultObj;
                     }
-                    ResultList = ResultList.GetRange(NowPage * pageContentCount - pageContentCount, pageContentCount);
+                    resultList = resultList.GetRange(NowPage * PageContentCount - PageContentCount, PageContentCount);
                 }
-                
-                ResultObj.ObjList = ResultList;
+
+                resultObj.ObjList = resultList;
             }
             else
             {
-                ClearPageCount();
-                return ResultObj;
+                //ClearPageCount();
+                return resultObj;
             }
 
-            return ResultObj;
+            return resultObj;
         }
 
         #endregion

@@ -1,21 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace GBFDesktopTools.View
 {
-    using GBFDesktopTools.Model;
-    using GBFDesktopTools.Model.abstractModel;
+    using Model.abstractModel;
     /// <summary>
     /// pgSelectCondition.xaml 的交互逻辑
     /// </summary>
@@ -88,7 +80,7 @@ namespace GBFDesktopTools.View
                     if (TargetTypeList.Count == 0 || RarityList.Count == 0 || ExcList.Count == 0)
                     {
                         this.ParentWindow.IsSelectCondition = false;
-                        this.ParentWindow.NG.NavigaionWin.Close();
+                        this.ParentWindow.Ng.NavigaionWin.Close();
                         return;
                     }
 
@@ -112,12 +104,12 @@ namespace GBFDesktopTools.View
                     }
 
                     this.ParentWindow.IsSelectCondition = true;
-                    this.ParentWindow.NG.NavigaionWin.Close();
+                    this.ParentWindow.Ng.NavigaionWin.Close();
                     return;
 
                 case "Back":
                     this.ParentWindow.IsSelectCondition = false;
-                    this.ParentWindow.NG.NavigaionWin.Close();
+                    this.ParentWindow.Ng.NavigaionWin.Close();
                     return;
             }
         }

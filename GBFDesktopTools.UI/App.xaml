@@ -6,11 +6,10 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/Panuon.UI.Silver;component/Control.xaml" />
+                <ResourceDictionary Source="UIDictionary.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Panuon.UI.Silver;component/Control.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
+        
     </Application.Resources>
 </Application>
-<!--<ResourceDictionary>
-    <BitmapImage x:Key="MainIcon" UriSource="Resources\Icon\SpiderProgramA.ico"/>
-</ResourceDictionary>-->

@@ -1,81 +1,106 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
+using System.Reflection;
 using GBFDesktopTools.Model.abstractModel;
+using GBFDesktopTools.Model.ToolAndHelper;
 
+// ReSharper disable once CheckNamespace
 namespace GBFDesktopTools.Model
 {
-    public class Weapon:GBFMessageAbstractModel
+    public class Weapon : GBFMessageAbstractModel
     {
-        #region Enum
+        #region 构造方法
+
+        public Weapon()
+        {
+            FsSearch_Nickname = new List<string>();
+            FsGBF_Nickname = new List<string>();
+        }
+
+        #endregion
+
+        #region Method
+
         /// <summary>
-        /// 武器类型枚举
+        /// 设置武器系列
+        /// </summary>
+        /// <param name="FC">获取包含武器系列的中日文对照词典</param>
+        /// <param name="TargetStr">武器系列日文字符串</param>
+        public void SetGBFSeriesName(FilterCondition FC, string TargetStr)
+        {
+            FsSeries_Name = string.IsNullOrEmpty(TargetStr) ? GBFSeriesNameEnum.未知 : FC.WeaponJpSeriesNameDic[TargetStr];
+        }
+
+        #endregion
+
+        #region Enum
+
+        /// <summary>
+        ///     武器类型枚举
         /// </summary>
         public enum WeaponKind
-        {   
+        {
+            /// <summary>
+            ///     无效
+            /// </summary>
+            无效类型 = -1,
             /// <summary>
             /// 全部类型，筛选器词缀
             /// </summary>
-            ALL,
+            全部 = 0,
             /// <summary>
-            /// 无效
+            ///     Sword
             /// </summary>
-            Invalid = 0,
+            剑 = 1,
             /// <summary>
-            /// 剑
+            ///     Dagger
             /// </summary>
-            Sword = 1,
+            匕首 = 2,
             /// <summary>
-            /// 匕首
+            ///     Spear
             /// </summary>
-            Dagger = 2,
+            长枪 = 3,
             /// <summary>
-            /// 长枪
+            ///     Axe
             /// </summary>
-            Spear = 3,
+            斧 = 4,
             /// <summary>
-            /// 斧头
+            ///     MagicWand
             /// </summary>
-            Axe = 4,
+            杖 = 5,
             /// <summary>
-            /// 杖
+            ///     Pistol
             /// </summary>
-            MagicWand = 5,
+            铳 = 6,
             /// <summary>
-            /// 铳
+            ///     Fighting
             /// </summary>
-            Pistol = 6,
+            格斗 = 7,
             /// <summary>
-            /// 格斗
+            ///     Bow
             /// </summary>
-            Fighting = 7,
+            弓 = 8,
             /// <summary>
-            /// 弓
+            ///     MusicalInstruments
             /// </summary>
-            Bow = 8,
+            乐器 = 9,
             /// <summary>
-            /// 乐器
+            ///     Blade
             /// </summary>
-            MusicalInstruments = 9,
+            刀 = 10,
             /// <summary>
-            /// 刀
+            ///     Material
             /// </summary>
-            Blade = 10,
-            /// <summary>
-            /// 素材
-            /// </summary>
-            Material = 99
+            素材 = 99
         }
 
         /// <summary>
-        /// 武器系列
+        ///     武器系列
         /// </summary>
         public enum GBFSeriesNameEnum
-        {   
-            全部系列,
-            Unknown,
+        {
+            未知 = -1,
+            全部系列 = 0,
             强化素材,
             玛格纳方阵系列,
             王权方阵系列,
@@ -110,25 +135,15 @@ namespace GBFDesktopTools.Model
         }
 
         /// <summary>
-        /// 筛选器武器突破次数
+        ///     筛选器武器突破次数
         /// </summary>
-        public enum GFBSearchEvoCounEnum
-        {   
-            全部,
+        public enum GFBSearchEvoCountEnum
+        {
+            全部 = 0,
             三星 = 3,
             四星 = 4,
-            四星及以上 = 1,
+            四星以上 = 1,
             五星 = 5
-        }
-
-        #endregion
-
-        #region 构造方法
-
-        public Weapon()
-        {
-            FsSearch_Nickname = new List<string>();
-            FsGBF_Nickname = new List<string>();
         }
 
         #endregion
@@ -146,80 +161,116 @@ namespace GBFDesktopTools.Model
         private string _WeaponImgUrl_s;
 
         /// <summary>
-        /// 是否过时
+        ///     是否过时
         /// </summary>
         public bool FbGBF_IsArchaic
         {
-            get { return _FbGBF_IsArchaic; }
-            set { _FbGBF_IsArchaic = value; this.RaisePropertyChanged(x => x.FbGBF_IsArchaic); }
+            get => _FbGBF_IsArchaic;
+            set
+            {
+                _FbGBF_IsArchaic = value;
+                this.RaisePropertyChanged(x => x.FbGBF_IsArchaic);
+            }
         }
+
         /// <summary>
-        /// 解锁的角色ID
+        ///     解锁的角色ID
         /// </summary>
         public long FnGBF_UnlockChar
         {
-            get { return _FnGBF_UnlockChar; }
-            set { _FnGBF_UnlockChar = value; this.RaisePropertyChanged(x => x.FnGBF_UnlockChar); }
+            get => _FnGBF_UnlockChar;
+            set
+            {
+                _FnGBF_UnlockChar = value;
+                this.RaisePropertyChanged(x => x.FnGBF_UnlockChar);
+            }
         }
+
         /// <summary>
-        /// 武器ID
+        ///     武器ID
         /// </summary>
         public long FnWeapon_ID
         {
-            get { return _FnWeapon_ID; }
-            set { _FnWeapon_ID = value; this.RaisePropertyChanged(x => x.FnWeapon_ID); }
+            get => _FnWeapon_ID;
+            set
+            {
+                _FnWeapon_ID = value;
+                this.RaisePropertyChanged(x => x.FnWeapon_ID);
+            }
         }
+
         /// <summary>
-        /// 武器图片 无框斜图
+        ///     武器图片 无框斜图
         /// </summary>
         public string WeaponImgUrl_b
         {
-            get { return _WeaponImgUrl_b; }
-            set { _WeaponImgUrl_b = value; this.RaisePropertyChanged(x => x.WeaponImgUrl_b); }
+            get => _WeaponImgUrl_b;
+            set
+            {
+                _WeaponImgUrl_b = value;
+                this.RaisePropertyChanged(x => x.WeaponImgUrl_b);
+            }
         }
+
         /// <summary>
-        /// 武器图片 游戏内造型
+        ///     武器图片 游戏内造型
         /// </summary>
         public string WeaponImgUrl_cjs
         {
-            get { return _WeaponImgUrl_cjs; }
-            set { _WeaponImgUrl_cjs = value; this.RaisePropertyChanged(x => x.WeaponImgUrl_cjs); }
+            get => _WeaponImgUrl_cjs;
+            set
+            {
+                _WeaponImgUrl_cjs = value;
+                this.RaisePropertyChanged(x => x.WeaponImgUrl_cjs);
+            }
         }
+
         /// <summary>
-        /// 武器图片 有框竖图
+        ///     武器图片 有框竖图
         /// </summary>
         public string WeaponImgUrl_ls
         {
-            get { return _WeaponImgUrl_ls; }
-            set { _WeaponImgUrl_ls = value; this.RaisePropertyChanged(x => x.WeaponImgUrl_ls); }
+            get => _WeaponImgUrl_ls;
+            set
+            {
+                _WeaponImgUrl_ls = value;
+                this.RaisePropertyChanged(x => x.WeaponImgUrl_ls);
+            }
         }
+
         /// <summary>
-        /// 武器图片 有框横图
+        ///     武器图片 有框横图
         /// </summary>
         public string WeaponImgUrl_m
         {
             get
             {
-                if (_WeaponImgUrl_m == "")
-                {
-                    var path = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
-                    path = path.Remove(path.IndexOf(@"GBFDesktopTools.Model.DLL"));
-                    path += @"Resources\Image\Weapon\ErrorImage (2).png";
-                    return path;
-                } 
-                return _WeaponImgUrl_m;
+                if (_WeaponImgUrl_m != "") return _WeaponImgUrl_m;
+                var path = Assembly.GetExecutingAssembly().CodeBase;
+                path = path.Remove(path.IndexOf(@"GBFDesktopTools.Model.DLL", StringComparison.Ordinal));
+                path += @"Resources\Image\Weapon\ErrorImage (2).png";
+                return path;
             }
-            set { _WeaponImgUrl_m = value; this.RaisePropertyChanged(x => x.WeaponImgUrl_m); }
+            set
+            {
+                _WeaponImgUrl_m = value;
+                this.RaisePropertyChanged(x => x.WeaponImgUrl_m);
+            }
         }
+
         /// <summary>
-        /// 武器图片 有框正方形
+        ///     武器图片 有框正方形
         /// </summary>
         public string WeaponImgUrl_s
         {
-            get { return _WeaponImgUrl_s; }
-            set { _WeaponImgUrl_s = value; this.RaisePropertyChanged(x => x.WeaponImgUrl_s); }
+            get => _WeaponImgUrl_s;
+            set
+            {
+                _WeaponImgUrl_s = value;
+                this.RaisePropertyChanged(x => x.WeaponImgUrl_s);
+            }
         }
-        
+
         #endregion
 
         #region SpecialInformation
@@ -238,130 +289,142 @@ namespace GBFDesktopTools.Model
 
 
         /// <summary>
-        /// 获取技能名称
+        ///     获取技能名称
         /// </summary>
         public string GetSkillName
         {
-            get 
+            get
             {
-                string SkillName = "";
-                foreach (var item in WeaponSkill)
-                {
-                    SkillName += item.Main_Description + item.Extra_Comment + ",";
-                }
-                return SkillName == "" ? "无" : SkillName.Remove(SkillName.Length - 1) ; 
+                var skillName = "";
+                foreach (var item in WeaponSkill) skillName += item.Main_Description + item.Extra_Comment + ",";
+                return skillName == "" ? "无" : skillName.Remove(skillName.Length - 1);
             }
         }
+
         /// <summary>
-        /// 获取一个可用的名称
+        ///     获取一个可用的名称
         /// </summary>
-        public String GetCanUseName
-        {
-            get 
-            {
-                return FsName_CHS != "" ? FsName_CHS : FsName_EN != "" ? FsName_EN : FsName_JP;
-            }
-        }
+        public string GetCanUseName => FsName_CHS != "" ? FsName_CHS : FsName_JP != "" ? FsName_JP : FsName_EN;
+
         /// <summary>
-        /// 技能警告 技能无数据 无法计算等
+        ///     技能警告 技能无数据 无法计算等
         /// </summary>
         public bool SkillWarning { get; set; }
+
         /// <summary>
-        /// 武器种类
+        ///     武器种类
         /// </summary>
         public WeaponKind FeWeapon_Kind
         {
-            get { return _FeWeapon_Kind; }
-            set { _FeWeapon_Kind = value; this.RaisePropertyChanged(x => x.FeWeapon_Kind); }
+            get => _FeWeapon_Kind;
+            set
+            {
+                _FeWeapon_Kind = value;
+                this.RaisePropertyChanged(x => x.FeWeapon_Kind);
+            }
         }
+
         /// <summary>
-        /// 技能ID
+        ///     技能ID
         /// </summary>
         public long FnWeapon_SkillID
         {
-            get { return _FnWeapon_SkillID; }
-            set { _FnWeapon_SkillID = value; this.RaisePropertyChanged(x => x.FnWeapon_SkillID); }
+            get => _FnWeapon_SkillID;
+            set
+            {
+                _FnWeapon_SkillID = value;
+                this.RaisePropertyChanged(x => x.FnWeapon_SkillID);
+            }
         }
+
         /// <summary>
-        /// 技能
+        ///     技能
         /// </summary>
         public string FsWeapon_SkillName
         {
-            get { return _FsWeapon_SkillName; }
-            set { _FsWeapon_SkillName = value; this.RaisePropertyChanged(x => x.FsWeapon_SkillName); }
+            get => _FsWeapon_SkillName;
+            set
+            {
+                _FsWeapon_SkillName = value;
+                this.RaisePropertyChanged(x => x.FsWeapon_SkillName);
+            }
         }
+
         /// <summary>
-        /// 5突攻击力
+        ///     5突攻击力
         /// </summary>
         public int FnWeapon_EvoFiveAttack
         {
-            get { return _FnWeapon_EvoFiveAttack; }
-            set { _FnWeapon_EvoFiveAttack = value; this.RaisePropertyChanged(x => x.FnWeapon_EvoFiveAttack); }
+            get => _FnWeapon_EvoFiveAttack;
+            set
+            {
+                _FnWeapon_EvoFiveAttack = value;
+                this.RaisePropertyChanged(x => x.FnWeapon_EvoFiveAttack);
+            }
         }
+
         /// <summary>
-        /// 5突生命值
+        ///     5突生命值
         /// </summary>
         public int FnWeapon_EvoFiveHp
         {
-            get { return _FnWeapon_EvoFiveHp; }
-            set { _FnWeapon_EvoFiveHp = value; this.RaisePropertyChanged(x => x.FnWeapon_EvoFiveHp); }
+            get => _FnWeapon_EvoFiveHp;
+            set
+            {
+                _FnWeapon_EvoFiveHp = value;
+                this.RaisePropertyChanged(x => x.FnWeapon_EvoFiveHp);
+            }
         }
+
         /// <summary>
-        /// 攻击力
+        ///     攻击力
         /// </summary>
         public int FnWeapon_EvoFourAttack
         {
-            get { return _FnWeapon_EvoFourAttack; }
-            set { _FnWeapon_EvoFourAttack = value; this.RaisePropertyChanged(x => x.FnWeapon_EvoFourAttack); }
+            get => _FnWeapon_EvoFourAttack;
+            set
+            {
+                _FnWeapon_EvoFourAttack = value;
+                this.RaisePropertyChanged(x => x.FnWeapon_EvoFourAttack);
+            }
         }
+
         /// <summary>
-        /// 4突生命值
+        ///     4突生命值
         /// </summary>
         public int FnWeapon_EvoFourHp
         {
-            get { return _FnWeapon_EvoFourHp; }
-            set { _FnWeapon_EvoFourHp = value; this.RaisePropertyChanged(x => x.FnWeapon_EvoFourHp); }
+            get => _FnWeapon_EvoFourHp;
+            set
+            {
+                _FnWeapon_EvoFourHp = value;
+                this.RaisePropertyChanged(x => x.FnWeapon_EvoFourHp);
+            }
         }
+
         /// <summary>
-        /// 100级攻击
+        ///     100级攻击
         /// </summary>
         public int FnWeapon_MaxAttack
         {
-            get { return _FnWeapon_MaxAttack; }
-            set { _FnWeapon_MaxAttack = value; this.RaisePropertyChanged(x => x.FnWeapon_MaxAttack); }
+            get => _FnWeapon_MaxAttack;
+            set
+            {
+                _FnWeapon_MaxAttack = value;
+                this.RaisePropertyChanged(x => x.FnWeapon_MaxAttack);
+            }
         }
+
         /// <summary>
-        /// 100级生命值
+        ///     100级生命值
         /// </summary>
         public int FnWeapon_MaxHp
         {
-            get { return _FnWeapon_MaxHp; }
-            set { _FnWeapon_MaxHp = value; this.RaisePropertyChanged(x => x.FnWeapon_MaxHp); }
-        }
-        #endregion
-
-        #region Method
-
-        /// <summary>
-        /// 设置武器系列
-        /// </summary>
-        /// <param name="FC">获取包含武器系列的中日文对照词典</param>
-        /// <param name="TargetStr">武器系列日文字符串</param>
-        public void SetGBFSeriesName(ToolAndHelper.FilterCondition FC,string TargetStr)
-        {
-            if (TargetStr == null || TargetStr == "")
+            get => _FnWeapon_MaxHp;
+            set
             {
-		        this.FsSeries_Name = GBFSeriesNameEnum.Unknown;
-                return;
-            }
-            else
-            {
-                if (this.FsGBF_Tag == "月中" || this.FsGBF_Tag == "月底")
-                {
-                    this.FsSeries_Name = this.FsGBF_Tag == "月中" ? Weapon.GBFSeriesNameEnum.六限武器_月中 : GBFSeriesNameEnum.六限武器_月底;
-                    return;
-                }
-                this.FsSeries_Name = FC.WeaponJPSeriesNameDic[TargetStr];
+                _FnWeapon_MaxHp = value;
+                this.RaisePropertyChanged(x => x.FnWeapon_MaxHp);
             }
         }
 

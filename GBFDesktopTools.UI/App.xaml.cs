@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 
 namespace GBFDesktopTools.View
-{   
-    using System.Windows.Media.Imaging;
-
+{
     /// <summary>
     /// App.xaml 的交互逻辑
     /// </summary>
@@ -19,5 +12,6 @@ namespace GBFDesktopTools.View
             var Win = new MainWindow();
             Win.Show();
         }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System;
+using System.Linq.Expressions;
 
 namespace GBFDesktopTools.Model.abstractModel
 {
@@ -58,10 +59,10 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public void BeginEdit()
         {
-            if (!inTX)
+            if (!inTxT)
             {
                 Backup();
-                inTX = true;
+                inTxT = true;
             }
         }
         /// <summary>
@@ -69,10 +70,10 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public void CancelEdit()
         {
-            if (inTX)
+            if (inTxT)
             {
                 Restore();
-                inTX = false;
+                inTxT = false;
             }
         }
         /// <summary>
@@ -80,23 +81,25 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public void EndEdit()
         {
-            if (inTX)
+            if (inTxT)
             {
                 if (Map != null)
                 {
                     Map.Clear();
                 }
-                inTX = false;
+                inTxT = false;
             }
         }
-        bool inTX = false;
-        System.Collections.Generic.Dictionary<string, object> Map;
-        void Backup()
+
+        private bool inTxT;
+        private Dictionary<string, object> Map;
+
+        private void Backup()
         {
             if (Map == null) Map = new Dictionary<string, object>();
-            System.Type type = this.GetType();
-            System.Reflection.PropertyInfo[] properties = type.GetProperties();
-            foreach (System.Reflection.PropertyInfo property in properties)
+            var type = this.GetType();
+            var properties = type.GetProperties();
+            foreach (var property in properties)
             {
                 if (property.CanRead && property.CanWrite)
                 {
@@ -105,11 +108,12 @@ namespace GBFDesktopTools.Model.abstractModel
                 }
             }
         }
-        void Restore()
+
+        private void Restore()
         {
-            System.Type type = this.GetType();
-            System.Reflection.PropertyInfo[] properties = type.GetProperties();
-            foreach (System.Reflection.PropertyInfo property in properties)
+            var type = this.GetType();
+            var properties = type.GetProperties();
+            foreach (var property in properties)
             {
                 if (property.CanWrite)
                 {
@@ -137,7 +141,7 @@ namespace GBFDesktopTools.Model.abstractModel
         {
             if (this.PropertyChanged != null)
             {
-                this.PropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+                PropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
         #endregion
@@ -173,9 +177,8 @@ namespace GBFDesktopTools.Model.abstractModel
         {
             if (expression == null) return;
 
-            if (expression.Body is System.Linq.Expressions.NewExpression)
+            if (expression.Body is NewExpression newExpression)
             {
-                var newExpression = expression.Body as System.Linq.Expressions.NewExpression;
                 foreach (var x in newExpression.Members)
                 {
                     propertyChangedBase.RaisePropertyChanged(x.Name);

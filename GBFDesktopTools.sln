@@ -7,14 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GBFDesktopTools.UI", "GBFDe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{7CA4BA35-709B-4A9A-AAB0-1432C9CB5BCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Panuon.UI.Silver", "GBFDesktopTools.UI\References\PanuonUI.Silver-2.0.0\Net40\Panuon.UI.Silver\Panuon.UI.Silver.csproj", "{8604F7A7-0AC0-4123-824C-F7BD7034358F}"
-EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		GBFDesktopTools.UI\References\PanuonUI.Silver-2.0.0\SharedResources\Panuon.UI.Silver.Core\Panuon.UI.Silver.Core.projitems*{8604f7a7-0ac0-4123-824c-f7bd7034358f}*SharedItemsImports = 4
-		GBFDesktopTools.UI\References\PanuonUI.Silver-2.0.0\SharedResources\Panuon.UI.Silver.Internal\Panuon.UI.Silver.Internal.projitems*{8604f7a7-0ac0-4123-824c-f7bd7034358f}*SharedItemsImports = 4
-		GBFDesktopTools.UI\References\PanuonUI.Silver-2.0.0\SharedResources\Panuon.UI.Silver\Panuon.UI.Silver.projitems*{8604f7a7-0ac0-4123-824c-f7bd7034358f}*SharedItemsImports = 4
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -44,18 +37,6 @@ Global
 		{7CA4BA35-709B-4A9A-AAB0-1432C9CB5BCB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{7CA4BA35-709B-4A9A-AAB0-1432C9CB5BCB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7CA4BA35-709B-4A9A-AAB0-1432C9CB5BCB}.Release|x86.ActiveCfg = Release|Any CPU
-		{8604F7A7-0AC0-4123-824C-F7BD7034358F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8604F7A7-0AC0-4123-824C-F7BD7034358F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8604F7A7-0AC0-4123-824C-F7BD7034358F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{8604F7A7-0AC0-4123-824C-F7BD7034358F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{8604F7A7-0AC0-4123-824C-F7BD7034358F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{8604F7A7-0AC0-4123-824C-F7BD7034358F}.Debug|x86.Build.0 = Debug|Any CPU
-		{8604F7A7-0AC0-4123-824C-F7BD7034358F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8604F7A7-0AC0-4123-824C-F7BD7034358F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8604F7A7-0AC0-4123-824C-F7BD7034358F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{8604F7A7-0AC0-4123-824C-F7BD7034358F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{8604F7A7-0AC0-4123-824C-F7BD7034358F}.Release|x86.ActiveCfg = Release|Any CPU
-		{8604F7A7-0AC0-4123-824C-F7BD7034358F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

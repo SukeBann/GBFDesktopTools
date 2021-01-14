@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+// ReSharper disable InconsistentNaming
 
 namespace GBFDesktopTools.Model.abstractModel
 {   
@@ -67,6 +67,8 @@ namespace GBFDesktopTools.Model.abstractModel
             未知,
             普通,
             金币,
+            月中,
+            月底,
             活动,
             特典,
             泳装浴衣,
@@ -95,7 +97,7 @@ namespace GBFDesktopTools.Model.abstractModel
 
         private string _FsTitle_JP;
         private Weapon.GBFSeriesNameEnum _FsSeries_Name;
-        private Weapon.GBFCategoryEnum _FsGBF_Category;
+        private GBFCategoryEnum _FsGBF_Category;
         private string _FsGBF_Tag;
 
         private List<string> _FsGBF_Nickname;
@@ -124,15 +126,15 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public string FsGBF_Tag
         {
-            get { return _FsGBF_Tag; }
+            get => _FsGBF_Tag;
             set { _FsGBF_Tag = value; this.RaisePropertyChanged(x => x.FsGBF_Tag); }
         }
         /// <summary>
         /// 类别
         /// </summary>
-        public Weapon.GBFCategoryEnum FsGBF_Category
+        public GBFCategoryEnum FsGBF_Category
         {
-            get { return _FsGBF_Category; }
+            get => _FsGBF_Category;
             set { _FsGBF_Category = value; this.RaisePropertyChanged(x => x.FsGBF_Category); }
         }
         /// <summary>
@@ -140,7 +142,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public short FnGBF_MaxEvo
         {
-            get { return _FnGBF_MaxEvo; }
+            get => _FnGBF_MaxEvo;
             set { _FnGBF_MaxEvo = value; this.RaisePropertyChanged(x => x.FnGBF_MaxEvo); }
         }
         /// <summary>
@@ -148,7 +150,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public short FnGBF_BaseEvo
         {
-            get { return _FnGBF_BaseEvo; }
+            get => _FnGBF_BaseEvo;
             set { _FnGBF_BaseEvo = value; this.RaisePropertyChanged(x => x.FnGBF_BaseEvo); }
         }
         /// <summary>
@@ -156,7 +158,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public GBFElementCHSEnum FeGBF_Element
         {
-            get { return _FeGBF_Element; }
+            get => _FeGBF_Element;
             set { _FeGBF_Element = value; this.RaisePropertyChanged(x => x.FeGBF_Element); }
         }
         /// <summary>
@@ -164,7 +166,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public GBFRarityEnum FeGBF_Rarity
         {
-            get { return _FeGBF_Rarity; }
+            get => _FeGBF_Rarity;
             set { _FeGBF_Rarity = value; this.RaisePropertyChanged(x => x.FeGBF_Rarity); }
         }
         /// <summary>
@@ -172,7 +174,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public short FnGBF_UserLevel
         {
-            get { return _FnGBF_UserLevel; }
+            get => _FnGBF_UserLevel;
             set { _FnGBF_UserLevel = value; this.RaisePropertyChanged(x => x.FnGBF_UserLevel); }
         }
         /// <summary>
@@ -180,7 +182,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public string FsGBF_LinkEnwiki
         {
-            get { return _FsGBF_LinkEnwiki; }
+            get => _FsGBF_LinkEnwiki;
             set { _FsGBF_LinkEnwiki = value; this.RaisePropertyChanged(x => x.FsGBF_LinkEnwiki); }
         }
         /// <summary>
@@ -188,7 +190,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public string FsGBF_LinkGamewith
         {
-            get { return _FsGBF_LinkGamewith; }
+            get => _FsGBF_LinkGamewith;
             set { _FsGBF_LinkGamewith = value; this.RaisePropertyChanged(x => x.FsGBF_LinkGamewith); }
         }
         /// <summary>
@@ -196,7 +198,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public DateTime FdGBF_LastDate
         {
-            get { return _FdGBF_LastDate; }
+            get => _FdGBF_LastDate;
             set { _FdGBF_LastDate = value; this.RaisePropertyChanged(x => x.FdGBF_LastDate); }
         }
         /// <summary>
@@ -204,7 +206,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public DateTime FdGBF_Star4
         {
-            get { return _FdGBF_Star4; }
+            get => _FdGBF_Star4;
             set { _FdGBF_Star4 = value; this.RaisePropertyChanged(x => x.FdGBF_Star5); }
         }
         /// <summary>
@@ -212,7 +214,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public DateTime FdGBF_Star5
         {
-            get { return _FdGBF_Star5; }
+            get => _FdGBF_Star5;
             set { _FdGBF_Star5 = value; this.RaisePropertyChanged(x => x.FdGBF_Star5); }
         }
         /// <summary>
@@ -220,7 +222,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public DateTime FdGBF_ReleaseDate
         {
-            get { return _FdGBF_ReleaseDate; }
+            get => _FdGBF_ReleaseDate;
             set { _FdGBF_ReleaseDate = value; this.RaisePropertyChanged(x => x.FdGBF_ReleaseDate); }
         }
         /// <summary>
@@ -228,7 +230,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public List<string> FsSearch_Nickname
         {
-            get { return _FsSearch_Nickname; }
+            get => _FsSearch_Nickname;
             set { _FsSearch_Nickname = value; this.RaisePropertyChanged(x => x.FsSearch_Nickname); }
         }
         /// <summary>
@@ -236,7 +238,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public List<string> FsGBF_Nickname
         {
-            get { return _FsGBF_Nickname; }
+            get => _FsGBF_Nickname;
             set { _FsGBF_Nickname = value; this.RaisePropertyChanged(x => x.FsGBF_Nickname); }
         }
         /// <summary>
@@ -244,7 +246,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public string FsName_CHS
         {
-            get { return _FsName_CHS; }
+            get => _FsName_CHS;
             set { _FsName_CHS = value; this.RaisePropertyChanged(x => x.FsName_CHS); }
         }
         /// <summary>
@@ -252,7 +254,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public string FsName_EN
         {
-            get { return _FsName_EN; }
+            get => _FsName_EN;
             set { _FsName_EN = value; this.RaisePropertyChanged(x => x.FsName_EN); }
         }
         /// <summary>
@@ -260,7 +262,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public Weapon.GBFSeriesNameEnum FsSeries_Name
         {
-            get { return _FsSeries_Name; }
+            get => _FsSeries_Name;
             set { _FsSeries_Name = value; this.RaisePropertyChanged(x => x.FsSeries_Name); }
         }
         /// <summary>
@@ -268,7 +270,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public string FsTitle_JP
         {
-            get { return _FsTitle_JP; }
+            get => _FsTitle_JP;
             set { _FsTitle_JP = value; this.RaisePropertyChanged(x => x.FsTitle_JP); }
         }
         /// <summary>
@@ -276,7 +278,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// </summary>
         public string FsName_JP
         {
-            get { return _FsName_JP; }
+            get => _FsName_JP;
             set { _FsName_JP = value; this.RaisePropertyChanged(x => x.FsName_JP); }
         }
 

@@ -1,143 +1,223 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Panuon.UI.Silver.Core;
 
 namespace GBFDesktopTools.View
 {
-    using GBFDesktopTools.Library;
-    using GBFDesktopTools.Model;
+    using Model;
+    using Library;
+    using Panuon.UI.Silver;
+    using System.Threading;
+    using System.Threading.Tasks;
     using System.Text.RegularExpressions;
+
     /// <summary>
     /// WeaponPanelSimulator.xaml 的交互逻辑
     /// </summary>
-    public partial class WeaponPanelSimulator : Panuon.UI.Silver.WindowX
+    public partial class WeaponPanelSimulator : WindowX
     {
-        WeaponAndSkillExcelReader WeaponAndSkill = new WeaponAndSkillExcelReader();
-        AsyncCollection<Weapon> WeaponList = new AsyncCollection<Weapon>();
-        AsyncCollection<string> WeaponSearchTip = new AsyncCollection<string>();
+        private readonly WeaponAndSkillExcelReader WeaponAndSkill = new WeaponAndSkillExcelReader();
+        private readonly AsyncCollection<string> WeaponSkillNameList = new AsyncCollection<string>();
+        private readonly AsyncCollection<WeaponSkill> WeaponSkillList = new AsyncCollection<WeaponSkill>();
+        private readonly AsyncCollection<Weapon> WeaponList = new AsyncCollection<Weapon>();
+        private readonly AsyncCollection<string> WeaponSearchTip = new AsyncCollection<string>();
 
-        GBFDesktopTools.Model.ToolAndHelper.FilterCondition Fc = null;
-        
-        public WeaponPanelSimulator(WeaponAndSkillExcelReader WAS)
+        private readonly Model.ToolAndHelper.FilterCondition Fc;
+
+        public WeaponPanelSimulator()
         {
             InitializeComponent();
-            WeaponAndSkill = WAS;
 
-            Fc = this.Resources["FcModel"] as GBFDesktopTools.Model.ToolAndHelper.FilterCondition;
-            Icon = App.Current.Resources["MainIcon"] as BitmapImage;
-            (this.Resources["cvsWeaponList"] as CollectionViewSource).Source = WeaponList;
-            (this.Resources["cvsWeaponSearchTip"] as CollectionViewSource).Source = WeaponSearchTip;
+            Fc = this.Resources["FcModel"] as Model.ToolAndHelper.FilterCondition;
+            
+            Icon = Application.Current.Resources["MainIcon"] as BitmapImage;
+            ((CollectionViewSource) this.Resources["cvsWeaponList"]).Source = WeaponList;
+            ((CollectionViewSource) this.Resources["cvsWeaponSearchTip"]).Source = WeaponSearchTip;
 
-            this.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
-            this.Loaded += new RoutedEventHandler(WeaponPanelSimulator_Loaded);
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            this.Loaded += WeaponPanelSimulator_Loaded;
         }
 
-        void WeaponPanelSimulator_Loaded(object sender, RoutedEventArgs e)
+        private void WeaponPanelSimulator_Loaded(object sender, RoutedEventArgs e)
         {
-            Fc.GetSearchTipList(WeaponAndSkill.WeaponList.ObjList);
+            RunTaskMethod();
+            // ReSharper disable once PossibleNullReferenceException
+            cbSortTypeList.ItemsSource = Fc.SearchSortTypeList;
+            cbWeaponKindList.ItemsSource = Fc.WeaponKindList;
+            cbWeaponSeriesNameList.ItemsSource = Fc.WeaponSeriesNameList;
+            cbWeaponEvoCountList.ItemsSource = Fc.WeaponSearchEvoCountList;
+            cbWeaponElementList.ItemsSource = Fc.WeaponElementList;
+            cbWeaponCategoryList.ItemsSource = Fc.WeaponCategoryList;
+            cbWeaponRarityList.ItemsSource = Fc.WeaponRarityList;
+
+            cbWeaponSkillNameList.ItemsSource = WeaponSkillNameList;
+            cbWeaponSkillNameList.SelectedIndex = 0;
+
+            Fc.loadWeaponListHandler += SearchRunEvent;
             this.Loaded -= WeaponPanelSimulator_Loaded;
         }
 
-        private void SearchRun(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// 异步加载数据时显示加载窗口
+        /// </summary>
+        private void RunTaskMethod()
         {
-            var Bt = sender as Button;
-            string Tags = Bt.Tag.ToString();
-            int pageIndex = Fc.NowPage;
-            var Obj = new Model.abstractModel.ObjectResult<Weapon>();
-            WeaponList.Clear();
-
-            switch (Tags)
+            try
             {
-                case "Search":
-                case "First":
-                    Fc.NowPage = 1;
-                    Obj = Fc.FilterRun();
-                    break;
-                case "Previous":
-                    Fc.NowPage = Fc.NowPage - 1 < 0 ? 0 : Fc.NowPage - 1;
-                    Obj = Fc.FilterRun();
-                    break;
-                case "Next":
-                    Fc.NowPage = Fc.NowPage + 1 > Fc.PageCount ? Fc.PageCount : Fc.NowPage + 1;
-                    Obj = Fc.FilterRun();
-                    break;
-                case "Last":
-                    if (Fc.PageCount == 0)
+                var PendingBox = PendingBoxX.Show("正在加载武器数据，请稍等。", "Loading~",this);
+                var task = Task.Factory.StartNew(() => WeaponAndSkill.LoadWeaponPanelSimulator());
+                var act = new Action(() =>
+                {
+                    try
                     {
-                        MessageBox.Show("当前列表没有数据");
-                        return;
+                        while (true)
+                        {
+                            if (!task.IsCompleted) continue;
+                            Fc.GetSearchTipList(WeaponAndSkill.WeaponList.ObjList);
+                            WeaponSkillList.AddRange(WeaponAndSkill.SkillList.ObjList);
+                            WeaponSkillNameList.AddRange(WeaponAndSkill.SkillList.ObjList.GroupBy(x => x.Main_Description).Select(x => x.Key).ToList());
+                            PendingBox.Close();
+
+                            var excelReader = task.Result;
+                            if (excelReader.HasError)
+                            {
+                                throw new Exception(excelReader.ErrorMsg);
+                            }
+                            return;
+                        }
                     }
-                    Fc.NowPage = Fc.PageCount;
-                    Obj = Fc.FilterRun();
-                    break;
-                case "Goto":
-                    Fc.NowPage = Convert.ToInt32(this.tbGotoValue.Text == "" ? "0" : this.tbGotoValue.Text);
-                    Obj = Fc.FilterRun();
-                    break;
+                    catch (Exception ex)
+                    {
+                        MessageBoxX.Show("子线程错误：" + ex.Message, "ErrorMessage", MessageBoxButton.OK, MessageBoxIcon.Error);
+                        Application.Current.Dispatcher.Invoke(new Action(this.Close));
+                    }
+                });
+                var thread = new Thread(new ThreadStart(act));
+                thread.Start();
             }
-            if (Obj.hasError)
+            catch (Exception ex)
             {
-                MessageBox.Show("加载列表出错："+Obj.ErrorMsg);
+                MessageBoxX.Show("打开窗口时发生错误：" + ex.Message, "ErrorMessage", MessageBoxButton.OK, MessageBoxIcon.Error);
+                this.Close();
+            }
+        }
+
+        private void FilterRunMethod()
+        {
+            this.IsMaskVisible = false;
+            var Obj = Fc.FilterRun();
+            WeaponList.Clear();
+            if (Obj.hasError || Obj.ObjList.Count == 0)
+            {
+                NoticeX.Show("加载列表出错：" + (string.IsNullOrEmpty(Obj.ErrorMsg) ? "没有查询到数据":Obj.ErrorMsg), MessageBoxIcon.Error,900);
                 return;
             }
             WeaponList.AddRange(Obj.ObjList);
+
+            this.IsMaskVisible = false;
+        }
+
+        private void SearchRunEvent(object sender, EventArgs e)
+        {
+            FilterRunMethod();
+        }
+
+        private void SearchRunClick(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is Button button))
+            {
+                return;
+            }
+
+            Fc.loadWeaponListHandler -= SearchRunEvent;
+            var tags = button.Tag;
+            switch (tags)
+            {
+                case "Search":
+                    Fc.NowPage = 1;
+                    break;
+                case "Goto":
+                    var tempInt = string.IsNullOrEmpty(tbGotoValue.Text) ? 1 : Convert.ToInt32(tbGotoValue.Text);
+                    if (tempInt > Fc.PageCount || tempInt < 1)
+                    {
+                        NoticeX.Show("页码超出范围","error",MessageBoxIcon.Error,900);
+                        return;
+                    }
+                    Fc.NowPage = tempInt;
+                    break;
+            }
+            FilterRunMethod();
+            Fc.loadWeaponListHandler += SearchRunEvent;
         }
 
         //显示搜索提示
         private void wtSearchInput_TextChanged(object sender, TextChangedEventArgs e)
         {
             WeaponSearchTip.Clear();
-            var waterText = sender as Xceed.Wpf.Toolkit.WatermarkTextBox;
-            var Text = waterText.Text;
-            if (Text == string.Empty || Text == null)
-            {
-                return;
-            }
-            List<string> TempList = new List<string>();
+            if (!(sender is TextBox txBox))return;
+
+            var Text = txBox.Text.Replace(@"\","");
+            if (Text.IsNullOrEmpty()) return;
 
             //匹配含有目标值的字符串
-            TempList = Fc.SearchTip.Where(x => Regex.IsMatch(x, Text,RegexOptions.IgnoreCase)).ToList();
-            
+            var TempList = Fc.SearchTip.Where(x => Regex.IsMatch(x, Text,RegexOptions.IgnoreCase)).ToList();
+            if (TempList.Count == 0) return;
+
             //按照目标值在字符串中的索引排序
-            TempList.Sort(new GBFDesktopTools.Model.ToolAndHelper.FilterCondition.SearchTipListReverserClass(Text));
+            TempList.Sort(new Model.ToolAndHelper.FilterCondition.SearchTipListReverserClass(Text));
+            
             //反转List
             TempList.Reverse();
 
             //如果有十个以上的值则取前十个
-            if (TempList.Count >= 10)
-            {
-                TempList = TempList.GetRange(0, 10);
-            }
-            //否则取10一下的最大值
-            else
-            {
-                TempList = TempList.GetRange(0, TempList.Count);
-            }
+            TempList = TempList.GetRange(0, TempList.Count >= 10 ? 10 : TempList.Count);
 
             WeaponSearchTip.AddRange(TempList);
             puInputTip.IsOpen = true;
         }
-        //选中搜索提示后填入WaterMarkTextBox
-        private void SelectTipChange(object sender, SelectionChangedEventArgs e)
+
+        private void SearchKeyUp(object sender, KeyEventArgs e)
         {
-            ListBox lb = sender as ListBox;
-            var lbItem = lb.SelectedItem as string;
-            if (lbItem == null || lbItem == string.Empty)
+            if (e.Key == Key.Enter)
             {
+                if (puInputTip.IsOpen)
+                {
+                    var text = TipListbox.SelectedItem?.ToString();
+                    if (!string.IsNullOrEmpty(text))
+                    {
+                        tbSearchInput.Text = text;
+                    }
+                }
+
+                Fc.loadWeaponListHandler -= SearchRunEvent;
+                FilterRunMethod();
+                Fc.loadWeaponListHandler += SearchRunEvent;
+                puInputTip.IsOpen = false;
                 return;
             }
 
-            wtSearchInput.TextChanged -= wtSearchInput_TextChanged;
-            wtSearchInput.Text = lbItem;
-            puInputTip.IsOpen = false;
-            wtSearchInput.TextChanged += wtSearchInput_TextChanged;
+            if (e.Key != Key.Down)
+            {
+                if (e.Key != Key.Up)
+                {
+                    return;
+                }
+            }
+
+            if (TipListbox.SelectedItem == null)
+            {
+                TipListbox.Focus();
+                if (TipListbox.SelectedItem == null)
+                {
+                    TipListbox.SelectedIndex = 0;
+                }
+            }
         }
-
-
 
     }
 }

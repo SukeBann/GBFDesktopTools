@@ -66,8 +66,13 @@
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net40-client\HtmlAgilityPack.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Windows.Shell">
-      <HintPath>References\PanuonUI.Silver-2.0.0\Net40\Panuon.UI.Silver\bin\Debug\Microsoft.Windows.Shell.dll</HintPath>
+    <Reference Include="Microsoft.Windows.Shell, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>References\PanuonUI.Silver-2.0.9\Net40\Panuon.UI.Silver\bin\Debug\Microsoft.Windows.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="Panuon.UI.Silver, Version=2.0.0.9, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>References\PanuonUI.Silver-2.0.9\Net40\Panuon.UI.Silver\bin\Debug\Panuon.UI.Silver.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -85,15 +90,14 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\packages\ExtendedWPFToolkit\Xceed.Wpf.Toolkit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Tools\ConverterHelper.cs" />
+    <Compile Include="Tools\UniformWrapPanel.cs" />
     <Compile Include="UI\Method\WeaponPanelSimulator\WeaponPanelSimulator.xaml.cs">
       <DependentUpon>WeaponPanelSimulator.xaml</DependentUpon>
     </Compile>
@@ -133,6 +137,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UIDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="UI\DownLoad\pgSelectCondition.xaml.cs">
@@ -157,6 +165,7 @@
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Panuon.UI.Silver.csproj" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -170,15 +179,16 @@
       <Project>{7CA4BA35-709B-4A9A-AAB0-1432C9CB5BCB}</Project>
       <Name>Model</Name>
     </ProjectReference>
-    <ProjectReference Include="References\PanuonUI.Silver-2.0.0\Net40\Panuon.UI.Silver\Panuon.UI.Silver.csproj">
-      <Project>{8604f7a7-0ac0-4123-824c-f7bd7034358f}</Project>
-      <Name>Panuon.UI.Silver</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Image\VerticalEmpty.jpg" />
+    <Resource Include="Resources\Image\ErrorImage %282%29.png" />
+    <Resource Include="Resources\Image\ErrorImage.png" />
+    <Resource Include="Resources\Image\HorizontalEmpty.jpg" />
+    <Resource Include="Resources\Icon\FuJiang.ico" />
     <Content Include="Resources\Icon\SpiderProgramA.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -208,6 +218,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

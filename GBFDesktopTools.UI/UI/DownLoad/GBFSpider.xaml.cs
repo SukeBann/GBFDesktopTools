@@ -5,17 +5,8 @@ using System.Text;
 using System.Net;
 using System.Windows;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Windows.Navigation;
-using HtmlAgilityPack;
 using GBFDesktopTools.Model;
 using GBFDesktopTools.Model.abstractModel;
 using GBFDesktopTools.Model.ToolAndHelper;
@@ -29,9 +20,9 @@ namespace GBFDesktopTools.View
     {
         //下载条件列表
         public List<SpiderCondition> DownList = new List<SpiderCondition>();
-        public Navigationer<GBFSpider, pgSelectCondition> NG = null;
+        public Navigationer<GBFSpider, pgSelectCondition> Ng = null;
         //下载状态
-        public DownLoadMessage DLM = new DownLoadMessage("Welcome GBFSpiderProgram", "Click the Buttons to Use the Program");
+        public DownLoadMessage Dlm = new DownLoadMessage("Welcome GBFSpiderProgram", "Click the Buttons to Use the Program");
         public bool IsSelectCondition = false;
         
         //下载对象
@@ -51,8 +42,8 @@ namespace GBFDesktopTools.View
         {
             InitializeComponent();
             this.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
-            DownLoadMessage.ItemsSource = DLM.CustomMessage;
-            this.PBSpiderProgress.DataContext = DLM;  
+            DownLoadMessage.ItemsSource = Dlm.CustomMessage;
+            this.PBSpiderProgress.DataContext = Dlm;  
             this.Loaded += new RoutedEventHandler(GBFSpider_Loaded);
         }
 
@@ -61,7 +52,7 @@ namespace GBFDesktopTools.View
         private void GBFSpider_Loaded(object sender, RoutedEventArgs e)
         {
             this.Loaded -= GBFSpider_Loaded;
-            DLM.ProgressBarValue = 0;
+            Dlm.ProgressBarValue = 0;
         }
 
         private void SpiderRun_Click(object sender, RoutedEventArgs e)
@@ -72,11 +63,11 @@ namespace GBFDesktopTools.View
             switch (SwitchCondition)
             {
                 case "SelectionCondition":
-                    NG = new Navigationer<GBFSpider, pgSelectCondition>(this, new pgSelectCondition(this));
-                    NG.Title = "下载条件选择";
-                    NG.SetWinSize(true, 350, 470);
-                    NG.ShowPg();
-                    NG = null;
+                    Ng = new Navigationer<GBFSpider, pgSelectCondition>(this, new pgSelectCondition(this));
+                    Ng.Title = "下载条件选择";
+                    Ng.SetWinSize(true, 350, 470);
+                    Ng.ShowPg();
+                    Ng = null;
                     break;
                 case "RunDownLoad":
                     if (IsSelectCondition == false) 
@@ -86,7 +77,7 @@ namespace GBFDesktopTools.View
                     }
                     //String projectName = Assembly.GetExecutingAssembly().GetName().Name.ToString();string A = "https://gbf.huijiwiki.com/wiki/%E8%A7%92%E8%89%B2%E6%90%9C%E7%B4%A2%E5%99%A8?rarity=3";
                     //GetHTMLResponse(A);
-                    DLM.AddCustomMessage("正在从本地加载数据，请稍等");
+                    Dlm.AddCustomMessage("正在从本地加载数据，请稍等");
 
                     var skillObj = LoadFromLocalSkill();
                     if (!skillObj.hasError)
@@ -110,8 +101,8 @@ namespace GBFDesktopTools.View
                         return;
                     }
 
-                    DLM.ProgressBarValue = 100;
-                    DLM.AddCustomMessage("加载完成!");
+                    Dlm.ProgressBarValue = 100;
+                    Dlm.AddCustomMessage("加载完成!");
                     break;
                 case "Back":
 
@@ -1158,10 +1149,6 @@ namespace GBFDesktopTools.View
             if (SkillStr == "") return;
             //不确定的技能名单
             List<string> ineptitude = ToolsAndHelper.GetSpecialSkillList();
-            if (Weapon.FnWeapon_ID == 1040008800)
-            {
-                var a = 1;
-            }
             try
             {
                 //先用英文逗号分割技能字符串 ，提取其中的多个技能
@@ -1174,7 +1161,6 @@ namespace GBFDesktopTools.View
                     //技能主名称
                     string SkillMainName = "";
                     //技能副名称
-                    string SkillExtraName = "";
                     //技能属性
                     string Element = "";
                     //技能后缀
@@ -1389,34 +1375,34 @@ namespace GBFDesktopTools.View
                     {
                         FilePath(wp.FnWeapon_ID, i, wp.FeGBF_Rarity.ToString(), sheet);
                     }
-                    wp.FeWeapon_Kind = dt.Rows[i][10].ToString() == string.Empty ? Weapon.WeaponKind.Invalid : (Weapon.WeaponKind)Enum.Parse(typeof(Weapon.WeaponKind), dt.Rows[i][10].ToString());
-                    wp.FeGBF_Rarity = dt.Rows[i][11].ToString() == string.Empty ? Weapon.GBFRarityEnum.Unknown : (Weapon.GBFRarityEnum)Enum.Parse(typeof(Weapon.GBFRarityEnum), dt.Rows[i][11].ToString());
-                    //wp.FsGBF_Category = dt.Rows[i][12].ToString() == string.Empty ? new List<string>() : SplitString(dt.Rows[i][12].ToString());
-                    //wp.FsGBF_Tag = dt.Rows[i][13].ToString() == string.Empty ? new List<string>() : SplitString(dt.Rows[i][13].ToString());
-                    wp.FdGBF_ReleaseDate = dt.Rows[i][14].ToString() == string.Empty ? Convert.ToDateTime(null) : Convert.ToDateTime(dt.Rows[i][14].ToString().Remove(0, 2));
-                    wp.FdGBF_Star4 = dt.Rows[i][15].ToString() == string.Empty ? Convert.ToDateTime(null) : Convert.ToDateTime(dt.Rows[i][15].ToString().Remove(0, 2));
-                    wp.FdGBF_Star5 = dt.Rows[i][16].ToString() == string.Empty ? Convert.ToDateTime(null) : Convert.ToDateTime(dt.Rows[i][16].ToString().Remove(0, 2));
-                    wp.FdGBF_LastDate = dt.Rows[i][17].ToString() == string.Empty ? Convert.ToDateTime(null) : Convert.ToDateTime(dt.Rows[i][17].ToString().Remove(0, 2));
-                    wp.FnGBF_UnlockChar = dt.Rows[i][18].ToString() == string.Empty ? 0 : Convert.ToInt64(dt.Rows[i][18]);
-                    wp.FsGBF_LinkGamewith = dt.Rows[i][19].ToString() == string.Empty ? "" : dt.Rows[i][19].ToString();
-                    wp.FsGBF_LinkEnwiki = dt.Rows[i][20].ToString() == string.Empty ? "" : dt.Rows[i][20].ToString();
-                    wp.FnGBF_UserLevel = dt.Rows[i][21].ToString() == string.Empty ? (short)0 : Convert.ToInt16(dt.Rows[i][21]);
-                    wp.FnWeapon_MaxHp = dt.Rows[i][22].ToString() == string.Empty ? 0 : Convert.ToInt32(dt.Rows[i][22]);
-                    wp.FnWeapon_MaxAttack = dt.Rows[i][23].ToString() == string.Empty ? 0 : Convert.ToInt32(dt.Rows[i][23]);
-                    wp.FnWeapon_EvoFourHp = dt.Rows[i][23].ToString() == string.Empty ? 0 : Convert.ToInt32(dt.Rows[i][24]);
-                    wp.FnWeapon_EvoFourAttack = dt.Rows[i][25].ToString() == string.Empty ? 0 : Convert.ToInt32(dt.Rows[i][25]);
-                    wp.FnWeapon_EvoFiveHp = dt.Rows[i][26].ToString() == string.Empty ? 0 : Convert.ToInt32(dt.Rows[i][26]);
-                    wp.FnWeapon_EvoFiveAttack = dt.Rows[i][27].ToString() == string.Empty ? 0 : Convert.ToInt32(dt.Rows[i][27]);
-                    wp.FnGBF_BaseEvo = dt.Rows[i][28].ToString() == string.Empty ? (short)0 : Convert.ToInt16(dt.Rows[i][28]);
-                    wp.FnGBF_MaxEvo = dt.Rows[i][29].ToString() == string.Empty ? (short)0 : Convert.ToInt16(dt.Rows[i][29]);
-                    wp.FbGBF_IsArchaic = dt.Rows[i][30].ToString() == string.Empty ? false : Convert.ToBoolean(dt.Rows[i][30]);
-                    wp.FsWeapon_SkillName = dt.Rows[i][31].ToString() == string.Empty ? "" : dt.Rows[i][31].ToString();
-                    wp.WeaponImgUrl_b = dt.Rows[i][32].ToString() == string.Empty ? "" : dt.Rows[i][32].ToString();
-                    wp.WeaponImgUrl_cjs = dt.Rows[i][33].ToString() == string.Empty ? "" : dt.Rows[i][33].ToString();
-                    wp.WeaponImgUrl_ls = dt.Rows[i][34].ToString() == string.Empty ? "" : dt.Rows[i][34].ToString();
-                    wp.WeaponImgUrl_m = dt.Rows[i][35].ToString() == string.Empty ? "" : dt.Rows[i][35].ToString();
-                    wp.WeaponImgUrl_s = dt.Rows[i][36].ToString() == string.Empty ? "" : dt.Rows[i][36].ToString();
-                    SetSkillNew(wp.FsWeapon_SkillName, wp);
+                    wp.FeWeapon_Kind = dt.Rows[i][10].ToString() == string.Empty ? Weapon.WeaponKind.无效类型 : (Weapon.WeaponKind)Enum.Parse(typeof(Weapon.WeaponKind), dt.Rows[i][10].ToString());
+                    //wp.FeGBF_Rarity = dt.Rows[i][11].ToString() == string.Empty ? Weapon.GBFRarityEnum.未知 : (Weapon.GBFRarityEnum)Enum.Parse(typeof(Weapon.GBFRarityEnum), dt.Rows[i][11].ToString());
+                    ////wp.FsGBF_Category = dt.Rows[i][12].ToString() == string.Empty ? new List<string>() : SplitString(dt.Rows[i][12].ToString());
+                    ////wp.FsGBF_Tag = dt.Rows[i][13].ToString() == string.Empty ? new List<string>() : SplitString(dt.Rows[i][13].ToString());
+                    //wp.FdGBF_ReleaseDate = dt.Rows[i][14].ToString() == string.Empty ? Convert.ToDateTime(null) : Convert.ToDateTime(dt.Rows[i][14].ToString().Remove(0, 2));
+                    //wp.FdGBF_Star4 = dt.Rows[i][15].ToString() == string.Empty ? Convert.ToDateTime(null) : Convert.ToDateTime(dt.Rows[i][15].ToString().Remove(0, 2));
+                    //wp.FdGBF_Star5 = dt.Rows[i][16].ToString() == string.Empty ? Convert.ToDateTime(null) : Convert.ToDateTime(dt.Rows[i][16].ToString().Remove(0, 2));
+                    //wp.FdGBF_LastDate = dt.Rows[i][17].ToString() == string.Empty ? Convert.ToDateTime(null) : Convert.ToDateTime(dt.Rows[i][17].ToString().Remove(0, 2));
+                    //wp.FnGBF_UnlockChar = dt.Rows[i][18].ToString() == string.Empty ? 0 : Convert.ToInt64(dt.Rows[i][18]);
+                    //wp.FsGBF_LinkGamewith = dt.Rows[i][19].ToString() == string.Empty ? "" : dt.Rows[i][19].ToString();
+                    //wp.FsGBF_LinkEnwiki = dt.Rows[i][20].ToString() == string.Empty ? "" : dt.Rows[i][20].ToString();
+                    //wp.FnGBF_UserLevel = dt.Rows[i][21].ToString() == string.Empty ? (short)0 : Convert.ToInt16(dt.Rows[i][21]);
+                    //wp.FnGBF_UnlockChar = dt.Rows[i][22].ToString() == string.Empty ? 0 : Convert.ToInt32(dt.Rows[i][22]);
+                    //wp.FnWeapon_MaxAttack = dt.Rows[i][23].ToString() == string.Empty ? 0 : Convert.ToInt32(dt.Rows[i][23]);
+                    //wp.FnWeaponEvoFourHp = dt.Rows[i][23].ToString() == string.Empty ? 0 : Convert.ToInt32(dt.Rows[i][24]);
+                    //wp.FnWeaponEvoFourAttack = dt.Rows[i][25].ToString() == string.Empty ? 0 : Convert.ToInt32(dt.Rows[i][25]);
+                    //wp.FnWeaponEvoFiveHp = dt.Rows[i][26].ToString() == string.Empty ? 0 : Convert.ToInt32(dt.Rows[i][26]);
+                    //wp.FnWeaponEvoFiveAttack = dt.Rows[i][27].ToString() == string.Empty ? 0 : Convert.ToInt32(dt.Rows[i][27]);
+                    //wp.FnGBF_BaseEvo = dt.Rows[i][28].ToString() == string.Empty ? (short)0 : Convert.ToInt16(dt.Rows[i][28]);
+                    //wp.FnGBF_MaxEvo = dt.Rows[i][29].ToString() == string.Empty ? (short)0 : Convert.ToInt16(dt.Rows[i][29]);
+                    //wp.FbGbfIsArchaic = dt.Rows[i][30].ToString() == string.Empty ? false : Convert.ToBoolean(dt.Rows[i][30]);
+                    //wp.FsWeaponSkillName = dt.Rows[i][31].ToString() == string.Empty ? "" : dt.Rows[i][31].ToString();
+                    //wp.WeaponImgUrlB = dt.Rows[i][32].ToString() == string.Empty ? "" : dt.Rows[i][32].ToString();
+                    //wp.WeaponImgUrlCjs = dt.Rows[i][33].ToString() == string.Empty ? "" : dt.Rows[i][33].ToString();
+                    //wp.WeaponImgUrlLs = dt.Rows[i][34].ToString() == string.Empty ? "" : dt.Rows[i][34].ToString();
+                    //wp.WeaponImgUrlM = dt.Rows[i][35].ToString() == string.Empty ? "" : dt.Rows[i][35].ToString();
+                    //wp.WeaponImgUrlS = dt.Rows[i][36].ToString() == string.Empty ? "" : dt.Rows[i][36].ToString();
+                    //SetSkillNew(wp.FsWeaponSkillName, wp);
                     WeaponList.Add(wp);
                 }
                 resultObj.ObjList = WeaponList;

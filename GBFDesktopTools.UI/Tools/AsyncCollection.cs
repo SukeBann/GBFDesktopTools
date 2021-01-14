@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 
 namespace GBFDesktopTools.View
 {
@@ -50,7 +48,7 @@ namespace GBFDesktopTools.View
         /// <summary>
         /// null：add；true：continue；false：break
         /// </summary>
-        /// <param name="list"></param>
+        /// <param name="_List"></param>
         /// <param name="doEach">null：add；true：continue；false：break</param>
         public void AddRange(IEnumerable<T> _List, System.Func<T, bool?> doEach = null)
         {
@@ -67,10 +65,7 @@ namespace GBFDesktopTools.View
                             {
                                 this.Add(x);
                             }
-                            else if (true == r)
-                            {
-                                continue;
-                            }
+                            else if (true == r) { }
                             else
                             {
                                 break;
@@ -115,6 +110,7 @@ namespace GBFDesktopTools.View
             }
         }
 
+        // ReSharper disable once UnusedMember.Global
         public void RemoveAt(int index)
         {
             if (Dispatcher.Thread == System.Threading.Thread.CurrentThread)
