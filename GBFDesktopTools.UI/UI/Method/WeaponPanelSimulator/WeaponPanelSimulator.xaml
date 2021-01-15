@@ -73,23 +73,11 @@
 
     </Window.Resources>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="38*" />
-            <ColumnDefinition Width="435*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="331*" />
-            <RowDefinition Height="336*" />
-            <RowDefinition Height="303*" />
-        </Grid.RowDefinitions>
-        <DockPanel LastChildFill="True"
-                   Grid.RowSpan="3"
-                   Grid.ColumnSpan="2">
-            <!--标题-->
+    <DockPanel LastChildFill="True">
+        <!--标题-->
+        <Grid DockPanel.Dock="Top">
             <Border BorderThickness="1"
-                    BorderBrush="#3742fa"
-                    DockPanel.Dock="Top">
+                    BorderBrush="#3742fa">
                 <TextBlock Text="GranBlue-Fantasy WeaponPanelSimulator"
                            Background="#70a1ff"
                            TextAlignment="Center"
@@ -97,38 +85,42 @@
                            FontFamily="Fira Code Medium"
                            Foreground="#ccfbea" />
             </Border>
+        </Grid>
+        <!--主面板-->
+        <Grid Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.7*" />
+                <ColumnDefinition Width="1.4*" />
+                <ColumnDefinition Width="0.8*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="0.45*" />
+            </Grid.RowDefinitions>
 
-            <Grid Margin="0,20,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.7*" />
-                    <ColumnDefinition Width="1.4*" />
-                    <ColumnDefinition Width="0.8*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="0.45*" />
-                </Grid.RowDefinitions>
-
-                <!--计算结果-->
+            <!--计算结果-->
+            <Grid>
                 <Border BorderThickness="1,1,1,1"
                         BorderBrush="#70A1FF">
 
                 </Border>
-                <!--保存读取-->
-                <Border Grid.Row="1"
-                        Grid.Column="0"
-                        BorderThickness="1,0,1,1"
+            </Grid>
+            <!--保存读取-->
+            <Grid Grid.Row="1"
+                  Grid.Column="0">
+
+                <Border BorderThickness="1,0,1,1"
                         BorderBrush="#70A1FF">
 
                 </Border>
-                <!--放置区-->
-                <Border Grid.Row="0"
-                        Grid.Column="1"
-                        BorderThickness="0,1,1,1"
-                        BorderBrush="#70A1FF">
+            </Grid>
+            <!--放置区-->
+            <Grid Grid.Row="0"
+                  Grid.Column="1">
+                <Border >
                     <Viewbox Stretch="Fill">
                         <Grid Height="618"
-                              Width="912">
+                              Width="910">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*" />
                                 <ColumnDefinition Width="2.6*" />
@@ -142,252 +134,243 @@
                                 <RowDefinition Height="7*" />
                             </Grid.RowDefinitions>
 
-                            <Border Grid.Row="0"
-                                    Grid.Column="0"
-                                    Grid.ColumnSpan="4"
-                                    BorderThickness="0,0,0,1"
-                                    BorderBrush="#82ADFF">
-                                <DockPanel LastChildFill="False">
-                                    <Border Style="{StaticResource CalculatorTopBorderStyle}">
-                                        <DockPanel LastChildFill="False">
-                                            <TextBlock Text="综合HP："
-                                                       FontSize="25"
-                                                       Width="110"
-                                                       VerticalAlignment="Center"
-                                                       Foreground="#2a73ff" />
-                                            <TextBlock Text="1000"
-                                                       TextAlignment="Right"
-                                                       DockPanel.Dock="Right"
-                                                       Width="100"
+                            <Grid Grid.Row="0"
+                                  Grid.Column="0"
+                                  Grid.ColumnSpan="4">
+                                <Border BorderThickness="0,0,0,1"
+                                        BorderBrush="#82ADFF">
+                                    <DockPanel LastChildFill="False">
+                                        <Border Style="{StaticResource CalculatorTopBorderStyle}">
+                                            <DockPanel LastChildFill="False">
+                                                <TextBlock Text="综合HP："
+                                                           FontSize="25"
+                                                           Width="110"
+                                                           VerticalAlignment="Center"
+                                                           Foreground="#2a73ff" />
+                                                <TextBlock Text="1000"
+                                                           TextAlignment="Right"
+                                                           DockPanel.Dock="Right"
+                                                           Width="100"
+                                                           Foreground="#2a73ff"
+                                                           VerticalAlignment="Center"
+                                                           FontSize="25" />
+                                            </DockPanel>
+                                        </Border>
+                                        <Border Style="{StaticResource CalculatorTopBorderStyle}">
+                                            <DockPanel LastChildFill="False">
+                                                <TextBlock Text="综合ATK:"
+                                                           FontSize="25"
+                                                           Width="110"
+                                                           VerticalAlignment="Center"
+                                                           Foreground="#2a73ff" />
+                                                <TextBlock Text="1000"
+                                                           TextAlignment="Right"
+                                                           DockPanel.Dock="Right"
+                                                           Width="100"
+                                                           Foreground="#2a73ff"
+                                                           VerticalAlignment="Center"
+                                                           FontSize="25" />
+                                            </DockPanel>
+                                        </Border>
+                                        <Border Style="{StaticResource CalculatorTopBorderStyle}"
+                                                DockPanel.Dock="Right">
+                                            <CheckBox  Height="30"
+                                                       Content="拖拽移动"
                                                        Foreground="#2a73ff"
-                                                       VerticalAlignment="Center"
-                                                       FontSize="25" />
-                                        </DockPanel>
-                                    </Border>
-                                    <Border Style="{StaticResource CalculatorTopBorderStyle}">
-                                        <DockPanel LastChildFill="False">
-                                            <TextBlock Text="综合ATK:"
-                                                       FontSize="25"
-                                                       Width="110"
-                                                       VerticalAlignment="Center"
-                                                       Foreground="#2a73ff" />
-                                            <TextBlock Text="1000"
-                                                       TextAlignment="Right"
-                                                       DockPanel.Dock="Right"
-                                                       Width="100"
-                                                       Foreground="#2a73ff"
-                                                       VerticalAlignment="Center"
-                                                       FontSize="25" />
-                                        </DockPanel>
-                                    </Border>
-                                    <Border Style="{StaticResource CalculatorTopBorderStyle}"
-                                            DockPanel.Dock="Right">
-                                        <CheckBox  Height="30"
-                                                   Content="拖拽移动"
-                                                   Foreground="#2a73ff"
-                                                   pu:CheckBoxHelper.CheckedBorderBrush="#82ADFF"
-                                                   pu:CheckBoxHelper.CheckBoxStyle="Switch2"
-                                                   pu:CheckBoxHelper.BoxHeight="30"
-                                                   pu:CheckBoxHelper.BoxWidth="80"
-                                                   pu:CheckBoxHelper.CheckedBackground="#2a73ff"
-                                                   pu:CheckBoxHelper.CheckedContent="拖拽复制" />
-                                    </Border>
-                                </DockPanel>
-                            </Border>
+                                                       pu:CheckBoxHelper.CheckedBorderBrush="#82ADFF"
+                                                       pu:CheckBoxHelper.CheckBoxStyle="Switch2"
+                                                       pu:CheckBoxHelper.BoxHeight="30"
+                                                       pu:CheckBoxHelper.BoxWidth="80"
+                                                       pu:CheckBoxHelper.CheckedBackground="#2a73ff"
+                                                       pu:CheckBoxHelper.CheckedContent="拖拽复制" />
+                                        </Border>
+                                    </DockPanel>
+                                </Border>
+                            </Grid>
+                           
                             <!--主武器-->
-                            <Border Grid.Column="0"
-                                    Grid.Row="1"
-                                    Grid.RowSpan="3"
-                                    Style="{StaticResource CalculatorMainBorderStyle}">
-                                <DockPanel>
-                                    <Border DockPanel.Dock="Top"
-                                            Margin="1">
-                                        <Border.Background>
-                                            <ImageBrush />
-                                        </Border.Background>
-                                        <Label Content="Main Weapon"
-                                               FontSize="26"
-                                               Foreground="#2a73ff"
-                                               HorizontalAlignment="Center"
-                                               FontFamily="Freestyle Script"/>
-                                    </Border>
-                                    <Border DockPanel.Dock="Bottom"
-                                            Margin="0,0,0,80"
-                                            Style="{StaticResource CalculatorMainBorderStyle}">
-                                        <StackPanel>
-                                            <Border Style="{StaticResource CalculatorMainBorderStyle}">
-                                                <DockPanel>
-                                                    <Label Content="Level:"
-                                                           Height="30"
-                                                           Width="60"
-                                                           DockPanel.Dock="Left" />
-                                                    <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
-                                                            pu:ButtonHelper.Icon="&#xe990;"
-                                                            Background="LightSkyBlue"
-                                                            Foreground="#2a73ff"
-                                                            Width="30"
-                                                            DockPanel.Dock="Right" />
-                                                    <TextBox Text="1"
-                                                             pu:TextBoxHelper.CornerRadius="5"
-                                                             TextAlignment="Center" />
-                                                </DockPanel>
-                                            </Border>
-                                            <Border Style="{StaticResource CalculatorMainBorderStyle}">
-                                                <DockPanel>
-                                                    <Label Content="Skilllv:"
-                                                           Width="60"
-                                                           Height="30"
-                                                           DockPanel.Dock="Left" />
-                                                    <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
-                                                            pu:ButtonHelper.Icon="&#xe990;"
-                                                            pu:ButtonHelper.ButtonStyle="Link"
-                                                            Width="30"
-                                                            DockPanel.Dock="Right" />
-                                                    <ComboBox pu:ComboBoxHelper.ComboBoxStyle="Standard"
-                                                              pu:ComboBoxHelper.CornerRadius="5" />
-                                                </DockPanel>
-                                            </Border>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border DockPanel.Dock="Top"
-                                            BorderThickness="1"
-                                            BorderBrush="#70a1ff">
-                                        <Border.Background>
-                                            <ImageBrush ImageSource="E:/GBFDesktopTools/GBFDesktopTools.UI/Resources/Image/VerticalEmpty.jpg" />
-                                        </Border.Background>
-                                    </Border>
-                                    
-                                </DockPanel>
-                            </Border>
-                            
+                            <Grid Grid.Column="0"
+                                  Grid.Row="1"
+                                  Grid.RowSpan="3">
+                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                    <DockPanel>
+                                        <Border DockPanel.Dock="Top"
+                                                Margin="1">
+                                            <Border.Background>
+                                                <ImageBrush />
+                                            </Border.Background>
+                                            <Label Content="Main Weapon"
+                                                   FontSize="26"
+                                                   Foreground="#2a73ff"
+                                                   HorizontalAlignment="Center"
+                                                   FontFamily="Freestyle Script" />
+                                        </Border>
+                                        <Border DockPanel.Dock="Bottom"
+                                                Margin="0,0,0,80"
+                                                Style="{StaticResource CalculatorMainBorderStyle}">
+                                            <StackPanel>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Level:"
+                                                               Height="30"
+                                                               Width="60"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                Background="LightSkyBlue"
+                                                                Foreground="#2a73ff"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <TextBox Text="1"
+                                                                 pu:TextBoxHelper.CornerRadius="5"
+                                                                 TextAlignment="Center" />
+                                                    </DockPanel>
+                                                </Border>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Skilllv:"
+                                                               Width="60"
+                                                               Height="30"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                pu:ButtonHelper.ButtonStyle="Link"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <ComboBox pu:ComboBoxHelper.ComboBoxStyle="Standard"
+                                                                  pu:ComboBoxHelper.CornerRadius="5" />
+                                                    </DockPanel>
+                                                </Border>
+                                            </StackPanel>
+                                        </Border>
+                                        <Border DockPanel.Dock="Top"
+                                                BorderThickness="1"
+                                                BorderBrush="#70a1ff">
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="E:/GBFDesktopTools/GBFDesktopTools.UI/Resources/Image/VerticalEmpty.jpg" />
+                                            </Border.Background>
+                                        </Border>
+
+                                    </DockPanel>
+                                </Border>
+                            </Grid>
+
                             <!--第一行-->
-                            <Border Grid.Column="1"
-                                    Grid.Row="1"
-                                    Style="{StaticResource CalculatorMainBorderStyle}">
+                            <Grid Grid.Column="1"
+                                  Grid.Row="1">
+                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                </Border>
+                            </Grid>
+                            <Grid Grid.Column="2"
+                                  Grid.Row="1">
+                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
 
-                            </Border>
-                            <Border Grid.Column="2"
-                                    Grid.Row="1"
-                                    Style="{StaticResource CalculatorMainBorderStyle}">
+                                </Border>
+                            </Grid>
+                            <Grid Grid.Column="3"
+                                  Grid.Row="1">
+                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
 
-                            </Border>
-                            <Border Grid.Column="3"
-                                    Grid.Row="1"
-                                    Style="{StaticResource CalculatorMainBorderStyle}">
-
-                            </Border>
+                                </Border>
+                            </Grid>
 
                             <!--第二行-->
-                            <Border Grid.Column="1"
-                                    Grid.Row="2"
-                                    Style="{StaticResource CalculatorMainBorderStyle}">
+                            <Grid Grid.Column="1"
+                                  Grid.Row="2">
+                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
 
-                            </Border>
-                            <Border Grid.Column="2"
-                                    Grid.Row="2"
-                                    Style="{StaticResource CalculatorMainBorderStyle}">
+                                </Border>
+                            </Grid>
+                            <Grid Grid.Column="2"
+                                  Grid.Row="2">
+                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
 
-                            </Border>
-                            <Border Grid.Column="3"
-                                    Grid.Row="2"
-                                    Style="{StaticResource CalculatorMainBorderStyle}">
+                                </Border>
+                            </Grid>
+                            <Grid Grid.Column="3"
+                                  Grid.Row="2">
+                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
 
-                            </Border>
+                                </Border>
+                            </Grid>
 
                             <!--第三行-->
-                            <Border Grid.Column="1"
-                                    Grid.Row="3"
-                                    Style="{StaticResource CalculatorMainBorderStyle}">
+                            <Grid Grid.Column="1"
+                                  Grid.Row="3">
+                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
 
-                            </Border>
-                            <Border Grid.Column="2"
-                                    Grid.Row="3"
-                                    Style="{StaticResource CalculatorMainBorderStyle}">
+                                </Border>
+                            </Grid>
+                            <Grid Grid.Column="2"
+                                  Grid.Row="3">
+                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
 
-                            </Border>
-                            <Border Grid.Column="3"
-                                    Grid.Row="3"
-                                    Style="{StaticResource CalculatorMainBorderStyle}">
+                                </Border>
+                            </Grid>
+                            <Grid Grid.Column="3"
+                                  Grid.Row="3">
+                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
 
-                            </Border>
-
+                                </Border>
+                            </Grid>
 
                         </Grid>
                     </Viewbox>
                 </Border>
-                <!--设置区-->
-                <Border Grid.Row="1"
-                        Grid.Column="1"
-                        BorderThickness="0,0,1,1"
+            </Grid>
+            <!--设置区-->
+            <Grid Grid.Row="1"
+                  Grid.Column="1">
+                <Border BorderThickness="0,0,1,1"
                         BorderBrush="#70A1FF">
 
                 </Border>
-                <!--放置源-->
-                <Border Grid.Row="0"
-                        Grid.Column="2"
-                        Grid.RowSpan="2"
-                        DataContext="{Binding Source={StaticResource FcModel}}"
+            </Grid>
+            <!--放置源-->
+            <Grid Grid.Row="0"
+                  Grid.Column="2"
+                  Grid.RowSpan="2">
+                <Border DataContext="{Binding Source={StaticResource FcModel}}"
                         BorderThickness="0,1,1,1"
                         BorderBrush="#70A1FF">
                     <DockPanel Margin="0,2,0,0">
-                        <Border DockPanel.Dock="Top"
-                                BorderBrush="#70A1FF"
-                                BorderThickness="0,0,0,1"
-                                Margin="0,0,0,2">
-                            <WrapPanel DockPanel.Dock="Top">
+                        <Grid DockPanel.Dock="Top"
+                              Margin="0,0,0,2">
+                            <Border BorderBrush="#70A1FF"
+                                    BorderThickness="0,0,0,1">
+                                <WrapPanel DockPanel.Dock="Top">
 
-                                <TextBox  x:Name="tbSearchInput"
-                                          Height="25"
-                                          Width="200"
-                                          KeyUp="SearchKeyUp"
-                                          TextChanged="wtSearchInput_TextChanged"
-                                          pu:TextBoxHelper.CornerRadius="5"
-                                          Text="{Binding Path=SearchName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                          pu:TextBoxHelper.Watermark="搜索器"
-                                          pu:TextBoxHelper.Icon="&#xe9c5;"
-                                          pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
-                                          pu:TextBoxHelper.FocusedBorderBrush="#B5B5B5"
-                                          pu:TextBoxHelper.FocusedShadowColor="#B5B5B5"
-                                          pu:TextBoxHelper.CanClear="True" />
-                                <Popup x:Name="puInputTip"
+                                    <TextBox  x:Name="tbSearchInput"
+                                              Height="25"
+                                              Width="200"
+                                              KeyUp="SearchKeyUp"
+                                              TextChanged="wtSearchInput_TextChanged"
+                                              pu:TextBoxHelper.CornerRadius="5"
+                                              Text="{Binding Path=SearchName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                              pu:TextBoxHelper.Watermark="搜索器"
+                                              pu:TextBoxHelper.Icon="&#xe9c5;"
+                                              pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                              pu:TextBoxHelper.FocusedBorderBrush="#B5B5B5"
+                                              pu:TextBoxHelper.FocusedShadowColor="#B5B5B5"
+                                              pu:TextBoxHelper.CanClear="True" />
+                                    <Popup x:Name="puInputTip"
                                            StaysOpen="False"
                                            Placement="Bottom"
                                            PopupAnimation="Slide"
                                            PlacementTarget="{Binding ElementName=tbSearchInput}"
                                            Width="{Binding ElementName= tbSearchInput, Path=Width}">
-                                    <Border Background="White"
-                                            BorderBrush="LightGray"
-                                            BorderThickness="1">
-                                        <ListBox x:Name="TipListbox"
-                                                 ItemsSource="{Binding Source={StaticResource cvsWeaponSearchTip}}"
-                                                 Focusable="True"
-                                                 KeyUp="SearchKeyUp" />
-                                    </Border>
-                                </Popup>
+                                        <Border Background="White"
+                                                BorderBrush="LightGray"
+                                                BorderThickness="1">
+                                            <ListBox x:Name="TipListbox"
+                                                     ItemsSource="{Binding Source={StaticResource cvsWeaponSearchTip}}"
+                                                     Focusable="True"
+                                                     KeyUp="SearchKeyUp" />
+                                        </Border>
+                                    </Popup>
 
-                                <Button Content="搜索"
-                                        Tag="Search"
-                                        Click="SearchRunClick"
-                                        Height="25"
-                                        Width="40"
-                                        Background="LightSkyBlue"
-                                        pu:ButtonHelper.CornerRadius="5"
-                                        pu:ButtonHelper.ClickStyle="Sink"
-                                        pu:ButtonHelper.HoverBrush="#70a1ff"
-                                        pu:ButtonHelper.IsWaiting="False"
-                                        pu:ButtonHelper.WaitingContent=""
-                                        Margin="5,0,5,0" />
-
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBox x:Name="tbGotoValue"
-                                             pu:TextBoxHelper.CornerRadius="5"
-                                             pu:TextBoxHelper.Watermark="页码"
-                                             Height="25"
-                                             Width="35"
-                                             Margin="5,0,5,0" />
-
-                                    <Button Content="转到"
-                                            Tag="Goto"
+                                    <Button Content="搜索"
+                                            Tag="Search"
                                             Click="SearchRunClick"
                                             Height="25"
                                             Width="40"
@@ -396,137 +379,162 @@
                                             pu:ButtonHelper.ClickStyle="Sink"
                                             pu:ButtonHelper.HoverBrush="#70a1ff"
                                             pu:ButtonHelper.IsWaiting="False"
-                                            pu:ButtonHelper.WaitingContent="" />
-                                </StackPanel>
+                                            pu:ButtonHelper.WaitingContent=""
+                                            Margin="5,0,5,0" />
 
-                                <StackPanel Margin="5,0,0,0"
-                                            Orientation="Horizontal">
-                                    <Label Content="排序方式："
-                                           Foreground="#4b89ff"
-                                           BorderThickness="1" />
-                                    <ComboBox x:Name="cbSortTypeList"
-                                              Foreground="#098bdb"
-                                              pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
-                                              pu:ComboBoxHelper.CornerRadius="5"
-                                              SelectedValue="{Binding Path=SearchSortType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                              pu:ComboBoxHelper.Icon="&#xe96a;"
-                                              Width="100"
-                                              Height="25" />
-                                </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBox x:Name="tbGotoValue"
+                                                 pu:TextBoxHelper.CornerRadius="5"
+                                                 pu:TextBoxHelper.Watermark="页码"
+                                                 Height="25"
+                                                 Width="35"
+                                                 Margin="5,0,5,0" />
 
-                            </WrapPanel>
-                        </Border>
+                                        <Button Content="转到"
+                                                Tag="Goto"
+                                                Click="SearchRunClick"
+                                                Height="25"
+                                                Width="40"
+                                                Background="LightSkyBlue"
+                                                pu:ButtonHelper.CornerRadius="5"
+                                                pu:ButtonHelper.ClickStyle="Sink"
+                                                pu:ButtonHelper.HoverBrush="#70a1ff"
+                                                pu:ButtonHelper.IsWaiting="False"
+                                                pu:ButtonHelper.WaitingContent="" />
+                                    </StackPanel>
 
-                        <Border DockPanel.Dock="Top"
-                                BorderBrush="#70A1FF"
-                                BorderThickness="0,1,0,1"
-                                Margin="0,5,0,2">
-                            <WrapPanel DockPanel.Dock="Top">
-                                <Border>
-                                    <WrapPanel>
-                                        <DockPanel>
-                                            <Label Content="技能："
-                                                   Foreground="#4b89ff"
-                                                   Margin="5,0,0,0" />
-                                            <ComboBox x:Name="cbWeaponSkillNameList"
-                                                      Foreground="#098bdb"
-                                                      pu:ComboBoxHelper.CornerRadius="5"
-                                                      pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
-                                                      pu:ComboBoxHelper.Icon="&#xe964;"
-                                                      SelectedValue="{Binding Path=WeaponSkillName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                                      Width="135"
-                                                      Height="25" />
-                                        </DockPanel>
-                                        <DockPanel>
-                                            <Label Foreground="#4b89ff"
-                                                   Margin="5,0,0,0"
-                                                   Content="系列：" />
-                                            <ComboBox x:Name="cbWeaponSeriesNameList"
-                                                      Foreground="#098bdb"
-                                                      pu:ComboBoxHelper.CornerRadius="5"
-                                                      pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
-                                                      pu:ComboBoxHelper.Icon="&#xe965;"
-                                                      SelectedValue="{Binding Path=FcSeriesName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                                      Width="145"
-                                                      Height="25" />
-                                        </DockPanel>
-                                        <StackPanel Margin="5,0,0,0"
-                                                    Orientation="Horizontal">
-                                            <Label  Foreground="#4b89ff"
-                                                    Content="稀有度：" />
-                                            <ComboBox x:Name="cbWeaponRarityList"
-                                                      Foreground="#098bdb"
-                                                      pu:ComboBoxHelper.CornerRadius="5"
-                                                      pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
-                                                      pu:ComboBoxHelper.Icon="&#xe961;"
-                                                      SelectedValue="{Binding Path=FcWeaponRarity,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                                      Width="72"
-                                                      Height="25" />
-                                        </StackPanel>
-                                    </WrapPanel>
-                                </Border>
-                            </WrapPanel>
-                        </Border>
+                                    <StackPanel Margin="5,0,0,0"
+                                                Orientation="Horizontal">
+                                        <Label Content="排序方式："
+                                               Foreground="#4b89ff"
+                                               BorderThickness="1" />
+                                        <ComboBox x:Name="cbSortTypeList"
+                                                  Foreground="#098bdb"
+                                                  pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                  pu:ComboBoxHelper.CornerRadius="5"
+                                                  SelectedValue="{Binding Path=SearchSortType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                  pu:ComboBoxHelper.Icon="&#xe96a;"
+                                                  Width="100"
+                                                  Height="25" />
+                                    </StackPanel>
 
-                        <Border DockPanel.Dock="Top"
-                                BorderBrush="#70A1FF"
-                                BorderThickness="0,1,0,1"
-                                Margin="0,5,0,0">
-                            <WrapPanel DockPanel.Dock="Top">
-                                <Border>
-                                    <WrapPanel>
+                                </WrapPanel>
+                            </Border>
+                        </Grid>
 
-                                        <StackPanel Margin="5,0,0,0"
-                                                    Orientation="Horizontal">
-                                            <Label  Foreground="#4b89ff"
-                                                    Content="属性：" />
-                                            <ComboBox x:Name="cbWeaponElementList"
-                                                      Foreground="#098bdb"
-                                                      pu:ComboBoxHelper.CornerRadius="5"
-                                                      SelectedValue="{Binding Path=FcWeaponElement,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                                      Width="58"
-                                                      Height="25" />
-                                        </StackPanel>
-                                        <StackPanel Margin="5,0,0,0"
-                                                    Orientation="Horizontal">
-                                            <Label  Foreground="#4b89ff"
-                                                    Content="类型：" />
-                                            <ComboBox x:Name="cbWeaponKindList"
-                                                      Foreground="#098bdb"
-                                                      pu:ComboBoxHelper.CornerRadius="5"
-                                                      SelectedValue="{Binding Path=FcWeaponKind,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                                      Width="58"
-                                                      Height="25" />
-                                        </StackPanel>
-                                        <StackPanel Margin="5,0,0,0"
-                                                    Orientation="Horizontal">
-                                            <Label  Foreground="#4b89ff"
-                                                    Content="上限解放：" />
-                                            <ComboBox x:Name="cbWeaponEvoCountList"
-                                                      Foreground="#098bdb"
-                                                      pu:ComboBoxHelper.CornerRadius="5"
-                                                      pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
-                                                      pu:ComboBoxHelper.Icon="&#xe958;"
-                                                      SelectedValue="{Binding Path=SearchEvoCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                                      Width="85"
-                                                      Height="25" />
-                                        </StackPanel>
-                                        <StackPanel Margin="5,0,0,0"
-                                                    Orientation="Horizontal">
-                                            <Label  Foreground="#4b89ff"
-                                                    Content="卡池：" />
-                                            <ComboBox x:Name="cbWeaponCategoryList"
-                                                      Foreground="#098bdb"
-                                                      pu:ComboBoxHelper.CornerRadius="5"
-                                                      SelectedValue="{Binding Path=WeaponCategory,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                                      Width="85"
-                                                      Height="25" />
-                                        </StackPanel>
+                        <Grid DockPanel.Dock="Top"
+                              Margin="0,5,0,2">
+                            <Border BorderBrush="#70A1FF"
+                                    BorderThickness="0,1,0,1">
+                                <WrapPanel DockPanel.Dock="Top">
+                                    <Border>
+                                        <WrapPanel>
+                                            <DockPanel>
+                                                <Label Content="技能："
+                                                       Foreground="#4b89ff"
+                                                       Margin="5,0,0,0" />
+                                                <ComboBox x:Name="cbWeaponSkillNameList"
+                                                          Foreground="#098bdb"
+                                                          pu:ComboBoxHelper.CornerRadius="5"
+                                                          pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                          pu:ComboBoxHelper.Icon="&#xe964;"
+                                                          SelectedValue="{Binding Path=WeaponSkillName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                          Width="135"
+                                                          Height="25" />
+                                            </DockPanel>
+                                            <DockPanel>
+                                                <Label Foreground="#4b89ff"
+                                                       Margin="5,0,0,0"
+                                                       Content="系列：" />
+                                                <ComboBox x:Name="cbWeaponSeriesNameList"
+                                                          Foreground="#098bdb"
+                                                          pu:ComboBoxHelper.CornerRadius="5"
+                                                          pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                          pu:ComboBoxHelper.Icon="&#xe965;"
+                                                          SelectedValue="{Binding Path=FcSeriesName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                          Width="145"
+                                                          Height="25" />
+                                            </DockPanel>
+                                            <StackPanel Margin="5,0,0,0"
+                                                        Orientation="Horizontal">
+                                                <Label  Foreground="#4b89ff"
+                                                        Content="稀有度：" />
+                                                <ComboBox x:Name="cbWeaponRarityList"
+                                                          Foreground="#098bdb"
+                                                          pu:ComboBoxHelper.CornerRadius="5"
+                                                          pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                          pu:ComboBoxHelper.Icon="&#xe961;"
+                                                          SelectedValue="{Binding Path=FcWeaponRarity,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                          Width="72"
+                                                          Height="25" />
+                                            </StackPanel>
+                                        </WrapPanel>
+                                    </Border>
+                                </WrapPanel>
+                            </Border>
+                        </Grid>
 
-                                    </WrapPanel>
-                                </Border>
-                            </WrapPanel>
-                        </Border>
+                        <Grid DockPanel.Dock="Top"
+                              Margin="0,5,0,0">
+                            <Border BorderBrush="#70A1FF"
+                                    BorderThickness="0,1,0,1">
+                                <WrapPanel DockPanel.Dock="Top">
+                                    <Border>
+                                        <WrapPanel>
+
+                                            <StackPanel Margin="5,0,0,0"
+                                                        Orientation="Horizontal">
+                                                <Label  Foreground="#4b89ff"
+                                                        Content="属性：" />
+                                                <ComboBox x:Name="cbWeaponElementList"
+                                                          Foreground="#098bdb"
+                                                          pu:ComboBoxHelper.CornerRadius="5"
+                                                          SelectedValue="{Binding Path=FcWeaponElement,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                          Width="58"
+                                                          Height="25" />
+                                            </StackPanel>
+                                            <StackPanel Margin="5,0,0,0"
+                                                        Orientation="Horizontal">
+                                                <Label  Foreground="#4b89ff"
+                                                        Content="类型：" />
+                                                <ComboBox x:Name="cbWeaponKindList"
+                                                          Foreground="#098bdb"
+                                                          pu:ComboBoxHelper.CornerRadius="5"
+                                                          SelectedValue="{Binding Path=FcWeaponKind,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                          Width="58"
+                                                          Height="25" />
+                                            </StackPanel>
+                                            <StackPanel Margin="5,0,0,0"
+                                                        Orientation="Horizontal">
+                                                <Label  Foreground="#4b89ff"
+                                                        Content="上限解放：" />
+                                                <ComboBox x:Name="cbWeaponEvoCountList"
+                                                          Foreground="#098bdb"
+                                                          pu:ComboBoxHelper.CornerRadius="5"
+                                                          pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                          pu:ComboBoxHelper.Icon="&#xe958;"
+                                                          SelectedValue="{Binding Path=SearchEvoCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                          Width="85"
+                                                          Height="25" />
+                                            </StackPanel>
+                                            <StackPanel Margin="5,0,0,0"
+                                                        Orientation="Horizontal">
+                                                <Label  Foreground="#4b89ff"
+                                                        Content="卡池：" />
+                                                <ComboBox x:Name="cbWeaponCategoryList"
+                                                          Foreground="#098bdb"
+                                                          pu:ComboBoxHelper.CornerRadius="5"
+                                                          SelectedValue="{Binding Path=WeaponCategory,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                          Width="85"
+                                                          Height="25" />
+                                            </StackPanel>
+
+                                        </WrapPanel>
+                                    </Border>
+                                </WrapPanel>
+                            </Border>
+                        </Grid>
+                        
 
                         <Border DockPanel.Dock="Bottom"
                                 BorderBrush="Gray"
@@ -599,10 +607,8 @@
 
                     </DockPanel>
                 </Border>
-
             </Grid>
-
-        </DockPanel>
-    </Grid>
+        </Grid>
+    </DockPanel>
 
 </pu:WindowX>

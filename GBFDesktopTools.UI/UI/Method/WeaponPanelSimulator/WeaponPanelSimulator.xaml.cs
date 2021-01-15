@@ -35,7 +35,7 @@ namespace GBFDesktopTools.View
 
             Fc = this.Resources["FcModel"] as Model.ToolAndHelper.FilterCondition;
             
-            Icon = Application.Current.Resources["MainIcon"] as BitmapImage;
+            
             ((CollectionViewSource) this.Resources["cvsWeaponList"]).Source = WeaponList;
             ((CollectionViewSource) this.Resources["cvsWeaponSearchTip"]).Source = WeaponSearchTip;
 
