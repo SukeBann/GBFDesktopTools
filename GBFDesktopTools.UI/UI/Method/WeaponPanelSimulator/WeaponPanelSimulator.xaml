@@ -117,7 +117,8 @@
             <!--放置区-->
             <Grid Grid.Row="0"
                   Grid.Column="1">
-                <Border >
+                <Border BorderThickness="1"
+                        BorderBrush="#70a1ff">
                     <Viewbox Stretch="Fill">
                         <Grid Height="618"
                               Width="910">
@@ -172,22 +173,19 @@
                                                            FontSize="25" />
                                             </DockPanel>
                                         </Border>
-                                        <Border Style="{StaticResource CalculatorTopBorderStyle}"
-                                                DockPanel.Dock="Right">
-                                            <CheckBox  Height="30"
-                                                       Content="拖拽移动"
-                                                       Foreground="#2a73ff"
-                                                       pu:CheckBoxHelper.CheckedBorderBrush="#82ADFF"
-                                                       pu:CheckBoxHelper.CheckBoxStyle="Switch2"
-                                                       pu:CheckBoxHelper.BoxHeight="30"
-                                                       pu:CheckBoxHelper.BoxWidth="80"
-                                                       pu:CheckBoxHelper.CheckedBackground="#2a73ff"
-                                                       pu:CheckBoxHelper.CheckedContent="拖拽复制" />
-                                        </Border>
+                                        <CheckBox  Content="拖拽移动"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="#2a73ff"
+                                                   DockPanel.Dock="Right"
+                                                   FontSize="20"
+                                                   pu:CheckBoxHelper.CheckedBorderBrush="#82ADFF"
+                                                   pu:CheckBoxHelper.CheckBoxStyle="Switch2"
+                                                   pu:CheckBoxHelper.CheckedBackground="#2a73ff"
+                                                   pu:CheckBoxHelper.CheckedContent="拖拽复制" />
                                     </DockPanel>
                                 </Border>
                             </Grid>
-                           
+
                             <!--主武器-->
                             <Grid Grid.Column="0"
                                   Grid.Row="1"
@@ -313,7 +311,6 @@
 
                                 </Border>
                             </Grid>
-
                         </Grid>
                     </Viewbox>
                 </Border>
@@ -534,7 +531,7 @@
                                 </WrapPanel>
                             </Border>
                         </Grid>
-                        
+
 
                         <Border DockPanel.Dock="Bottom"
                                 BorderBrush="Gray"
