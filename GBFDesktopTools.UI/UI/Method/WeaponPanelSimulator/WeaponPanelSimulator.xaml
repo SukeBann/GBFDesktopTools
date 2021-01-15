@@ -117,7 +117,8 @@
             <!--放置区-->
             <Grid Grid.Row="0"
                   Grid.Column="1">
-                <Border >
+                <Border BorderThickness="1"
+                        BorderBrush="#70a1ff">
                     <Viewbox Stretch="Fill">
                         <Grid Height="618"
                               Width="910">
@@ -313,7 +314,6 @@
 
                                 </Border>
                             </Grid>
-
                         </Grid>
                     </Viewbox>
                 </Border>
