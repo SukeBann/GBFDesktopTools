@@ -6,6 +6,8 @@
             xmlns:purs="clr-namespace:Panuon.UI.Silver.Resources;assembly=Panuon.UI.Silver"
             xmlns:uif="clr-namespace:Frameworks"
             xmlns:view="clr-namespace:GBFDesktopTools.View"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
             Title="WeaponPanelSimulator"
             Height="1000"
             MinHeight="750"
@@ -18,7 +20,7 @@
         <CollectionViewSource x:Key="cvsWeaponSearchTip" />
 
         <ToolModel:FilterCondition x:Key="FcModel" />
-
+        <ToolModel:CalculatorCore x:Key="CCModel" />
 
         <Style TargetType="Border"
                x:Key="CalculatorTopBorderStyle">
@@ -87,7 +89,8 @@
             </Border>
         </Grid>
         <!--主面板-->
-        <Grid Margin="0,20,0,0">
+        <Grid Margin="0,20,0,0"
+              DataContext="{Binding Source={StaticResource CCModel}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.7*" />
                 <ColumnDefinition Width="1.4*" />
@@ -124,9 +127,9 @@
                               Width="910">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*" />
-                                <ColumnDefinition Width="2.6*" />
-                                <ColumnDefinition Width="2.6*" />
-                                <ColumnDefinition Width="2.6*" />
+                                <ColumnDefinition Width="2.5*" />
+                                <ColumnDefinition Width="2.5*" />
+                                <ColumnDefinition Width="2.5*" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="1.5*" />
@@ -174,6 +177,8 @@
                                             </DockPanel>
                                         </Border>
                                         <CheckBox  Content="拖拽移动"
+                                                   IsChecked="{Binding Path=CopyOrMove}"
+                                                   Margin="0,0,10,0"
                                                    VerticalAlignment="Center"
                                                    Foreground="#2a73ff"
                                                    DockPanel.Dock="Right"
@@ -189,14 +194,13 @@
                             <!--主武器-->
                             <Grid Grid.Column="0"
                                   Grid.Row="1"
-                                  Grid.RowSpan="3">
+                                  Grid.RowSpan="3"
+                                  x:Name="gMainWeapon"
+                                  DataContext="{Binding Path=MainWeapon}">
                                 <Border Style="{StaticResource CalculatorMainBorderStyle}">
                                     <DockPanel>
                                         <Border DockPanel.Dock="Top"
                                                 Margin="1">
-                                            <Border.Background>
-                                                <ImageBrush />
-                                            </Border.Background>
                                             <Label Content="Main Weapon"
                                                    FontSize="26"
                                                    Foreground="#2a73ff"
@@ -204,7 +208,6 @@
                                                    FontFamily="Freestyle Script" />
                                         </Border>
                                         <Border DockPanel.Dock="Bottom"
-                                                Margin="0,0,0,80"
                                                 Style="{StaticResource CalculatorMainBorderStyle}">
                                             <StackPanel>
                                                 <Border Style="{StaticResource CalculatorMainBorderStyle}">
@@ -212,14 +215,19 @@
                                                         <Label Content="Level:"
                                                                Height="30"
                                                                Width="60"
+                                                               Foreground="#2a73ff"
                                                                DockPanel.Dock="Left" />
                                                         <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
                                                                 pu:ButtonHelper.Icon="&#xe990;"
-                                                                Background="LightSkyBlue"
                                                                 Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
                                                                 Width="30"
                                                                 DockPanel.Dock="Right" />
                                                         <TextBox Text="1"
+                                                                 Foreground="#2a73ff"
+                                                                 BorderBrush="#70A1FF"
+                                                                 BorderThickness="1,0,1,0"
                                                                  pu:TextBoxHelper.CornerRadius="5"
                                                                  TextAlignment="Center" />
                                                     </DockPanel>
@@ -229,13 +237,19 @@
                                                         <Label Content="Skilllv:"
                                                                Width="60"
                                                                Height="30"
+                                                               Foreground="#2a73ff"
                                                                DockPanel.Dock="Left" />
                                                         <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
                                                                 pu:ButtonHelper.Icon="&#xe990;"
-                                                                pu:ButtonHelper.ButtonStyle="Link"
+                                                                Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
                                                                 Width="30"
                                                                 DockPanel.Dock="Right" />
-                                                        <ComboBox pu:ComboBoxHelper.ComboBoxStyle="Standard"
+                                                        <ComboBox BorderBrush="#70A1FF" 
+                                                                  BorderThickness="1,0,1,0"
+                                                                  pu:ComboBoxHelper.ComboBoxStyle="Standard"
+                                                                  pu:ComboBoxHelper.DropDownCornerRadius="5"
                                                                   pu:ComboBoxHelper.CornerRadius="5" />
                                                     </DockPanel>
                                                 </Border>
@@ -243,9 +257,12 @@
                                         </Border>
                                         <Border DockPanel.Dock="Top"
                                                 BorderThickness="1"
+                                                PreviewMouseLeftButtonDown="DragDidBegin"
+                                                AllowDrop="True"
+                                                Drop="WeaponDrop"
                                                 BorderBrush="#70a1ff">
                                             <Border.Background>
-                                                <ImageBrush ImageSource="E:/GBFDesktopTools/GBFDesktopTools.UI/Resources/Image/VerticalEmpty.jpg" />
+                                                <ImageBrush ImageSource="{Binding WeaponImgUrl_ls}" />
                                             </Border.Background>
                                         </Border>
 
@@ -255,60 +272,621 @@
 
                             <!--第一行-->
                             <Grid Grid.Column="1"
-                                  Grid.Row="1">
+                                  Grid.Row="1"
+                                  x:Name="gOneAndOne"
+                                  DataContext="{Binding Path=OneAndOne}">
                                 <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                    <DockPanel>
+                                        <Border DockPanel.Dock="Bottom"
+                                                DataContext="{Binding ElementName=OneOfOne,Path=DataContext}"
+                                                Style="{StaticResource CalculatorMainBorderStyle}">
+                                            <StackPanel>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Level:"
+                                                               Height="30"
+                                                               Width="60"
+                                                               Foreground="#2a73ff"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <TextBox Text="{Binding WeaponImgUrl_m}"
+                                                                 Foreground="#2a73ff"
+                                                                 BorderBrush="#70A1FF"
+                                                                 BorderThickness="1,0,1,0"
+                                                                 pu:TextBoxHelper.CornerRadius="5"
+                                                                 TextAlignment="Center" />
+                                                    </DockPanel>
+                                                </Border>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Skilllv:"
+                                                               Width="60"
+                                                               Height="30"
+                                                               Foreground="#2a73ff"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <ComboBox BorderBrush="#70A1FF"
+                                                                  BorderThickness="1,0,1,0"
+                                                                  pu:ComboBoxHelper.ComboBoxStyle="Standard"
+                                                                  pu:ComboBoxHelper.DropDownCornerRadius="5"
+                                                                  pu:ComboBoxHelper.CornerRadius="5" />
+                                                    </DockPanel>
+                                                </Border>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Border DockPanel.Dock="Top"
+                                                BorderThickness="1"
+                                                PreviewMouseLeftButtonDown="DragDidBegin"
+                                                AllowDrop="True"
+                                                Drop="WeaponDrop"
+                                                CornerRadius="5">
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="{Binding Path=WeaponImgUrl_m}" />
+                                            </Border.Background>
+                                        </Border>
+                                    </DockPanel>
                                 </Border>
                             </Grid>
                             <Grid Grid.Column="2"
-                                  Grid.Row="1">
+                                  Grid.Row="1"
+                                  x:Name="gOneAndTwo"
+                                  DataContext="{Binding Path=OneAndTwo}">
                                 <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                    <DockPanel>
+                                        <Border DockPanel.Dock="Bottom"
+                                                Style="{StaticResource CalculatorMainBorderStyle}">
+                                            <StackPanel>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Level:"
+                                                               Height="30"
+                                                               Width="60"
+                                                               Foreground="#2a73ff"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <TextBox Text="{Binding WeaponImgUrl_m}"
+                                                                 Foreground="#2a73ff"
+                                                                 BorderBrush="#70A1FF"
+                                                                 BorderThickness="1,0,1,0"
+                                                                 pu:TextBoxHelper.CornerRadius="5"
+                                                                 TextAlignment="Center" />
+                                                    </DockPanel>
+                                                </Border>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Skilllv:"
+                                                               Width="60"
+                                                               Height="30"
+                                                               Foreground="#2a73ff"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <ComboBox BorderBrush="#70A1FF"
+                                                                  BorderThickness="1,0,1,0"
+                                                                  pu:ComboBoxHelper.ComboBoxStyle="Standard"
+                                                                  pu:ComboBoxHelper.DropDownCornerRadius="5"
+                                                                  pu:ComboBoxHelper.CornerRadius="5" />
+                                                    </DockPanel>
+                                                </Border>
+                                            </StackPanel>
+                                        </Border>
 
+                                        <Border DockPanel.Dock="Top"
+                                                BorderThickness="1"
+                                                PreviewMouseLeftButtonDown="DragDidBegin"
+                                                AllowDrop="True"
+                                                Drop="WeaponDrop"
+                                                CornerRadius="5">
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="{Binding Path=WeaponImgUrl_m}" />
+                                            </Border.Background>
+                                        </Border>
+                                    </DockPanel>
                                 </Border>
                             </Grid>
                             <Grid Grid.Column="3"
-                                  Grid.Row="1">
-                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                  Grid.Row="1"
+                                  x:Name="gOneAndThree"
+                                  DataContext="{Binding Path=OneAndThree}">
+                                <Border Style="{StaticResource CalculatorMainBorderStyle}"
+                                        Drop="WeaponDrop">
+                                    <DockPanel>
+                                        <Border DockPanel.Dock="Bottom"
+                                                Style="{StaticResource CalculatorMainBorderStyle}">
+                                            <StackPanel>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Level:"
+                                                               Height="30"
+                                                               Width="60"
+                                                               Foreground="#2a73ff"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <TextBox Text="1"
+                                                                 Foreground="#2a73ff"
+                                                                 BorderBrush="#70A1FF"
+                                                                 BorderThickness="1,0,1,0"
+                                                                 pu:TextBoxHelper.CornerRadius="5"
+                                                                 TextAlignment="Center" />
+                                                    </DockPanel>
+                                                </Border>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Skilllv:"
+                                                               Width="60"
+                                                               Height="30"
+                                                               Foreground="#2a73ff"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <ComboBox BorderBrush="#70A1FF"
+                                                                  BorderThickness="1,0,1,0"
+                                                                  pu:ComboBoxHelper.ComboBoxStyle="Standard"
+                                                                  pu:ComboBoxHelper.DropDownCornerRadius="5"
+                                                                  pu:ComboBoxHelper.CornerRadius="5" />
+                                                    </DockPanel>
+                                                </Border>
+                                            </StackPanel>
+                                        </Border>
 
+                                        <Border DockPanel.Dock="Top"
+                                                 BorderThickness="1"
+                                                 PreviewMouseLeftButtonDown="DragDidBegin"
+                                                 AllowDrop="True"
+                                                 Drop="WeaponDrop"
+                                                 CornerRadius="5">
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="{Binding Path=WeaponImgUrl_m}" />
+                                            </Border.Background>
+                                        </Border>
+                                    </DockPanel>
                                 </Border>
                             </Grid>
 
                             <!--第二行-->
                             <Grid Grid.Column="1"
-                                  Grid.Row="2">
+                                  Grid.Row="2"
+                                  x:Name="gTwoAndOne"
+                                  DataContext="{Binding Path=TwoAndOne}">
                                 <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                    <DockPanel>
+                                        <Border DockPanel.Dock="Bottom"
+                                                Style="{StaticResource CalculatorMainBorderStyle}">
+                                            <StackPanel>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Level:"
+                                                               Height="30"
+                                                               Width="60"
+                                                               Foreground="#2a73ff"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <TextBox Text="1"
+                                                                 Foreground="#2a73ff"
+                                                                 BorderBrush="#70A1FF"
+                                                                 BorderThickness="1,0,1,0"
+                                                                 pu:TextBoxHelper.CornerRadius="5"
+                                                                 TextAlignment="Center" />
+                                                    </DockPanel>
+                                                </Border>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Skilllv:"
+                                                               Width="60"
+                                                               Height="30"
+                                                               Foreground="#2a73ff"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <ComboBox BorderBrush="#70A1FF"
+                                                                  BorderThickness="1,0,1,0"
+                                                                  pu:ComboBoxHelper.ComboBoxStyle="Standard"
+                                                                  pu:ComboBoxHelper.DropDownCornerRadius="5"
+                                                                  pu:ComboBoxHelper.CornerRadius="5" />
+                                                    </DockPanel>
+                                                </Border>
+                                            </StackPanel>
+                                        </Border>
 
+                                        <Border DockPanel.Dock="Top"
+                                                BorderThickness="1"
+                                                PreviewMouseLeftButtonDown="DragDidBegin"
+                                                AllowDrop="True"
+                                                Drop="WeaponDrop"
+                                                CornerRadius="5">
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="{Binding Path=WeaponImgUrl_m}" />
+                                            </Border.Background>
+                                        </Border>
+                                    </DockPanel>
                                 </Border>
                             </Grid>
                             <Grid Grid.Column="2"
-                                  Grid.Row="2">
+                                  Grid.Row="2"
+                                  x:Name="gTwoAndTwo"
+                                  DataContext="{Binding Path=TwoAndTwo}">
                                 <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                    <DockPanel>
+                                        <Border DockPanel.Dock="Bottom"
+                                                Style="{StaticResource CalculatorMainBorderStyle}">
+                                            <StackPanel>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Level:"
+                                                               Height="30"
+                                                               Width="60"
+                                                               Foreground="#2a73ff"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <TextBox Text="1"
+                                                                 Foreground="#2a73ff"
+                                                                 BorderBrush="#70A1FF"
+                                                                 BorderThickness="1,0,1,0"
+                                                                 pu:TextBoxHelper.CornerRadius="5"
+                                                                 TextAlignment="Center" />
+                                                    </DockPanel>
+                                                </Border>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Skilllv:"
+                                                               Width="60"
+                                                               Height="30"
+                                                               Foreground="#2a73ff"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <ComboBox BorderBrush="#70A1FF"
+                                                                  BorderThickness="1,0,1,0"
+                                                                  pu:ComboBoxHelper.ComboBoxStyle="Standard"
+                                                                  pu:ComboBoxHelper.DropDownCornerRadius="5"
+                                                                  pu:ComboBoxHelper.CornerRadius="5" />
+                                                    </DockPanel>
+                                                </Border>
+                                            </StackPanel>
+                                        </Border>
 
+                                        <Border DockPanel.Dock="Top"
+                                                BorderThickness="1"
+                                                PreviewMouseLeftButtonDown="DragDidBegin"
+                                                AllowDrop="True"
+                                                Drop="WeaponDrop"
+                                                CornerRadius="5">
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="{Binding Path=WeaponImgUrl_m}" />
+                                            </Border.Background>
+                                        </Border>
+                                    </DockPanel>
                                 </Border>
                             </Grid>
                             <Grid Grid.Column="3"
-                                  Grid.Row="2">
+                                  Grid.Row="2"
+                                  x:Name="gTwoAndThree"
+                                  DataContext="{Binding Path=TwoAndThree}">
                                 <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                    <DockPanel>
+                                        <Border DockPanel.Dock="Bottom"
+                                                Style="{StaticResource CalculatorMainBorderStyle}">
+                                            <StackPanel>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Level:"
+                                                               Height="30"
+                                                               Width="60"
+                                                               Foreground="#2a73ff"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <TextBox Text="1"
+                                                                 Foreground="#2a73ff"
+                                                                 BorderBrush="#70A1FF"
+                                                                 BorderThickness="1,0,1,0"
+                                                                 pu:TextBoxHelper.CornerRadius="5"
+                                                                 TextAlignment="Center" />
+                                                    </DockPanel>
+                                                </Border>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Skilllv:"
+                                                               Width="60"
+                                                               Height="30"
+                                                               Foreground="#2a73ff"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <ComboBox BorderBrush="#70A1FF"
+                                                                  BorderThickness="1,0,1,0"
+                                                                  pu:ComboBoxHelper.ComboBoxStyle="Standard"
+                                                                  pu:ComboBoxHelper.DropDownCornerRadius="5"
+                                                                  pu:ComboBoxHelper.CornerRadius="5" />
+                                                    </DockPanel>
+                                                </Border>
+                                            </StackPanel>
+                                        </Border>
 
+                                        <Border DockPanel.Dock="Top"
+                                                BorderThickness="1"
+                                                PreviewMouseLeftButtonDown="DragDidBegin"
+                                                AllowDrop="True"
+                                                Drop="WeaponDrop"
+                                                CornerRadius="5">
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="{Binding Path=WeaponImgUrl_m}" />
+                                            </Border.Background>
+                                        </Border>
+                                    </DockPanel>
                                 </Border>
                             </Grid>
 
                             <!--第三行-->
                             <Grid Grid.Column="1"
-                                  Grid.Row="3">
+                                  Grid.Row="3"
+                                  x:Name="gThreeAndOne"
+                                  DataContext="{Binding Path=ThreeAndOne}">
                                 <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                    <DockPanel>
+                                        <Border DockPanel.Dock="Bottom"
+                                                Style="{StaticResource CalculatorMainBorderStyle}">
+                                            <StackPanel>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Level:"
+                                                               Height="30"
+                                                               Width="60"
+                                                               Foreground="#2a73ff"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <TextBox Text="1"
+                                                                 Foreground="#2a73ff"
+                                                                 BorderBrush="#70A1FF"
+                                                                 BorderThickness="1,0,1,0"
+                                                                 pu:TextBoxHelper.CornerRadius="5"
+                                                                 TextAlignment="Center" />
+                                                    </DockPanel>
+                                                </Border>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Skilllv:"
+                                                               Width="60"
+                                                               Height="30"
+                                                               Foreground="#2a73ff"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <ComboBox BorderBrush="#70A1FF"
+                                                                  BorderThickness="1,0,1,0"
+                                                                  pu:ComboBoxHelper.ComboBoxStyle="Standard"
+                                                                  pu:ComboBoxHelper.DropDownCornerRadius="5"
+                                                                  pu:ComboBoxHelper.CornerRadius="5" />
+                                                    </DockPanel>
+                                                </Border>
+                                            </StackPanel>
+                                        </Border>
 
+                                        <Border DockPanel.Dock="Top"
+                                                BorderThickness="1"
+                                                PreviewMouseLeftButtonDown="DragDidBegin"
+                                                AllowDrop="True"
+                                                Drop="WeaponDrop"
+                                                CornerRadius="5">
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="{Binding Path=WeaponImgUrl_m}" />
+                                            </Border.Background>
+                                        </Border>
+                                    </DockPanel>
                                 </Border>
                             </Grid>
                             <Grid Grid.Column="2"
-                                  Grid.Row="3">
+                                  Grid.Row="3"
+                                  x:Name="gThreeAndTwo"
+                                  DataContext="{Binding Path=ThreeAndTwo}">
                                 <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                    <DockPanel>
+                                        <Border DockPanel.Dock="Bottom"
+                                                Style="{StaticResource CalculatorMainBorderStyle}">
+                                            <StackPanel>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Level:"
+                                                               Height="30"
+                                                               Width="60"
+                                                               Foreground="#2a73ff"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <TextBox Text="1"
+                                                                 Foreground="#2a73ff"
+                                                                 BorderBrush="#70A1FF"
+                                                                 BorderThickness="1,0,1,0"
+                                                                 pu:TextBoxHelper.CornerRadius="5"
+                                                                 TextAlignment="Center" />
+                                                    </DockPanel>
+                                                </Border>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Skilllv:"
+                                                               Width="60"
+                                                               Height="30"
+                                                               Foreground="#2a73ff"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <ComboBox BorderBrush="#70A1FF"
+                                                                  BorderThickness="1,0,1,0"
+                                                                  pu:ComboBoxHelper.ComboBoxStyle="Standard"
+                                                                  pu:ComboBoxHelper.DropDownCornerRadius="5"
+                                                                  pu:ComboBoxHelper.CornerRadius="5" />
+                                                    </DockPanel>
+                                                </Border>
+                                            </StackPanel>
+                                        </Border>
 
+                                        <Border DockPanel.Dock="Top"
+                                                BorderThickness="1"
+                                                PreviewMouseLeftButtonDown="DragDidBegin"
+                                                AllowDrop="True"
+                                                Drop="WeaponDrop"
+                                                CornerRadius="5">
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="{Binding Path=WeaponImgUrl_m}" />
+                                            </Border.Background>
+                                        </Border>
+                                    </DockPanel>
                                 </Border>
                             </Grid>
                             <Grid Grid.Column="3"
-                                  Grid.Row="3">
+                                  Grid.Row="3"
+                                  x:Name="gThreeAndThree"
+                                  DataContext="{Binding Path=ThreeAndThree}">
                                 <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                    <DockPanel>
+                                        <Border DockPanel.Dock="Bottom"
+                                                Style="{StaticResource CalculatorMainBorderStyle}">
+                                            <StackPanel>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Level:"
+                                                               Height="30"
+                                                               Width="60"
+                                                               Foreground="#2a73ff"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <TextBox Text="1"
+                                                                 Foreground="#2a73ff"
+                                                                 BorderBrush="#70A1FF"
+                                                                 BorderThickness="1,0,1,0"
+                                                                 pu:TextBoxHelper.CornerRadius="5"
+                                                                 TextAlignment="Center" />
+                                                    </DockPanel>
+                                                </Border>
+                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Skilllv:"
+                                                               Width="60"
+                                                               Height="30"
+                                                               Foreground="#2a73ff"
+                                                               DockPanel.Dock="Left" />
+                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                                                                pu:ButtonHelper.Icon="&#xe990;"
+                                                                Foreground="#2a73ff"
+                                                                Background="LightSkyBlue"
+                                                                pu:ButtonHelper.ClickStyle="Sink"
+                                                                Width="30"
+                                                                DockPanel.Dock="Right" />
+                                                        <ComboBox BorderBrush="#70A1FF"
+                                                                  BorderThickness="1,0,1,0"
+                                                                  pu:ComboBoxHelper.ComboBoxStyle="Standard"
+                                                                  pu:ComboBoxHelper.DropDownCornerRadius="5"
+                                                                  pu:ComboBoxHelper.CornerRadius="5" />
+                                                    </DockPanel>
+                                                </Border>
+                                            </StackPanel>
+                                        </Border>
 
+                                        <Border DockPanel.Dock="Top"
+                                                BorderThickness="1"
+                                                PreviewMouseLeftButtonDown="DragDidBegin"
+                                                AllowDrop="True"
+                                                Drop="WeaponDrop"
+                                                CornerRadius="5">
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="{Binding Path=WeaponImgUrl_m}" />
+                                            </Border.Background>
+                                        </Border>
+                                    </DockPanel>
                                 </Border>
                             </Grid>
                         </Grid>
@@ -341,7 +919,7 @@
                                               Height="25"
                                               Width="200"
                                               KeyUp="SearchKeyUp"
-                                              TextChanged="wtSearchInput_TextChanged"
+                                              TextChanged="WtSearchInput_TextChanged"
                                               pu:TextBoxHelper.CornerRadius="5"
                                               Text="{Binding Path=SearchName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                               pu:TextBoxHelper.Watermark="搜索器"
@@ -409,6 +987,7 @@
                                                   Foreground="#098bdb"
                                                   pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
                                                   pu:ComboBoxHelper.CornerRadius="5"
+                                                  pu:ComboBoxHelper.DropDownCornerRadius="5"
                                                   SelectedValue="{Binding Path=SearchSortType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                                   pu:ComboBoxHelper.Icon="&#xe96a;"
                                                   Width="100"
@@ -433,11 +1012,11 @@
                                                 <ComboBox x:Name="cbWeaponSkillNameList"
                                                           Foreground="#098bdb"
                                                           pu:ComboBoxHelper.CornerRadius="5"
+                                                          pu:ComboBoxHelper.DropDownCornerRadius="5"
                                                           pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
                                                           pu:ComboBoxHelper.Icon="&#xe964;"
                                                           SelectedValue="{Binding Path=WeaponSkillName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                                          Width="135"
-                                                          Height="25" />
+                                                          Width="135"/>
                                             </DockPanel>
                                             <DockPanel>
                                                 <Label Foreground="#4b89ff"
@@ -446,6 +1025,7 @@
                                                 <ComboBox x:Name="cbWeaponSeriesNameList"
                                                           Foreground="#098bdb"
                                                           pu:ComboBoxHelper.CornerRadius="5"
+                                                          pu:ComboBoxHelper.DropDownCornerRadius="5"
                                                           pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
                                                           pu:ComboBoxHelper.Icon="&#xe965;"
                                                           SelectedValue="{Binding Path=FcSeriesName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
@@ -459,6 +1039,7 @@
                                                 <ComboBox x:Name="cbWeaponRarityList"
                                                           Foreground="#098bdb"
                                                           pu:ComboBoxHelper.CornerRadius="5"
+                                                          pu:ComboBoxHelper.DropDownCornerRadius="5"
                                                           pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
                                                           pu:ComboBoxHelper.Icon="&#xe961;"
                                                           SelectedValue="{Binding Path=FcWeaponRarity,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
@@ -486,6 +1067,7 @@
                                                 <ComboBox x:Name="cbWeaponElementList"
                                                           Foreground="#098bdb"
                                                           pu:ComboBoxHelper.CornerRadius="5"
+                                                          pu:ComboBoxHelper.DropDownCornerRadius="5"
                                                           SelectedValue="{Binding Path=FcWeaponElement,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                                           Width="58"
                                                           Height="25" />
@@ -497,6 +1079,7 @@
                                                 <ComboBox x:Name="cbWeaponKindList"
                                                           Foreground="#098bdb"
                                                           pu:ComboBoxHelper.CornerRadius="5"
+                                                          pu:ComboBoxHelper.DropDownCornerRadius="5"
                                                           SelectedValue="{Binding Path=FcWeaponKind,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                                           Width="58"
                                                           Height="25" />
@@ -508,6 +1091,7 @@
                                                 <ComboBox x:Name="cbWeaponEvoCountList"
                                                           Foreground="#098bdb"
                                                           pu:ComboBoxHelper.CornerRadius="5"
+                                                          pu:ComboBoxHelper.DropDownCornerRadius="5"
                                                           pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
                                                           pu:ComboBoxHelper.Icon="&#xe958;"
                                                           SelectedValue="{Binding Path=SearchEvoCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
@@ -521,6 +1105,7 @@
                                                 <ComboBox x:Name="cbWeaponCategoryList"
                                                           Foreground="#098bdb"
                                                           pu:ComboBoxHelper.CornerRadius="5"
+                                                          pu:ComboBoxHelper.DropDownCornerRadius="5"
                                                           SelectedValue="{Binding Path=WeaponCategory,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                                           Width="85"
                                                           Height="25" />
@@ -548,7 +1133,9 @@
                                 <ListBox x:Name="lbWeaponList"
                                          ItemsSource="{Binding Source={StaticResource cvsWeaponList}}"
                                          pu:ListBoxHelper.ItemsHeight="NaN"
-                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                         AllowDrop="True"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                         PreviewMouseLeftButtonDown="DragDidBegin">
                                     <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <uif:UniformWrapPanel Groups="4"
@@ -568,7 +1155,7 @@
                                                                             <GroupBox Header="{Binding Path=GetCanUseName}"
                                                                                       pu:GroupBoxHelper.GroupBoxStyle="Standard">
                                                                                 <StackPanel Width="200">
-                                                                                    <TextBlock Text="{Binding Path=FnGbfMaxEvo, StringFormat='可突破次数: {0}'}" />
+                                                                                    <TextBlock Text="{Binding Path=FnGBF_MaxEvo, StringFormat='可突破次数: {0}'}" />
                                                                                     <TextBlock Text="{Binding Path=FnWeapon_MaxAttack, StringFormat='ATK: {0}'}" />
                                                                                     <TextBlock Text="{Binding Path=FnWeapon_MaxHp, StringFormat='HP: {0}'}" />
                                                                                     <TextBlock Text="{Binding Path=GetSkillName, StringFormat='技能: {0}'}" />

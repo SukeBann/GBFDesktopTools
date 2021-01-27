@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.ComponentModel;
 using GBFDesktopTools.Model.abstractModel;
 
 namespace GBFDesktopTools.Model
@@ -578,7 +576,6 @@ namespace GBFDesktopTools.Model
 
         #region 构造方法
 
-
         #endregion
 
         #region MainProperty
@@ -701,11 +698,11 @@ namespace GBFDesktopTools.Model
         /// <summary>
         /// 设置技能目标
         /// </summary>
-        /// <param name="str">要拆分的字符串</param>
+        /// <param name="Str">要拆分的字符串</param>
         public void SetSkillTarget(string Str)
         {
             Str = Str.Remove(Str.Length - 1, 1).Remove(0, 1);
-            var strArray = Str.Split(new char[1] { ',' });
+            var strArray = Str.Split(new char[] { ',' });
             foreach (var item in strArray)
             {
                 this.SkillTargetType.Add((SkillTargetEnum)Enum.Parse(typeof(SkillTargetEnum),item));
@@ -715,11 +712,11 @@ namespace GBFDesktopTools.Model
         /// <summary>
         /// 设置技能计算方式
         /// </summary>
-        /// <param name="str">要拆分的字符串</param>
+        /// <param name="Str">要拆分的字符串</param>
         public void SetFormulaModeEnum(string Str)
         {
             Str = Str.Remove(Str.Length - 1, 1).Remove(0, 1);
-            var strArray = Str.Split(new char[1] { ',' });
+            var strArray = Str.Split(new char[] { ',' });
             foreach (var item in strArray)
             {
                 switch (item)
@@ -751,7 +748,7 @@ namespace GBFDesktopTools.Model
                 this.ConditionType.Add(Condition.NoHave);
                 return;
             }
-            var strArray = Str.Split(new char[1] { ',' }).ToList();
+            var strArray = Str.Split(new char[] { ',' }).ToList();
             foreach (var item in strArray)
             {
                 this.ConditionType.Add((Condition)Enum.Parse(typeof(Condition), item));
@@ -764,18 +761,14 @@ namespace GBFDesktopTools.Model
         /// <param name="StrList">要拆分的字符串数组</param>
         public void SetSkillValue(List<string> StrList)
         {
-            for (int i = 1; i< 21; i++)
+            for (var i = 1; i< 21; i++)
             {
                 if (StrList[i] == String.Empty)
                 {
                     continue;
                 }
-                var strArray = StrList[i].Split(new char[1] { '&' }).ToList();
-                var DoubleList = new List<double>();
-                foreach (var str in strArray)
-                {
-                    DoubleList.Add(Convert.ToDouble(str) / 100);
-                }
+                var strArray = StrList[i].Split(new char[] { '&' }).ToList();
+                var DoubleList = strArray.Select(str => Convert.ToDouble(str) / 100).ToList();
                 SkillValue[i] = DoubleList;
             }
         }
@@ -783,22 +776,22 @@ namespace GBFDesktopTools.Model
         /// <summary>
         /// 获取一个以技能类型分组的字典集
         /// </summary>
-        /// <param name="str">封装后的对象，包含技能列表</param>
+        /// <param name="WeeaponSkillList">封装后的对象，包含技能列表</param>
         /// <returns></returns>
-        public ObjectResult<WeaponSkill> GetWeaponSkillList(ObjectResult<WeaponSkill> WeaponList)
+        public ObjectResult<WeaponSkill> GetWeaponSkillList(ObjectResult<WeaponSkill> WeeaponSkillList)
         {   
-            if (WeaponList.hasError) return WeaponList;
+            if (WeeaponSkillList.hasError) return WeeaponSkillList;
 
             var dic = new Dictionary<string,List<WeaponSkill>>();
-            var WpList = WeaponList.ObjList;
+            var WpList = WeeaponSkillList.ObjList;
             foreach (var skillType in Enum.GetNames(typeof(SkillTypeEnum)))
             {
                 dic.Add(skillType,
                         WpList.Where(x => x.Main_Name == (SkillTypeEnum)Enum.Parse(typeof(SkillTypeEnum),skillType)).ToList()
                     );
             }
-            WeaponList.ObjStrDic = dic;
-            return WeaponList;
+            WeeaponSkillList.ObjStrDic = dic;
+            return WeeaponSkillList;
         }
 
         #endregion

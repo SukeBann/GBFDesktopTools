@@ -369,7 +369,7 @@ namespace GBFDesktopTools.Library
                             ? new List<string>()
                             : SplitString(dt.Rows[i][8].ToString()),
                         FeGBF_Element = dt.Rows[i][9].ToString() == string.Empty
-                            ? Weapon.GBFElementCHSEnum.无
+                            ? Weapon.GBFElementCHSEnum.无属性
                             : (Weapon.GBFElementCHSEnum) Enum.Parse(typeof(Weapon.GBFElementCHSEnum),
                                 dt.Rows[i][9].ToString()),
                         FeWeapon_Kind = dt.Rows[i][10].ToString() == string.Empty

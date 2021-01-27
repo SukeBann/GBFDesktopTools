@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using GBFDesktopTools.Model.abstractModel;
 using GBFDesktopTools.Model.ToolAndHelper;
@@ -10,9 +11,9 @@ namespace GBFDesktopTools.Model
     public class Weapon : GBFMessageAbstractModel
     {
         #region 构造方法
-
-        public Weapon()
+        public Weapon(bool _isEmpty = false)
         {
+            IsEmpty = _isEmpty;
             FsSearch_Nickname = new List<string>();
             FsGBF_Nickname = new List<string>();
         }
@@ -29,6 +30,15 @@ namespace GBFDesktopTools.Model
         public void SetGBFSeriesName(FilterCondition FC, string TargetStr)
         {
             FsSeries_Name = string.IsNullOrEmpty(TargetStr) ? GBFSeriesNameEnum.未知 : FC.WeaponJpSeriesNameDic[TargetStr];
+        }
+
+        public Weapon CopySelf()
+        {
+            var TempWeapon = this.Clone() as Weapon;
+            var TempSkillList = this.WeaponSkill.Select(x => x.Clone() as WeaponSkill).ToList();
+            TempWeapon.WeaponSkill = TempSkillList;
+
+            return TempWeapon;
         }
 
         #endregion
@@ -230,7 +240,14 @@ namespace GBFDesktopTools.Model
         /// </summary>
         public string WeaponImgUrl_ls
         {
-            get => _WeaponImgUrl_ls;
+            get
+            {
+                if (_WeaponImgUrl_ls != "") return _WeaponImgUrl_ls;
+                var path = Assembly.GetExecutingAssembly().CodeBase;
+                path = path.Remove(path.IndexOf(@"GBFDesktopTools.Model.DLL", StringComparison.Ordinal));
+                path += @"Resources\Image\Weapon\ErrorImage (1).png";
+                return path;
+            }
             set
             {
                 _WeaponImgUrl_ls = value;
@@ -275,6 +292,8 @@ namespace GBFDesktopTools.Model
 
         #region SpecialInformation
 
+        public bool IsEmpty { get;}
+
         private string _FsWeapon_SkillName;
         private long _FnWeapon_SkillID;
 
@@ -286,7 +305,6 @@ namespace GBFDesktopTools.Model
         private int _FnWeapon_EvoFiveAttack;
         private WeaponKind _FeWeapon_Kind;
         public List<WeaponSkill> WeaponSkill = new List<WeaponSkill>();
-
 
         /// <summary>
         ///     获取技能名称
@@ -377,7 +395,7 @@ namespace GBFDesktopTools.Model
         }
 
         /// <summary>
-        ///     攻击力
+        ///   4突攻击力
         /// </summary>
         public int FnWeapon_EvoFourAttack
         {

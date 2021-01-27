@@ -184,10 +184,10 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Image\VerticalEmpty.jpg" />
-    <Resource Include="Resources\Image\ErrorImage %282%29.png" />
-    <Resource Include="Resources\Image\ErrorImage.png" />
-    <Resource Include="Resources\Image\HorizontalEmpty.jpg" />
+    <EmbeddedResource Include="Resources\Image\ErrorImage %281%29.png" />
+    <EmbeddedResource Include="Resources\Image\VerticalEmpty.jpg" />
+    <EmbeddedResource Include="Resources\Image\ErrorImage %282%29.png" />
+    <EmbeddedResource Include="Resources\Image\HorizontalEmpty.jpg" />
     <Resource Include="Resources\Icon\FuJiang.ico" />
     <Content Include="Resources\Icon\SpiderProgramA.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

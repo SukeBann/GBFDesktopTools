@@ -23,7 +23,7 @@ namespace GBFDesktopTools.View
     public partial class MainWindow : Panuon.UI.Silver.WindowX
     {
         public Navigationer<MainWindow, pgLoading> NG = null;
-        private Model.DownLoadMessage DM = new Model.DownLoadMessage("Welcome GBFDesktopTools","click these button to use the program");
+        //private Model.DownLoadMessage DM = new Model.DownLoadMessage("Welcome GBFDesktopTools","click these button to use the program");
         
         public MainWindow()
         {
@@ -35,7 +35,7 @@ namespace GBFDesktopTools.View
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            this.DownLoadMessage.DataContext = DM.CustomMessage;
+            //this.DownLoadMessage.DataContext = DM.CustomMessage;
             this.Loaded -= MainWindow_Loaded;
         }
 

@@ -30,10 +30,10 @@ namespace GBFDesktopTools.Model.abstractModel
         /// 中文元素枚举
         /// </summary>
         public enum GBFElementCHSEnum
-        {   
-            全部,
-            未知 = -1,
-            无 = 0,
+        {
+            全部 = 0,
+            无属性 = 98,
+            未知 = 99,
             火 = 1,
             水 = 2,
             土 = 3,

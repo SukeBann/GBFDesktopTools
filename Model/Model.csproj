@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Library\ExcelReader.cs" />
-    <Compile Include="ToolAndHelper\DownLoadMessage.cs" />
+    <Compile Include="ToolAndHelper\CalculatorCore.cs" />
     <Compile Include="Models\Abstract\GBFMessageAbstractModel.cs" />
     <Compile Include="Models\Abstract\Model.cs" />
     <Compile Include="ToolAndHelper\Helper.cs" />

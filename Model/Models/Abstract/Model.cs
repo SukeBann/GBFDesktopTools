@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System;
+using System.IO;
 using System.Linq.Expressions;
+using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace GBFDesktopTools.Model.abstractModel
 {
@@ -97,7 +100,7 @@ namespace GBFDesktopTools.Model.abstractModel
         private void Backup()
         {
             if (Map == null) Map = new Dictionary<string, object>();
-            var type = this.GetType();
+            var type = GetType();
             var properties = type.GetProperties();
             foreach (var property in properties)
             {
@@ -111,7 +114,7 @@ namespace GBFDesktopTools.Model.abstractModel
 
         private void Restore()
         {
-            var type = this.GetType();
+            var type = GetType();
             var properties = type.GetProperties();
             foreach (var property in properties)
             {
@@ -139,9 +142,9 @@ namespace GBFDesktopTools.Model.abstractModel
         /// <param name="propertyName"></param>
         public void RaisePropertyChanged(string propertyName)
         {
-            if (this.PropertyChanged != null)
+            if (PropertyChanged != null)
             {
-                PropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
         #endregion
@@ -161,8 +164,73 @@ namespace GBFDesktopTools.Model.abstractModel
         /// <returns></returns>
         public virtual object Clone()
         {
-            return this.MemberwiseClone();
+            return MemberwiseClone();
         }
+
+        /// <summary>
+        /// 创建泛型对象的深度克隆副本
+        /// </summary>
+        /// <typeparam name="T">泛型对象类型</typeparam>
+        /// <param name="obj">泛型对象</param>
+        /// <returns></returns>
+        public static T DeepClone<T>(T obj)
+        {
+            //如果是字符串或值类型则直接返回
+            if (obj is string || obj.GetType().IsValueType) return obj;
+
+            var retval = Activator.CreateInstance(obj.GetType());
+            var fields = obj.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            foreach (var field in fields)
+            {
+                try { field.SetValue(retval, DeepClone(field.GetValue(obj))); }
+                catch
+                {
+                    // ignored
+                }
+            }
+            return (T)retval;
+        }
+
+        /// <summary>
+        /// 创建当前对象的深度克隆副本
+        /// </summary>
+        /// <returns></returns>
+        //public object DeepClone()
+        //{
+        //    var retval = Activator.CreateInstance(GetType());
+        //    var fields = GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+        //    foreach (var field in fields)
+        //    {
+        //        object TempValue = null;
+        //        TempValue = field.GetValue(this);
+        //        //如果是字符串或值类型则直接返回
+        //        if (!(field.FieldType.IsValueType || field.FieldType == typeof(string)))
+        //        {   
+        //            Type A = GetType();
+        //            var TargetType = fields.GetType();
+        //            TempValue = ((abstractModel)field.GetValue(this)).DeepClone();
+        //        }
+        //        field.SetValue(retval, TempValue);
+        //    }
+        //    return retval;
+        //}
+
+        public object DeepCopyByBin()
+        {
+            object retval;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                //序列化成流
+                bf.Serialize(ms, this);
+                ms.Seek(0, SeekOrigin.Begin);
+                //反序列化成对象
+                retval = bf.Deserialize(ms);
+                ms.Close();
+            }
+            return retval;
+        }
+
     }
     /// <summary>
     /// Model扩展方法
@@ -173,7 +241,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// RaisePropertyChanged(string propertyName) 扩展方法
         /// this.RaisePropertyChanged(x => x.属性); 关键字 this 不能省略
         /// </summary>
-        public static void RaisePropertyChanged<T, TProperty>(this T propertyChangedBase, System.Linq.Expressions.Expression<Func<T, TProperty>> expression) where T : abstractModel
+        public static void RaisePropertyChanged<T, TProperty>(this T propertyChangedBase, Expression<Func<T, TProperty>> expression) where T : abstractModel
         {
             if (expression == null) return;
 
@@ -184,9 +252,9 @@ namespace GBFDesktopTools.Model.abstractModel
                     propertyChangedBase.RaisePropertyChanged(x.Name);
                 }
             }
-            else if (expression.Body is System.Linq.Expressions.MemberExpression)
+            else if (expression.Body is MemberExpression)
             {
-                var memberExpression = expression.Body as System.Linq.Expressions.MemberExpression;
+                var memberExpression = expression.Body as MemberExpression;
                 propertyChangedBase.RaisePropertyChanged(memberExpression.Member.Name);
             }
             /*
@@ -209,28 +277,28 @@ namespace GBFDesktopTools.Model.abstractModel
         /// <param name="Entity">Model</param>
         /// <param name="newModel">新Model</param>
         /// <param name="linqExpression">不包含的属性 x => x.PropertyA 或 new { x.PropertyA, x.PropertyB }</param>
-        public static void Update<T, TProperty>(this T Entity, T newModel = null, System.Linq.Expressions.Expression<Func<T, TProperty>> linqExpression = null) where T : abstractModel
+        public static void Update<T, TProperty>(this T Entity, T newModel = null, Expression<Func<T, TProperty>> linqExpression = null) where T : abstractModel
         {
             List<string> NotContainProperties = new List<string>();
             if (linqExpression != null)
             {
-                if (linqExpression.Body is System.Linq.Expressions.NewExpression)
+                if (linqExpression.Body is NewExpression)
                 {
-                    var x1 = linqExpression.Body as System.Linq.Expressions.NewExpression;
+                    var x1 = linqExpression.Body as NewExpression;
                     foreach (var x in x1.Members)
                     {
                         NotContainProperties.Add(x.Name);
                     }
                 }
-                else if (linqExpression.Body is System.Linq.Expressions.MemberExpression)
+                else if (linqExpression.Body is MemberExpression)
                 {
-                    var x2 = linqExpression.Body as System.Linq.Expressions.MemberExpression;
+                    var x2 = linqExpression.Body as MemberExpression;
                     NotContainProperties.Add(x2.Member.Name);
                 }
             }
-            System.Type type = Entity.GetType();
-            System.Reflection.PropertyInfo[] properties = type.GetProperties();
-            foreach (System.Reflection.PropertyInfo property in properties)
+            Type type = Entity.GetType();
+            PropertyInfo[] properties = type.GetProperties();
+            foreach (PropertyInfo property in properties)
             {
                 if (!NotContainProperties.Contains(property.Name))
                 {
@@ -254,9 +322,9 @@ namespace GBFDesktopTools.Model.abstractModel
         /// <param name="obj"></param>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public static string GetPropertyName<T, TProperty>(this T obj, System.Linq.Expressions.Expression<Func<T, TProperty>> expression) where T : new()
+        public static string GetPropertyName<T, TProperty>(this T obj, Expression<Func<T, TProperty>> expression) where T : new()
         {
-            var memberExpression = expression.Body as System.Linq.Expressions.MemberExpression;
+            var memberExpression = expression.Body as MemberExpression;
             if (memberExpression != null)
             {
                 return memberExpression.Member.Name;
@@ -273,9 +341,9 @@ namespace GBFDesktopTools.Model.abstractModel
         /// <param name="expression"></param>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        public static bool IsProperty<T, TProperty>(this T propertyChangedBase, System.Linq.Expressions.Expression<Func<T, TProperty>> expression, string propertyName) where T : abstractModel
+        public static bool IsProperty<T, TProperty>(this T propertyChangedBase, Expression<Func<T, TProperty>> expression, string propertyName) where T : abstractModel
         {
-            var memberExpression = expression.Body as System.Linq.Expressions.MemberExpression;
+            var memberExpression = expression.Body as MemberExpression;
             return memberExpression == null ? false : (memberExpression.Member.Name == propertyName);
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using static GBFDesktopTools.Model.Weapon;
@@ -154,7 +155,8 @@ namespace GBFDesktopTools.Model.ToolAndHelper
     }
 
     /// <summary>
-    /// 具有 （武器类型，属性，武器系列，稀有度，武器分类，武器上限解放程度）筛选词缀 的筛选器
+    /// 具有 （武器类型，属性，武器系列，稀有度，武器分类，武器上限解放程度）筛选词缀 的筛选器，
+    /// 提供一系列筛选的操作方法，以及筛选词缀列表。
     /// </summary>
     public class FilterCondition : abstractModel
     {
@@ -276,7 +278,6 @@ namespace GBFDesktopTools.Model.ToolAndHelper
         private GFBSearchEvoCountEnum _searchEvoCount;
         private GBFMessageAbstractModel.SearchSortTypeEnum _searchSortType;
 
-
         /// <summary>
         /// 武器排序类型
         /// </summary>
@@ -369,6 +370,8 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             //加载属性列表
             foreach (var item in Enum.GetNames(typeof(GBFMessageAbstractModel.GBFElementCHSEnum)))
             {
+                var e = (GBFMessageAbstractModel.GBFElementCHSEnum) Enum.Parse(
+                    typeof(GBFMessageAbstractModel.GBFElementCHSEnum), item);
                 WeaponElementList.Add((GBFMessageAbstractModel.GBFElementCHSEnum)Enum.Parse(typeof(GBFMessageAbstractModel.GBFElementCHSEnum), item));
             }
             //加载稀有度列表

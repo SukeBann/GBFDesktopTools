@@ -4,8 +4,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using GBFDesktopTools.Model.ToolAndHelper;
 using Panuon.UI.Silver.Core;
+// ReSharper disable DelegateSubtraction
 
 namespace GBFDesktopTools.View
 {
@@ -27,18 +29,19 @@ namespace GBFDesktopTools.View
         private readonly AsyncCollection<Weapon> WeaponList = new AsyncCollection<Weapon>();
         private readonly AsyncCollection<string> WeaponSearchTip = new AsyncCollection<string>();
 
-        private readonly Model.ToolAndHelper.FilterCondition Fc;
+        private readonly FilterCondition Fc;
+        private readonly CalculatorCore CC;
 
         public WeaponPanelSimulator()
         {
             InitializeComponent();
 
-            Fc = this.Resources["FcModel"] as Model.ToolAndHelper.FilterCondition;
-            
-            
+            Fc = this.Resources["FcModel"] as FilterCondition;
+            CC = this.Resources["CCModel"] as CalculatorCore;
+
             ((CollectionViewSource) this.Resources["cvsWeaponList"]).Source = WeaponList;
             ((CollectionViewSource) this.Resources["cvsWeaponSearchTip"]).Source = WeaponSearchTip;
-
+            
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             this.Loaded += WeaponPanelSimulator_Loaded;
         }
@@ -47,6 +50,8 @@ namespace GBFDesktopTools.View
         {
             RunTaskMethod();
             // ReSharper disable once PossibleNullReferenceException
+            
+            //筛选器下拉菜单数据
             cbSortTypeList.ItemsSource = Fc.SearchSortTypeList;
             cbWeaponKindList.ItemsSource = Fc.WeaponKindList;
             cbWeaponSeriesNameList.ItemsSource = Fc.WeaponSeriesNameList;
@@ -63,7 +68,7 @@ namespace GBFDesktopTools.View
         }
 
         /// <summary>
-        /// 异步加载数据时显示加载窗口
+        /// 异步载入窗口数据时显示加载窗口
         /// </summary>
         private void RunTaskMethod()
         {
@@ -107,6 +112,8 @@ namespace GBFDesktopTools.View
             }
         }
 
+        #region 放置源
+
         private void FilterRunMethod()
         {
             this.IsMaskVisible = false;
@@ -114,7 +121,7 @@ namespace GBFDesktopTools.View
             WeaponList.Clear();
             if (Obj.hasError || Obj.ObjList.Count == 0)
             {
-                NoticeX.Show("加载列表出错：" + (string.IsNullOrEmpty(Obj.ErrorMsg) ? "没有查询到数据":Obj.ErrorMsg), MessageBoxIcon.Error,900);
+                NoticeX.Show("加载列表出错：" + (string.IsNullOrEmpty(Obj.ErrorMsg) ? "没有查询到数据" : Obj.ErrorMsg), MessageBoxIcon.Error, 900);
                 return;
             }
             WeaponList.AddRange(Obj.ObjList);
@@ -133,7 +140,6 @@ namespace GBFDesktopTools.View
             {
                 return;
             }
-
             Fc.loadWeaponListHandler -= SearchRunEvent;
             var tags = button.Tag;
             switch (tags)
@@ -145,7 +151,7 @@ namespace GBFDesktopTools.View
                     var tempInt = string.IsNullOrEmpty(tbGotoValue.Text) ? 1 : Convert.ToInt32(tbGotoValue.Text);
                     if (tempInt > Fc.PageCount || tempInt < 1)
                     {
-                        NoticeX.Show("页码超出范围","error",MessageBoxIcon.Error,900);
+                        NoticeX.Show("页码超出范围", "error", MessageBoxIcon.Error, 900);
                         return;
                     }
                     Fc.NowPage = tempInt;
@@ -156,21 +162,21 @@ namespace GBFDesktopTools.View
         }
 
         //显示搜索提示
-        private void wtSearchInput_TextChanged(object sender, TextChangedEventArgs e)
+        private void WtSearchInput_TextChanged(object sender, TextChangedEventArgs e)
         {
             WeaponSearchTip.Clear();
-            if (!(sender is TextBox txBox))return;
+            if (!(sender is TextBox txBox)) return;
 
-            var Text = txBox.Text.Replace(@"\","");
+            var Text = txBox.Text.Replace(@"\", "");
             if (Text.IsNullOrEmpty()) return;
 
             //匹配含有目标值的字符串
-            var TempList = Fc.SearchTip.Where(x => Regex.IsMatch(x, Text,RegexOptions.IgnoreCase)).ToList();
+            var TempList = Fc.SearchTip.Where(x => Regex.IsMatch(x, Text, RegexOptions.IgnoreCase)).ToList();
             if (TempList.Count == 0) return;
 
             //按照目标值在字符串中的索引排序
             TempList.Sort(new Model.ToolAndHelper.FilterCondition.SearchTipListReverserClass(Text));
-            
+
             //反转List
             TempList.Reverse();
 
@@ -181,6 +187,7 @@ namespace GBFDesktopTools.View
             puInputTip.IsOpen = true;
         }
 
+        //搜索输入框支持回车以及Key.down切换至搜索提示
         private void SearchKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -209,15 +216,176 @@ namespace GBFDesktopTools.View
                 }
             }
 
+            if (TipListbox.SelectedItem != null) return;
+            TipListbox.Focus();
             if (TipListbox.SelectedItem == null)
             {
-                TipListbox.Focus();
-                if (TipListbox.SelectedItem == null)
-                {
-                    TipListbox.SelectedIndex = 0;
-                }
+                TipListbox.SelectedIndex = 0;
             }
         }
 
+        #endregion
+
+        #region 实现拖放
+
+
+        //private void DragDidBegin(object sender, MouseButtonEventArgs e)
+        //{
+        //    var targetControl = (IInputElement) sender;
+
+        //    var pos = e.GetPosition(targetControl);
+        //    var result = VisualTreeHelper.HitTest(targetControl as Visual, pos);
+
+        //    if (result == null) return;
+
+        //    Weapon TargetWeapon = null;
+
+        //    switch (sender)
+        //    {
+        //        case ListBox _:
+        //            TargetWeapon = Utils.FindVisualParent<ListBoxItem>(result.VisualHit).Content as Weapon;
+        //            TargetWeapon = TargetWeapon.CopySelf();
+        //            break;
+        //        case Border _:
+        //            TargetWeapon = Utils.FindVisualParent<Border>(result.VisualHit).DataContext as Weapon;
+        //            if (CC.CopyOrMove)
+        //            {
+        //                TargetWeapon = TargetWeapon.CopySelf();
+        //                break;
+        //            }
+        //            TempControl = sender as DependencyObject;
+        //            break;
+        //        /*
+        //         *  完成复制与移动的切换
+        //         *  需要注意点是如果移动时 目标点有内容 则是将两个内容交换位置
+        //         */
+        //    }
+
+        //    if (TargetWeapon == null)
+        //    {
+        //        return;
+        //    }
+        //    var dataObject = new DataObject(TargetWeapon);
+
+        //    DragDrop.DoDragDrop(sender as DependencyObject, dataObject, DragDropEffects.Copy);
+        //}
+
+        private DependencyObject TempControl = null;
+
+        private void DragDidBegin(object sender, MouseButtonEventArgs e)
+        {
+            switch (sender)
+            {
+                case ListBox lb:
+                {
+                    var pos = e.GetPosition(lb);
+                    var result = VisualTreeHelper.HitTest(lb, pos);
+                    if (result == null)
+                    {
+                        return;
+                    }
+                    CC.TempWeapon = Utils.FindVisualParent<ListBoxItem>(result.VisualHit).Content as Weapon;
+                    break;
+                }
+                case Border bd:
+                {
+                    var pos = e.GetPosition(bd);
+                    var result = VisualTreeHelper.HitTest(bd, pos);
+                    if (result == null)
+                    {
+                        return;
+                    }
+                    CC.TempWeapon = Utils.FindVisualParent<Border>(result.VisualHit).DataContext as Weapon;
+                    if (!CC.CopyOrMove)
+                    {
+                        TempControl = bd;
+                    }
+                    break;
+                }
+                default:
+                    CC.TempWeapon = null;
+                    break;
+            }
+
+            if (CC.TempWeapon == null) {return;}
+            var dataObject = new DataObject(CC.TempWeapon);
+            DragDrop.DoDragDrop((DependencyObject) sender, dataObject, DragDropEffects.Copy);
+        }
+
+        private void WeaponDrop(object sender, DragEventArgs e)
+        {
+            if (TempControl == null)
+            {
+               var Grid = Utils.FindVisualParent<Grid>(sender as Border);
+               Grid.DataContext = (e.Data.GetData(typeof(Weapon)) as Weapon).CopySelf();
+            }
+            else
+            {
+                var Grid = Utils.FindVisualParent<Grid>(sender as Border);
+                var SourceGrid = Utils.FindVisualParent<Grid>(TempControl);
+                SourceGrid.DataContext = Grid.DataContext;
+                Grid.DataContext = e.Data.GetData(typeof(Weapon)) as Weapon;
+            }
+
+            TempControl = null;
+        }
+
+        //private void WeaponDrop(object sender, DragEventArgs e)
+        //{
+        //    if (!(sender is Border targetBorder))
+        //    {
+        //        return;
+        //    }
+        //    var pos = e.GetPosition(targetBorder);
+        //    var result = VisualTreeHelper.HitTest(targetBorder, pos);
+        //    if (result == null) { return; }
+
+        //    if (e.Data.GetData(typeof(Weapon)) is Weapon dragWeapon)
+        //    {
+        //        if (CC.CopyOrMove)
+        //        {
+        //            targetBorder.DataContext = dragWeapon;
+        //        }
+        //        else
+        //        {
+        //            if ((e.Source as Border) != null)
+        //            {
+        //                var TempControl = e.Source as Border;
+        //                TempControl.DataContext = targetBorder.DataContext;
+        //            }
+        //            targetBorder.DataContext = dragWeapon;
+        //        }
+        //    }
+        //}
+
+        #endregion
+
+
+    }
+
+    /// <summary>
+    /// 拖拽事件辅助类
+    /// </summary>
+    internal static class Utils
+    {
+        /// <summary>
+        /// 根据子元素查找父元素
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static T FindVisualParent<T>(DependencyObject obj) where T : class
+        {
+            while (obj != null)
+            {
+                if (obj is T obj1)
+                {
+                    return obj1;
+                }
+                    
+                obj = VisualTreeHelper.GetParent(obj);
+            }
+            return null;
+        }
     }
 }

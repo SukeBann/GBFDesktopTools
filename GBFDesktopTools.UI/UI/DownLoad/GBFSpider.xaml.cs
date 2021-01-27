@@ -22,7 +22,7 @@ namespace GBFDesktopTools.View
         public List<SpiderCondition> DownList = new List<SpiderCondition>();
         public Navigationer<GBFSpider, pgSelectCondition> Ng = null;
         //下载状态
-        public DownLoadMessage Dlm = new DownLoadMessage("Welcome GBFSpiderProgram", "Click the Buttons to Use the Program");
+        //public DownLoadMessage Dlm = new DownLoadMessage("Welcome GBFSpiderProgram", "Click the Buttons to Use the Program");
         public bool IsSelectCondition = false;
         
         //下载对象
@@ -42,8 +42,8 @@ namespace GBFDesktopTools.View
         {
             InitializeComponent();
             this.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
-            DownLoadMessage.ItemsSource = Dlm.CustomMessage;
-            this.PBSpiderProgress.DataContext = Dlm;  
+            //DownLoadMessage.ItemsSource = Dlm.CustomMessage;
+            //this.PBSpiderProgress.DataContext = Dlm;  
             this.Loaded += new RoutedEventHandler(GBFSpider_Loaded);
         }
 
@@ -52,7 +52,7 @@ namespace GBFDesktopTools.View
         private void GBFSpider_Loaded(object sender, RoutedEventArgs e)
         {
             this.Loaded -= GBFSpider_Loaded;
-            Dlm.ProgressBarValue = 0;
+            //Dlm.ProgressBarValue = 0;
         }
 
         private void SpiderRun_Click(object sender, RoutedEventArgs e)
@@ -77,7 +77,7 @@ namespace GBFDesktopTools.View
                     }
                     //String projectName = Assembly.GetExecutingAssembly().GetName().Name.ToString();string A = "https://gbf.huijiwiki.com/wiki/%E8%A7%92%E8%89%B2%E6%90%9C%E7%B4%A2%E5%99%A8?rarity=3";
                     //GetHTMLResponse(A);
-                    Dlm.AddCustomMessage("正在从本地加载数据，请稍等");
+                    //Dlm.AddCustomMessage("正在从本地加载数据，请稍等");
 
                     var skillObj = LoadFromLocalSkill();
                     if (!skillObj.hasError)
@@ -101,8 +101,8 @@ namespace GBFDesktopTools.View
                         return;
                     }
 
-                    Dlm.ProgressBarValue = 100;
-                    Dlm.AddCustomMessage("加载完成!");
+                    //Dlm.ProgressBarValue = 100;
+                    //Dlm.AddCustomMessage("加载完成!");
                     break;
                 case "Back":
 
@@ -1369,7 +1369,7 @@ namespace GBFDesktopTools.View
                     wp.FsName_CHS = dt.Rows[i][5].ToString() == string.Empty ? "" : dt.Rows[i][5].ToString();
                     wp.FsGBF_Nickname = dt.Rows[i][6].ToString() == string.Empty ? new List<string>() : SplitString(dt.Rows[i][7].ToString());
                     wp.FsSearch_Nickname = dt.Rows[i][8].ToString() == string.Empty ? new List<string>() : SplitString(dt.Rows[i][8].ToString());
-                    wp.FeGBF_Element = dt.Rows[i][9].ToString() == string.Empty ? Weapon.GBFElementCHSEnum.无 : (Weapon.GBFElementCHSEnum)Enum.Parse(typeof(Weapon.GBFElementCHSEnum), dt.Rows[i][9].ToString());
+                    wp.FeGBF_Element = dt.Rows[i][9].ToString() == string.Empty ? Weapon.GBFElementCHSEnum.无属性 : (Weapon.GBFElementCHSEnum)Enum.Parse(typeof(Weapon.GBFElementCHSEnum), dt.Rows[i][9].ToString());
                     //更新图片路径
                     if (IsUpdateImage)
                     {
