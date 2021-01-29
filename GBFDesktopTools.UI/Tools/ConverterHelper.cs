@@ -22,7 +22,11 @@ namespace GBFDesktopTools.View
             /// <summary>
             /// 如果数据源有数据则显示 无数据隐藏 可见性
             /// </summary>
-            ItemsSourceCVisibility
+            ItemsSourceCountVisibility,
+            /// <summary>
+            /// 如果值不为null或者String.Empty 则显示，无数据则隐藏 可见性
+            /// </summary>
+            StringIsEmptyVisibility
         }
 
         private ConverterEnumSelect _ConverterType;
@@ -53,10 +57,14 @@ namespace GBFDesktopTools.View
         /// </summary>
         private void GetConverterDic()
         {
-            //可见性转换
-            var mscvFunc = new Func<object, Type, object, CultureInfo, object>(MItemsSourceCVisibility);
-            ConverterFuncsDic.Add("ItemsSourceCVisibility", mscvFunc);
-            
+            //数据源Count可见性转换
+            var mscvFunc = new Func<object, Type, object, CultureInfo, object>(MItemsSourceCountVisibility);
+            ConverterFuncsDic.Add("ItemsSourceCountVisibility", mscvFunc);  
+
+            //字符串是否为空可见性转换
+            var msevFunc = new Func<object, Type, object, CultureInfo, object>(MStringIsEmptyVisibility);
+            ConverterFuncsDic.Add("StringIsEmptyVisibility", msevFunc);
+
             /*
              *待添加
              */
@@ -68,14 +76,24 @@ namespace GBFDesktopTools.View
         /// 如果数据源有数据则显示 无数据隐藏 可见性
         /// </summary>
         /// <returns>Visibility</returns>
-        private object MItemsSourceCVisibility(object value, Type targetType, object parameter, CultureInfo culture)
+        private object MItemsSourceCountVisibility(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var count = System.Convert.ToInt32(value);
             return count > 0 ? Visibility.Visible : Visibility.Hidden;
         }
-        
-        #endregion
 
+        /// <summary>
+        /// 如果值不为null或者String.Empty 则显示，无数据则隐藏 可见性
+        /// </summary>
+        /// <returns>Visibility</returns>
+        private object MStringIsEmptyVisibility(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return string.IsNullOrEmpty((string)value) ? Visibility.Hidden : Visibility.Visible;
+        }
+
+        
+
+        #endregion
 
         #region MainFunc
 

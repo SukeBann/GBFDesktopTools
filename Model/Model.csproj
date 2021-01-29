@@ -51,7 +51,6 @@
     <Compile Include="ToolAndHelper\ObjectResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Weapon\SkillMethod.cs" />
-    <Compile Include="Models\Weapon\SkillTarget.cs" />
     <Compile Include="Models\Weapon\Weapon.cs" />
     <Compile Include="Models\Weapon\WeaponSkill.cs" />
   </ItemGroup>

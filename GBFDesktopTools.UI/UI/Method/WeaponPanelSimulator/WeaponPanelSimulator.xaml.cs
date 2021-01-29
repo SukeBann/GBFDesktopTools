@@ -83,17 +83,17 @@ namespace GBFDesktopTools.View
                         while (true)
                         {
                             if (!task.IsCompleted) continue;
-                            Fc.GetSearchTipList(WeaponAndSkill.WeaponList.ObjList);
-                            WeaponSkillList.AddRange(WeaponAndSkill.SkillList.ObjList);
-                            WeaponSkillNameList.AddRange(WeaponAndSkill.SkillList.ObjList.GroupBy(x => x.Main_Description).Select(x => x.Key).ToList());
-                            PendingBox.Close();
-
+                            
                             var excelReader = task.Result;
                             if (excelReader.HasError)
                             {
                                 throw new Exception(excelReader.ErrorMsg);
                             }
-                            return;
+                            Fc.GetSearchTipList(excelReader.WeaponList.ObjList);
+                            WeaponSkillList.AddRange(excelReader.SkillList.ObjList);
+                            WeaponSkillNameList.AddRange(excelReader.SkillList.ObjList.GroupBy(x => x.Extra_Description + x.Main_Description).Select(x => x.Key).ToList());
+                            PendingBox.Close();
+                        return;
                         }
                     }
                     catch (Exception ex)
@@ -229,47 +229,6 @@ namespace GBFDesktopTools.View
         #region 实现拖放
 
 
-        //private void DragDidBegin(object sender, MouseButtonEventArgs e)
-        //{
-        //    var targetControl = (IInputElement) sender;
-
-        //    var pos = e.GetPosition(targetControl);
-        //    var result = VisualTreeHelper.HitTest(targetControl as Visual, pos);
-
-        //    if (result == null) return;
-
-        //    Weapon TargetWeapon = null;
-
-        //    switch (sender)
-        //    {
-        //        case ListBox _:
-        //            TargetWeapon = Utils.FindVisualParent<ListBoxItem>(result.VisualHit).Content as Weapon;
-        //            TargetWeapon = TargetWeapon.CopySelf();
-        //            break;
-        //        case Border _:
-        //            TargetWeapon = Utils.FindVisualParent<Border>(result.VisualHit).DataContext as Weapon;
-        //            if (CC.CopyOrMove)
-        //            {
-        //                TargetWeapon = TargetWeapon.CopySelf();
-        //                break;
-        //            }
-        //            TempControl = sender as DependencyObject;
-        //            break;
-        //        /*
-        //         *  完成复制与移动的切换
-        //         *  需要注意点是如果移动时 目标点有内容 则是将两个内容交换位置
-        //         */
-        //    }
-
-        //    if (TargetWeapon == null)
-        //    {
-        //        return;
-        //    }
-        //    var dataObject = new DataObject(TargetWeapon);
-
-        //    DragDrop.DoDragDrop(sender as DependencyObject, dataObject, DragDropEffects.Copy);
-        //}
-
         private DependencyObject TempControl = null;
 
         private void DragDidBegin(object sender, MouseButtonEventArgs e)
@@ -330,36 +289,7 @@ namespace GBFDesktopTools.View
             TempControl = null;
         }
 
-        //private void WeaponDrop(object sender, DragEventArgs e)
-        //{
-        //    if (!(sender is Border targetBorder))
-        //    {
-        //        return;
-        //    }
-        //    var pos = e.GetPosition(targetBorder);
-        //    var result = VisualTreeHelper.HitTest(targetBorder, pos);
-        //    if (result == null) { return; }
-
-        //    if (e.Data.GetData(typeof(Weapon)) is Weapon dragWeapon)
-        //    {
-        //        if (CC.CopyOrMove)
-        //        {
-        //            targetBorder.DataContext = dragWeapon;
-        //        }
-        //        else
-        //        {
-        //            if ((e.Source as Border) != null)
-        //            {
-        //                var TempControl = e.Source as Border;
-        //                TempControl.DataContext = targetBorder.DataContext;
-        //            }
-        //            targetBorder.DataContext = dragWeapon;
-        //        }
-        //    }
-        //}
-
         #endregion
-
 
     }
 

@@ -19,11 +19,13 @@
         <CollectionViewSource x:Key="cvsWeaponList" />
         <CollectionViewSource x:Key="cvsWeaponSearchTip" />
 
-        <ToolModel:FilterCondition x:Key="FcModel" />
-        <ToolModel:CalculatorCore x:Key="CCModel" />
-
-        <Style TargetType="Border"
-               x:Key="CalculatorTopBorderStyle">
+        <ToolModel:CalculatorCore x:Key="CCModel"/>
+        <ToolModel:FilterCondition x:Key="FcModel"/>
+        
+        
+        <!--放置区border-->
+        <Style x:Key="CalculatorTopBorderStyle" 
+                TargetType="Border">
             <Setter Property="CornerRadius"
                     Value="5" />
             <Setter Property="BorderThickness"
@@ -33,15 +35,99 @@
             <Setter Property="Padding"
                     Value="4,0,4,0" />
         </Style>
-
-        <Style TargetType="Border"
-               x:Key="CalculatorMainBorderStyle">
+        <Style x:Key="CalculatorMainBorderStyle" 
+               TargetType="Border">
             <Setter Property="CornerRadius"
                     Value="5" />
             <Setter Property="BorderThickness"
                     Value="1" />
             <Setter Property="BorderBrush"
                     Value="#70a1ff" />
+        </Style>
+        <Style x:Key="CalculatorExtraBorderStyle" 
+               TargetType="Border">
+            <Setter Property="BorderThickness"
+                    Value="0,1,0,0" />
+            <Setter Property="BorderBrush"
+                    Value="#70a1ff" />
+        </Style>
+
+        <!--计算器槽位 等级功能区样式-->
+        <Style x:Key="CalculatorLevelLabelStyle"
+               TargetType="Label"
+               BasedOn="{StaticResource {x:Type Label}}">
+            <Setter Property="Height" 
+                    Value="30"/>
+            <Setter Property="Width" 
+                    Value="60"/>
+            <Setter Property="DockPanel.Dock"
+                    Value="Left" />
+            <Setter Property="Foreground"
+                    Value="#2a73ff"/>
+        </Style>
+        <Style x:Key="CalculatorLevelButtonStyle"
+               TargetType="Button"
+               BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Width"
+                    Value="30" />
+            <Setter Property="DockPanel.Dock"
+                    Value="Right" />
+            <Setter Property="pu:IconHelper.FontFamily"
+                    Value="{StaticResource PanuonIconFont}"/>
+            <Setter Property="pu:ButtonHelper.Icon"
+                    Value="&#xe990;"/>
+            <Setter Property="Foreground"
+                    Value="#2a73ff"/>
+            <Setter Property="Background"
+                    Value="LightSkyBlue" />
+            <Setter Property="pu:ButtonHelper.ClickStyle"
+                    Value="Sink" />
+        </Style>
+        <Style x:Key="CalculatorLevelComboBoxStyle"
+               TargetType="ComboBox"
+               BasedOn="{StaticResource {x:Type ComboBox}}">
+
+        </Style>
+
+        <!-- <Border Style="{StaticResource CalculatorExtraBorderStyle}">
+            <DockPanel>
+                <Label Content="Skilllv:"
+                       Width="60"
+                       Height="30"
+                       Foreground="#2a73ff"
+                       DockPanel.Dock="Left" />
+                <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
+                        pu:ButtonHelper.Icon="&#xe990;"
+                        Foreground="#2a73ff"
+                        Background="LightSkyBlue"
+                        pu:ButtonHelper.ClickStyle="Sink"
+                        Width="30"
+                        DockPanel.Dock="Right" />
+                <ComboBox BorderBrush="#70A1FF"
+                          BorderThickness="1,0,1,0"
+                          pu:ComboBoxHelper.ComboBoxStyle="Standard"
+                          pu:ComboBoxHelper.DropDownCornerRadius="5"
+                          pu:ComboBoxHelper.CornerRadius="5" />
+            </DockPanel>
+        </Border>-->
+
+        <Style x:Key="SkillLabelStyle" 
+               TargetType="Label" 
+               BasedOn="{StaticResource {x:Type Label}}">
+            <Setter Property="Foreground"
+                    Value="#FF4141"/>
+            <Setter Property="FontSize" 
+                    Value="14" />
+            <Setter Property="FontWeight" 
+                    Value="Bold" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black"
+                                      Direction="0"
+                                      ShadowDepth="4"
+                                      Opacity="1" />
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <!--分页选择器样式-->
@@ -210,7 +296,7 @@
                                         <Border DockPanel.Dock="Bottom"
                                                 Style="{StaticResource CalculatorMainBorderStyle}">
                                             <StackPanel>
-                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                <Border Style="{StaticResource CalculatorExtraBorderStyle}">
                                                     <DockPanel>
                                                         <Label Content="Level:"
                                                                Height="30"
@@ -232,7 +318,7 @@
                                                                  TextAlignment="Center" />
                                                     </DockPanel>
                                                 </Border>
-                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                <Border Style="{StaticResource CalculatorExtraBorderStyle}">
                                                     <DockPanel>
                                                         <Label Content="Skilllv:"
                                                                Width="60"
@@ -281,7 +367,7 @@
                                                 DataContext="{Binding ElementName=OneOfOne,Path=DataContext}"
                                                 Style="{StaticResource CalculatorMainBorderStyle}">
                                             <StackPanel>
-                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                <Border Style="{StaticResource CalculatorExtraBorderStyle}">
                                                     <DockPanel>
                                                         <Label Content="Level:"
                                                                Height="30"
@@ -303,7 +389,7 @@
                                                                  TextAlignment="Center" />
                                                     </DockPanel>
                                                 </Border>
-                                                <Border Style="{StaticResource CalculatorMainBorderStyle}">
+                                                <Border Style="{StaticResource CalculatorExtraBorderStyle}">
                                                     <DockPanel>
                                                         <Label Content="Skilllv:"
                                                                Width="60"
@@ -336,6 +422,64 @@
                                             <Border.Background>
                                                 <ImageBrush ImageSource="{Binding Path=WeaponImgUrl_m}" />
                                             </Border.Background>
+                                            <StackPanel Orientation="Horizontal">
+                                                <StackPanel>
+                                                    <Label Content="{Binding SkillOne}"
+                                                           Style="{StaticResource SkillLabelStyle}" />
+                                                    <Label Content="{Binding SkillTwo}"
+                                                           Style="{StaticResource SkillLabelStyle}"/>
+                                                    <Label Content="{Binding SkillThree}"
+                                                           Style="{StaticResource SkillLabelStyle}"/>
+                                                    <StackPanel.ToolTip>
+                                                        <ToolTip ToolTipService.ShowDuration="3000">
+                                                            <ToolTip.Template>
+                                                                <ControlTemplate>
+                                                                    <StackPanel>
+                                                                        <GroupBox Header="{Binding Path=SkillOne}"
+                                                                                  FontWeight="Bold"
+                                                                                  FontSize="14"
+                                                                                  pu:GroupBoxHelper.CornerRadius="5"
+                                                                                  pu:GroupBoxHelper.GroupBoxStyle="Standard"
+                                                                                  Visibility="{Binding Path=SkillOne,Converter={view:ConverterHelper ConverterType=StringIsEmptyVisibility},Mode=OneWay}">
+                                                                            <StackPanel Width="200">
+                                                                                <TextBlock Text="{Binding Path=SkillOneDescriptionOne}"
+                                                                                           TextWrapping="Wrap" />
+                                                                            </StackPanel>
+                                                                        </GroupBox>
+                                                                        <GroupBox Header="{Binding Path=SkillTwo}"
+                                                                                  FontWeight="Bold"
+                                                                                  FontSize="14"
+                                                                                  Margin="0,2,0,0"
+                                                                                  pu:GroupBoxHelper.CornerRadius="5"
+                                                                                  pu:GroupBoxHelper.GroupBoxStyle="Standard"
+                                                                                  Visibility="{Binding Path=SkillTwo,Converter={view:ConverterHelper ConverterType=StringIsEmptyVisibility},Mode=OneWay}">
+                                                                            <StackPanel Width="200">
+                                                                                <TextBlock Text="{Binding Path=SkillOneDescriptionTwo}"
+                                                                                           TextWrapping="Wrap" />
+                                                                            </StackPanel>
+                                                                        </GroupBox>
+                                                                        <GroupBox Header="{Binding Path=SkillThree}"
+                                                                                  FontWeight="Bold"
+                                                                                  FontSize="14"
+                                                                                  Margin="0,2,0,0"
+                                                                                  pu:GroupBoxHelper.CornerRadius="5"
+                                                                                  pu:GroupBoxHelper.GroupBoxStyle="Standard"
+                                                                                  Visibility="{Binding Path=SkillThree,Converter={view:ConverterHelper ConverterType=StringIsEmptyVisibility},Mode=OneWay}">
+                                                                            <StackPanel Width="200">
+                                                                                <TextBlock Text="{Binding Path=SkillOneDescriptionThree}"
+                                                                                           TextWrapping="Wrap" />
+                                                                            </StackPanel>
+                                                                        </GroupBox>
+                                                                    </StackPanel>
+                                                                </ControlTemplate>
+                                                            </ToolTip.Template>
+                                                        </ToolTip>
+                                                    </StackPanel.ToolTip>
+                                                </StackPanel>
+                                                <StackPanel>
+
+                                                </StackPanel>
+                                            </StackPanel>
                                         </Border>
                                     </DockPanel>
                                 </Border>
@@ -1146,26 +1290,23 @@
                                         <DataTemplate>
                                             <Image Source="{Binding Path=WeaponImgUrl_m}">
                                                 <Image.ToolTip>
-                                                    <ToolTip>
-                                                        <ToolTip.Style>
-                                                            <Style TargetType="ToolTip">
-                                                                <Setter Property="Template">
-                                                                    <Setter.Value>
-                                                                        <ControlTemplate>
-                                                                            <GroupBox Header="{Binding Path=GetCanUseName}"
-                                                                                      pu:GroupBoxHelper.GroupBoxStyle="Standard">
-                                                                                <StackPanel Width="200">
-                                                                                    <TextBlock Text="{Binding Path=FnGBF_MaxEvo, StringFormat='可突破次数: {0}'}" />
-                                                                                    <TextBlock Text="{Binding Path=FnWeapon_MaxAttack, StringFormat='ATK: {0}'}" />
-                                                                                    <TextBlock Text="{Binding Path=FnWeapon_MaxHp, StringFormat='HP: {0}'}" />
-                                                                                    <TextBlock Text="{Binding Path=GetSkillName, StringFormat='技能: {0}'}" />
-                                                                                </StackPanel>
-                                                                            </GroupBox>
-                                                                        </ControlTemplate>
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                            </Style>
-                                                        </ToolTip.Style>
+                                                    <ToolTip ToolTipService.ShowDuration="3000">
+                                                        <ToolTip.Template>
+                                                            <ControlTemplate>
+                                                                <GroupBox Header="{Binding Path=GetCanUseName}"
+                                                                          FontWeight="Bold"
+                                                                          FontSize="14"
+                                                                          pu:GroupBoxHelper.CornerRadius="5"
+                                                                          pu:GroupBoxHelper.GroupBoxStyle="Standard">
+                                                                    <StackPanel Width="200">
+                                                                        <TextBlock Margin="4,0,0,0" Text="{Binding Path=FnGBF_MaxEvo, StringFormat='可突破次数: {0}'}" />
+                                                                        <TextBlock Margin="4,0,0,0" Text="{Binding Path=FnWeapon_MaxAttack, StringFormat='ATK: {0}'}" />
+                                                                        <TextBlock Margin="4,0,0,0" Text="{Binding Path=FnWeapon_MaxHp, StringFormat='HP: {0}'}" />
+                                                                        <TextBlock Margin="4,0,0,0" Text="{Binding Path=GetSkillName, StringFormat='技能: {0}'}" />
+                                                                    </StackPanel>
+                                                                </GroupBox>
+                                                            </ControlTemplate>
+                                                        </ToolTip.Template>
                                                     </ToolTip>
                                                 </Image.ToolTip>
                                             </Image>
@@ -1174,7 +1315,7 @@
                                 </ListBox>
                                 <Border BorderBrush="#70A1FF"
                                         BorderThickness="0,1,0,0"
-                                        Visibility="{Binding ElementName=lbWeaponList,Path=HasItems,Converter={view:ConverterHelper ConverterType=ItemsSourceCVisibility},Mode=OneWay}">
+                                        Visibility="{Binding ElementName=lbWeaponList,Path=HasItems,Converter={view:ConverterHelper ConverterType=ItemsSourceCountVisibility},Mode=OneWay}">
                                     <pu:Pagination Height="30"
                                                    Margin="0,10,0,10"
                                                    HorizontalAlignment="Center"

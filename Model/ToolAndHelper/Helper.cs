@@ -152,6 +152,67 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             return Regex.IsMatch(targetStr, regStr);
         }
 
+        /// <summary>
+        /// 获取一个以技能目标枚举类型作为键，中文技能目标类型描述为值的字典集
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<WeaponSkill.SkillTargetEnum, string> GetSkillTargetChsNameDictionary()
+        {
+            return new Dictionary<WeaponSkill.SkillTargetEnum, string>()
+            {
+                {WeaponSkill.SkillTargetEnum.Attack,"攻击力"},
+
+                {WeaponSkill.SkillTargetEnum.HP,"生命值"},
+                {WeaponSkill.SkillTargetEnum.Cut,"伤害减免"},
+                {WeaponSkill.SkillTargetEnum.Defense,"防御力"},
+
+                {WeaponSkill.SkillTargetEnum.CritDamage,"暴击伤害"},
+                {WeaponSkill.SkillTargetEnum.CritProbability,"暴击几率"},
+
+                {WeaponSkill.SkillTargetEnum.DA,"DA几率(连续攻击两次)"},
+                {WeaponSkill.SkillTargetEnum.TA,"TA几率(连续攻击三次)"},
+                {WeaponSkill.SkillTargetEnum.Counter,"反击伤害(回避)几率"},
+                {WeaponSkill.SkillTargetEnum.AdditionalDamage_NormalAttack,"普攻追伤"},
+                {WeaponSkill.SkillTargetEnum.UpperLimit_NormalAttack,"普攻伤害上限"},
+
+                {WeaponSkill.SkillTargetEnum.SkillDamage,"技能伤害"},
+                {WeaponSkill.SkillTargetEnum.UpperLimit_Skill,"技能伤害上限"},
+
+                {WeaponSkill.SkillTargetEnum.ChainBurstDamage,"连锁奥义伤害(cb)"},
+                {WeaponSkill.SkillTargetEnum.UltimateSkillDamage,"奥义伤害"},
+                {WeaponSkill.SkillTargetEnum.UpperLimit_UltimateSkill,"奥义伤害上限"},
+                {WeaponSkill.SkillTargetEnum.UpperLimit_ChainBurst,"连锁奥义伤害(cb)上限"},
+
+                {WeaponSkill.SkillTargetEnum.Barrier,"屏障"},
+                {WeaponSkill.SkillTargetEnum.Resist,"弱体耐性"},
+                {WeaponSkill.SkillTargetEnum.Heal_limit,"生命回复上限"}
+            };
+        }
+
+        /// <summary>
+        /// 获取一个特殊技能枚举类型为键，特殊技能的描述信息为值的字典集
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<WeaponSkill.Condition, string> GetSpecialSkillDictionary()
+        {
+            return new Dictionary<WeaponSkill.Condition, string>()
+            {
+                {WeaponSkill.Condition.Guard,"生命值越少,防御力越高"},
+                {WeaponSkill.Condition.BackWater,"生命值越少,攻击力越高"},
+                {WeaponSkill.Condition.Whole,"生命值越高，攻击力越高"},
+
+                {WeaponSkill.Condition.barrier,"获得屏障，持续到消耗完"},
+
+                {WeaponSkill.Condition.FightBegin,"在战斗开始时"},
+                {WeaponSkill.Condition.JinJin,"经过的回合越多,攻击力越高(13回合达到最大值)"},
+
+                {WeaponSkill.Condition.Arcarum,"在阿卡姆转世中,"},
+
+                {WeaponSkill.Condition.Damaged,"收到伤害时"},
+                
+                {WeaponSkill.Condition.Primal,"星晶兽角色的"},
+            };
+        }
     }
 
     /// <summary>
@@ -370,8 +431,6 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             //加载属性列表
             foreach (var item in Enum.GetNames(typeof(GBFMessageAbstractModel.GBFElementCHSEnum)))
             {
-                var e = (GBFMessageAbstractModel.GBFElementCHSEnum) Enum.Parse(
-                    typeof(GBFMessageAbstractModel.GBFElementCHSEnum), item);
                 WeaponElementList.Add((GBFMessageAbstractModel.GBFElementCHSEnum)Enum.Parse(typeof(GBFMessageAbstractModel.GBFElementCHSEnum), item));
             }
             //加载稀有度列表
@@ -380,7 +439,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
                 WeaponRarityList.Add((GBFMessageAbstractModel.GBFRarityEnum)Enum.Parse(typeof(GBFMessageAbstractModel.GBFRarityEnum), item));
             }
             //加载武器系列列表
-            var asm = System.Reflection.Assembly.GetExecutingAssembly();
+            var asm = Assembly.GetExecutingAssembly();
             using (var stream = asm.GetManifestResourceStream(asm.GetName().Name + ".Resources.Txt.FsSeries_Name.txt"))
             {
                 if (stream == null)
@@ -396,7 +455,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
                     WeaponSeriesNameList.Add((GBFSeriesNameEnum)Enum.Parse(typeof(GBFSeriesNameEnum), seriesNameList[1]));
                 }
                 WeaponSeriesNameList.Sort();
-                WeaponSeriesNameList.Insert(0, Weapon.GBFSeriesNameEnum.全部系列);
+                WeaponSeriesNameList.Insert(0, GBFSeriesNameEnum.全部系列);
                 sr.Close();
             }
             //加载武器卡池列表
@@ -607,7 +666,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
                 }
                 if (WeaponSkillName != "全部技能")
                 {
-                    resultList = resultList.Where(x => x.WeaponSkill.Exists(s => s.Main_Description == WeaponSkillName)).ToList();
+                    resultList = resultList.Where(x => x.WeaponSkill.Exists(s =>s.Extra_Description + s.Main_Description == WeaponSkillName)).ToList();
                 }
                 if (SearchEvoCount != GFBSearchEvoCountEnum.全部)
                 {

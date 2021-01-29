@@ -13,9 +13,9 @@ namespace GBFDesktopTools.Model.abstractModel
     /// </summary>
     public abstract class abstractModel : INotifyPropertyChanged, IEditableObject, ICloneable
     {
-        bool _IsChecked = false;
-        bool _IsEnabled = false;
-        string _BaseRemark = "";
+        private bool _IsChecked = false;
+        private bool _IsEnabled = false;
+        private string _BaseRemark = "";
 
         /// <summary>
         /// 可选
@@ -190,47 +190,6 @@ namespace GBFDesktopTools.Model.abstractModel
             }
             return (T)retval;
         }
-
-        /// <summary>
-        /// 创建当前对象的深度克隆副本
-        /// </summary>
-        /// <returns></returns>
-        //public object DeepClone()
-        //{
-        //    var retval = Activator.CreateInstance(GetType());
-        //    var fields = GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
-        //    foreach (var field in fields)
-        //    {
-        //        object TempValue = null;
-        //        TempValue = field.GetValue(this);
-        //        //如果是字符串或值类型则直接返回
-        //        if (!(field.FieldType.IsValueType || field.FieldType == typeof(string)))
-        //        {   
-        //            Type A = GetType();
-        //            var TargetType = fields.GetType();
-        //            TempValue = ((abstractModel)field.GetValue(this)).DeepClone();
-        //        }
-        //        field.SetValue(retval, TempValue);
-        //    }
-        //    return retval;
-        //}
-
-        public object DeepCopyByBin()
-        {
-            object retval;
-            using (MemoryStream ms = new MemoryStream())
-            {
-                BinaryFormatter bf = new BinaryFormatter();
-                //序列化成流
-                bf.Serialize(ms, this);
-                ms.Seek(0, SeekOrigin.Begin);
-                //反序列化成对象
-                retval = bf.Deserialize(ms);
-                ms.Close();
-            }
-            return retval;
-        }
-
     }
     /// <summary>
     /// Model扩展方法

@@ -249,7 +249,7 @@ namespace GBFDesktopTools.Library
                 DataTable dt = sheet.Cells.ExportDataTable(0, 0, RowCount, ColumnCount);
                 for (var i = 2; i < dt.Rows.Count; i++)
                 {
-                    WeaponSkill skill = new WeaponSkill
+                    WeaponSkill skill = new WeaponSkill 
                     {
                         Skill_ID = Convert.ToInt32(dt.Rows[i][0]),
                         Main_Name = (WeaponSkill.SkillTypeEnum) Enum.Parse(typeof(WeaponSkill.SkillTypeEnum),
@@ -293,13 +293,17 @@ namespace GBFDesktopTools.Library
                     {
                         skill.SetFormulaModeEnum(dt.Rows[i][12].ToString());
                     }
-                    
+
+                    //设置技能数值
                     var StrList = new List<string>();
                     for (var index = 19; index < 40; index++)
                     {
                         StrList.Add(dt.Rows[i][index].ToString() == string.Empty ? "" : dt.Rows[i][index].ToString());
                     }
                     skill.SetSkillValue(StrList);
+
+                    //设置详细技能描述
+                    skill.SetSkillDetailedDescription();
                     skillList.Add(skill);
                 }
                 skillList.Insert(0,new WeaponSkill()

@@ -5,7 +5,7 @@ using GBFDesktopTools.Model.abstractModel;
 
 namespace GBFDesktopTools.Model
 {
-    public class WeaponSkill : Model.abstractModel.abstractModel
+    public class WeaponSkill : abstractModel.abstractModel
     {
         #region 枚举类型
 
@@ -389,15 +389,7 @@ namespace GBFDesktopTools.Model
             /// <summary>
             /// 降低
             /// </summary>
-            Down,
-            /// <summary>
-            /// 固定提升
-            /// </summary>
-            fixedUp,
-            /// <summary>
-            /// 固定降低
-            /// </summary>
-            fixedDown
+            Down
         }
         /// <summary>
         /// 持续时间类型
@@ -481,9 +473,9 @@ namespace GBFDesktopTools.Model
             /// </summary>
             JinJin,
             /// <summary>
-            /// Counter
+            /// 屏障
             /// </summary>
-            Counter
+            barrier
         }
         /// <summary>
         /// skillTarget
@@ -523,7 +515,7 @@ namespace GBFDesktopTools.Model
             /// </summary>
             Resist,
             /// <summary>
-            /// 反击伤害（回避）百分比
+            /// 反击伤害（回避）几率
             /// </summary>
             Counter,
             /// <summary>
@@ -587,6 +579,14 @@ namespace GBFDesktopTools.Model
         /// 技能前缀
         /// </summary>
         public SkillTypeEnum Main_Name { get; set; }
+        /// <summary>
+        /// 获取一个带技能大小后缀的中文技能名
+        /// </summary>
+        public string CHS_Name => Extra_Description + Main_Description + (string.IsNullOrEmpty(Extra_Comment) ? "" : "[" + Extra_Comment + "]");
+        /// <summary>
+        /// 获取一个中文的技能作用描述，描述前的"xx属性角色"需要使用武器的SkillOneDescription获取
+        /// </summary>
+        public string CHS_DetailedDescription { get; set; }
         /// <summary>
         /// 技能后缀
         /// </summary>
@@ -702,7 +702,7 @@ namespace GBFDesktopTools.Model
         public void SetSkillTarget(string Str)
         {
             Str = Str.Remove(Str.Length - 1, 1).Remove(0, 1);
-            var strArray = Str.Split(new char[] { ',' });
+            var strArray = Str.Split(',');
             foreach (var item in strArray)
             {
                 this.SkillTargetType.Add((SkillTargetEnum)Enum.Parse(typeof(SkillTargetEnum),item));
@@ -716,7 +716,7 @@ namespace GBFDesktopTools.Model
         public void SetFormulaModeEnum(string Str)
         {
             Str = Str.Remove(Str.Length - 1, 1).Remove(0, 1);
-            var strArray = Str.Split(new char[] { ',' });
+            var strArray = Str.Split(',', '，');
             foreach (var item in strArray)
             {
                 switch (item)
@@ -726,12 +726,6 @@ namespace GBFDesktopTools.Model
                         break;
                     case "-":
                         this.FormulamodeType.Add(FormulaModeEnum.Down);
-                        break;
-                    case "++":
-                        this.FormulamodeType.Add(FormulaModeEnum.fixedUp);
-                        break;
-                    case "--":
-                        this.FormulamodeType.Add(FormulaModeEnum.fixedDown);
                         break;
                 }
             }
@@ -748,7 +742,7 @@ namespace GBFDesktopTools.Model
                 this.ConditionType.Add(Condition.NoHave);
                 return;
             }
-            var strArray = Str.Split(new char[] { ',' }).ToList();
+            var strArray = Str.Split(',', '，').ToList();
             foreach (var item in strArray)
             {
                 this.ConditionType.Add((Condition)Enum.Parse(typeof(Condition), item));
@@ -767,14 +761,66 @@ namespace GBFDesktopTools.Model
                 {
                     continue;
                 }
-                var strArray = StrList[i].Split(new char[] { '&' }).ToList();
+                var strArray = StrList[i].Split('&').ToList();
                 var DoubleList = strArray.Select(str => Convert.ToDouble(str) / 100).ToList();
                 SkillValue[i] = DoubleList;
             }
         }
 
         /// <summary>
-        /// 获取一个以技能类型分组的字典集
+        /// 设置详细技能描述
+        /// </summary>
+        public void SetSkillDetailedDescription()
+        {
+            var DetailedDescription = "属性角色";
+            var TargetNameDic = ToolAndHelper.ToolsAndHelper.GetSkillTargetChsNameDictionary();
+
+            foreach (var targetEnum in SkillTargetType)
+            {
+                var targetName = TargetNameDic[targetEnum];
+                var Formulamode = FormulamodeType[SkillTargetType.IndexOf(targetEnum)] == FormulaModeEnum.Up ? "提升," : "下降,";
+
+                if (ConditionType.Count >= 1)
+                {
+                    var SpecialSkillDic = ToolAndHelper.ToolsAndHelper.GetSpecialSkillDictionary();
+                    foreach (var VARIABLE in ConditionType.Where(VARIABLE => SpecialSkillDic.Keys.ToList().Exists(x => x == VARIABLE)))
+                    {
+                        switch (VARIABLE)
+                        {
+                            //先制
+                            case Condition.FightBegin:
+                                //先制结界的情况（屏障）
+                                if (SpecialSkillDic.Keys.ToList().Exists(x => x == Condition.barrier))
+                                {
+                                    CHS_DetailedDescription = DetailedDescription + (SpecialSkillDic[VARIABLE] + SpecialSkillDic[Condition.barrier]);
+                                    return;
+                                }
+                                CHS_DetailedDescription = DetailedDescription + SpecialSkillDic[VARIABLE] + targetName + Formulamode + "持续八回合";
+                                return;
+                            //阿卡姆转世中生效，收到伤害生效，星晶兽角色生效
+                            case Condition.Arcarum:
+                            case Condition.Damaged:
+                                DetailedDescription += SpecialSkillDic[VARIABLE] + targetName + Formulamode;
+                                continue;
+                            case Condition.Primal:
+                                DetailedDescription = SpecialSkillDic[VARIABLE] + targetName + Formulamode;
+                                continue;
+                            //可以直接返回完整的详细技能描述的情况
+                            default:
+                                CHS_DetailedDescription = DetailedDescription + SpecialSkillDic[VARIABLE];
+                                return;
+                        }
+                    }
+                }
+
+                DetailedDescription += (SkillTargetType.IndexOf(targetEnum) == 0 ? "的" : "") + targetName + Formulamode;
+            }
+
+            CHS_DetailedDescription = string.IsNullOrEmpty(DetailedDescription) ? DetailedDescription : DetailedDescription.Remove(DetailedDescription.Length - 1, 1);
+        }
+
+        /// <summary>
+        /// 获取一个以技能类型(非中文字符串)分组的字典集
         /// </summary>
         /// <param name="WeeaponSkillList">封装后的对象，包含技能列表</param>
         /// <returns></returns>
@@ -787,8 +833,9 @@ namespace GBFDesktopTools.Model
             foreach (var skillType in Enum.GetNames(typeof(SkillTypeEnum)))
             {
                 dic.Add(skillType,
-                        WpList.Where(x => x.Main_Name == (SkillTypeEnum)Enum.Parse(typeof(SkillTypeEnum),skillType)).ToList()
-                    );
+                        WpList.Where(x => 
+                            x.Main_Name == (SkillTypeEnum)Enum.Parse(typeof(SkillTypeEnum),skillType))
+                            .ToList());
             }
             WeeaponSkillList.ObjStrDic = dic;
             return WeeaponSkillList;

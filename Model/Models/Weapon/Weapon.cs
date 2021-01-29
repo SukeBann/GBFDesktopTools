@@ -307,14 +307,13 @@ namespace GBFDesktopTools.Model
         public List<WeaponSkill> WeaponSkill = new List<WeaponSkill>();
 
         /// <summary>
-        ///     获取技能名称
+        /// 获取中文技能名称
         /// </summary>
         public string GetSkillName
         {
             get
             {
-                var skillName = "";
-                foreach (var item in WeaponSkill) skillName += item.Main_Description + item.Extra_Comment + ",";
+                var skillName = WeaponSkill.Aggregate("", (current, item) => current + (item.CHS_Name + ","));
                 return skillName == "" ? "无" : skillName.Remove(skillName.Length - 1);
             }
         }
@@ -443,6 +442,198 @@ namespace GBFDesktopTools.Model
             {
                 _FnWeapon_MaxHp = value;
                 this.RaisePropertyChanged(x => x.FnWeapon_MaxHp);
+            }
+        }
+
+        #endregion
+
+        #region CalculatorMethod
+
+        /// <summary>
+        /// 设置默认等级数据
+        /// </summary>
+        public void SetDefaultsValue()
+        {
+            NowLevel = MaxLevel;
+            NowSkillLevel = MaxLevel;
+            ExtraLevel = 0;
+        }
+
+        #endregion
+
+        #region CalculatorProperty
+
+        /// <summary>
+        /// 最大等级
+        /// </summary>
+        public int MaxLevel => FnWeapon_EvoFiveAttack != 0 ? 200 : FnWeapon_EvoFourAttack != 0 ? 150 :100;
+        /// <summary>
+        /// 最大技能等级
+        /// </summary>
+        public int MaxSkillLevel => FnWeapon_EvoFiveAttack != 0 ? 20 : FnWeapon_EvoFourAttack != 0 ? 15 : 10;
+
+        private int _NowLevel;
+        private int _NowSkillLevel;
+        private int _ExtraLevel;
+
+        /// <summary>
+        /// 加蛋等级
+        /// </summary>
+        public int ExtraLevel
+        {
+            get => _ExtraLevel;
+            set { _ExtraLevel = value; this.RaisePropertyChanged(x => x.ExtraLevel); }
+        }
+
+        /// <summary>
+        /// 当前生命值
+        /// </summary>
+        public int NowHP
+        {
+            get
+            {
+                var ExtraHP = ExtraLevel * 1;
+                var _HP = NowLevel == 200 ? FnWeapon_EvoFiveHp : NowLevel == 150 ? FnWeapon_EvoFourHp : FnWeapon_MaxHp;
+                return _HP + ExtraHP;
+            }
+        }
+
+        /// <summary>
+        /// 当前攻击力
+        /// </summary>
+        public int NowAttack
+        {
+            get
+            {
+                var ExtraATT = ExtraLevel * 5;
+                var _ATT = NowLevel == 200 ? FnWeapon_EvoFiveAttack : NowLevel == 150 ? FnWeapon_EvoFourAttack : FnWeapon_MaxAttack;
+                return _ATT + ExtraATT;
+            }
+        }
+
+        /// <summary>
+        /// 当前技能等级
+        /// </summary>
+        public int NowSkillLevel
+        {
+            get => _NowSkillLevel;
+            set { _NowSkillLevel = value; this.RaisePropertyChanged(x => x.NowSkillLevel); }
+        }
+
+        /// <summary>
+        /// 当前等级
+        /// </summary>
+        public int NowLevel
+        {
+            get => _NowLevel;
+            set { _NowLevel = value; this.RaisePropertyChanged(x => x.NowLevel); }
+        }
+
+        /// <summary>
+        /// 技能一
+        /// </summary>
+        public string SkillOne
+        {
+            get
+            {
+                if (WeaponSkill != null && WeaponSkill.Count >= 1)
+                {
+                    return WeaponSkill[0].CHS_Name;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+
+        /// <summary>
+        /// 技能一描述
+        /// </summary>
+        public string SkillOneDescriptionOne
+        {
+            get
+            {
+                if (WeaponSkill != null && WeaponSkill.Count >= 1)
+                {
+                    return FeGBF_Element + WeaponSkill[0].CHS_DetailedDescription;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+
+        /// <summary>
+        /// 技能二
+        /// </summary>
+        public string SkillTwo
+        {
+            get
+            {
+                if (WeaponSkill != null && WeaponSkill.Count >= 2)
+                {
+                    return WeaponSkill[1].CHS_Name;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+
+        /// <summary>
+        /// 技能二描述
+        /// </summary>
+        public string SkillOneDescriptionTwo
+        {
+            get
+            {
+                if (WeaponSkill != null && WeaponSkill.Count >= 2)
+                {
+                    return FeGBF_Element + WeaponSkill[1].CHS_DetailedDescription;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+
+        /// <summary>
+        /// 技能三
+        /// </summary>
+        public string SkillThree
+        {
+            get
+            {
+                if (WeaponSkill != null && WeaponSkill.Count >= 3)
+                {
+                    return WeaponSkill[2].CHS_Name;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+
+        /// <summary>
+        /// 技能三描述
+        /// </summary>
+        public string SkillOneDescriptionThree
+        {
+            get
+            {
+                if (WeaponSkill != null && WeaponSkill.Count >= 3)
+                {
+                    return FeGBF_Element + WeaponSkill[2].CHS_DetailedDescription;
+                }
+                else
+                {
+                    return "";
+                }
             }
         }
 
