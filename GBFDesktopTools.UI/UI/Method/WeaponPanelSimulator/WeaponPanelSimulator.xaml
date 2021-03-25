@@ -57,11 +57,13 @@
                TargetType="Label"
                BasedOn="{StaticResource {x:Type Label}}">
             <Setter Property="Height" 
-                    Value="30"/>
+                    Value="20"/>
             <Setter Property="Width" 
                     Value="60"/>
             <Setter Property="DockPanel.Dock"
                     Value="Left" />
+            <Setter Property="FontSize"
+                    Value="10" />
             <Setter Property="Foreground"
                     Value="#2a73ff"/>
         </Style>
@@ -86,31 +88,21 @@
         <Style x:Key="CalculatorLevelComboBoxStyle"
                TargetType="ComboBox"
                BasedOn="{StaticResource {x:Type ComboBox}}">
-
+            <Setter Property="BorderBrush"
+                    Value="#70A1FF" />
+            <Setter Property="Height"
+                    Value="20" />
+            <Setter Property="BorderThickness"
+                    Value="1,0,1,0" />
+            <Setter Property="pu:ComboBoxHelper.ComboBoxStyle"
+                    Value="Standard" />
+            <Setter Property="pu:ComboBoxHelper.DropDownCornerRadius"
+                    Value="5" />
+            <Setter Property="pu:ComboBoxHelper.CornerRadius"
+                    Value="5" />
         </Style>
 
-        <!-- <Border Style="{StaticResource CalculatorExtraBorderStyle}">
-            <DockPanel>
-                <Label Content="Skilllv:"
-                       Width="60"
-                       Height="30"
-                       Foreground="#2a73ff"
-                       DockPanel.Dock="Left" />
-                <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
-                        pu:ButtonHelper.Icon="&#xe990;"
-                        Foreground="#2a73ff"
-                        Background="LightSkyBlue"
-                        pu:ButtonHelper.ClickStyle="Sink"
-                        Width="30"
-                        DockPanel.Dock="Right" />
-                <ComboBox BorderBrush="#70A1FF"
-                          BorderThickness="1,0,1,0"
-                          pu:ComboBoxHelper.ComboBoxStyle="Standard"
-                          pu:ComboBoxHelper.DropDownCornerRadius="5"
-                          pu:ComboBoxHelper.CornerRadius="5" />
-            </DockPanel>
-        </Border>-->
-
+        <!--技能字体阴影-->
         <Style x:Key="SkillLabelStyle" 
                TargetType="Label" 
                BasedOn="{StaticResource {x:Type Label}}">
@@ -367,20 +359,11 @@
                                                 DataContext="{Binding ElementName=OneOfOne,Path=DataContext}"
                                                 Style="{StaticResource CalculatorMainBorderStyle}">
                                             <StackPanel>
-                                                <Border Style="{StaticResource CalculatorExtraBorderStyle}">
+                                                <!--<Border Style="{StaticResource CalculatorExtraBorderStyle}">
                                                     <DockPanel>
                                                         <Label Content="Level:"
-                                                               Height="30"
-                                                               Width="60"
-                                                               Foreground="#2a73ff"
-                                                               DockPanel.Dock="Left" />
-                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
-                                                                pu:ButtonHelper.Icon="&#xe990;"
-                                                                Foreground="#2a73ff"
-                                                                Background="LightSkyBlue"
-                                                                pu:ButtonHelper.ClickStyle="Sink"
-                                                                Width="30"
-                                                                DockPanel.Dock="Right" />
+                                                               Style="{StaticResource CalculatorLevelLabelStyle}"/>
+                                                        <Button Style="{StaticResource CalculatorLevelButtonStyle}"/>
                                                         <TextBox Text="{Binding WeaponImgUrl_m}"
                                                                  Foreground="#2a73ff"
                                                                  BorderBrush="#70A1FF"
@@ -388,28 +371,37 @@
                                                                  pu:TextBoxHelper.CornerRadius="5"
                                                                  TextAlignment="Center" />
                                                     </DockPanel>
+                                                </Border>-->
+                                                <Border Style="{StaticResource CalculatorExtraBorderStyle}">
+                                                    <DockPanel>
+                                                        <ComboBox Style="{StaticResource CalculatorLevelComboBoxStyle}"
+                                                                  x:Name="tempC"
+                                                                  FontSize="10"
+                                                                  Width="40"/>
+                                                        <ComboBox Style="{StaticResource CalculatorLevelComboBoxStyle}"
+                                                                  x:Name="tempA"
+                                                                  FontSize="10" />
+                                                    </DockPanel>
+                                                </Border>
+                                                <!--<Border Style="{StaticResource CalculatorExtraBorderStyle}">
+                                                    <DockPanel>
+                                                        <Label Content="Skilllv:"
+                                                               Style="{StaticResource CalculatorLevelLabelStyle}" />
+                                                        <Button Style="{StaticResource CalculatorLevelButtonStyle}" />
+                                                        <ComboBox Style="{StaticResource CalculatorLevelComboBoxStyle}"
+                                                                  ItemsSource="{Binding Source={StaticResource cvsWeaponList}}"
+                                                                  FontSize="10"
+                                                                  DisplayMemberPath="GetSkillName"/>
+                                                    </DockPanel>
                                                 </Border>
                                                 <Border Style="{StaticResource CalculatorExtraBorderStyle}">
                                                     <DockPanel>
                                                         <Label Content="Skilllv:"
-                                                               Width="60"
-                                                               Height="30"
-                                                               Foreground="#2a73ff"
-                                                               DockPanel.Dock="Left" />
-                                                        <Button pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
-                                                                pu:ButtonHelper.Icon="&#xe990;"
-                                                                Foreground="#2a73ff"
-                                                                Background="LightSkyBlue"
-                                                                pu:ButtonHelper.ClickStyle="Sink"
-                                                                Width="30"
-                                                                DockPanel.Dock="Right" />
-                                                        <ComboBox BorderBrush="#70A1FF"
-                                                                  BorderThickness="1,0,1,0"
-                                                                  pu:ComboBoxHelper.ComboBoxStyle="Standard"
-                                                                  pu:ComboBoxHelper.DropDownCornerRadius="5"
-                                                                  pu:ComboBoxHelper.CornerRadius="5" />
+                                                               Style="{StaticResource CalculatorLevelLabelStyle}"/>
+                                                        <Button Style="{StaticResource CalculatorLevelButtonStyle}"/>
+                                                        <ComboBox Style="{StaticResource CalculatorLevelComboBoxStyle}"/>
                                                     </DockPanel>
-                                                </Border>
+                                                </Border>-->
                                             </StackPanel>
                                         </Border>
 

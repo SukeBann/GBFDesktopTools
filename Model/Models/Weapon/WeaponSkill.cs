@@ -5,7 +5,7 @@ using GBFDesktopTools.Model.abstractModel;
 
 namespace GBFDesktopTools.Model
 {
-    public class WeaponSkill : abstractModel.abstractModel
+    public class WeaponSkill : GBFMessageAbstractModel
     {
         #region 枚举类型
 
@@ -583,10 +583,67 @@ namespace GBFDesktopTools.Model
         /// 获取一个带技能大小后缀的中文技能名
         /// </summary>
         public string CHS_Name => Extra_Description + Main_Description + (string.IsNullOrEmpty(Extra_Comment) ? "" : "[" + Extra_Comment + "]");
+
         /// <summary>
-        /// 获取一个中文的技能作用描述，描述前的"xx属性角色"需要使用武器的SkillOneDescription获取
+        /// 获取一个中文的技能作用描述，描述前的属性类型需要使用武器的SkillOneDescription获取
         /// </summary>
-        public string CHS_DetailedDescription { get; set; }
+        public string CHS_DetailedDescription
+        {
+            get
+            {
+                if (FormulamodeType.Count < 1)
+                {
+                    return "";
+                }
+                var DetailedDescription = SkillElement + "属性角色";
+                var TargetNameDic = ToolAndHelper.ToolsAndHelper.GetSkillTargetChsNameDictionary();
+
+                foreach (var targetEnum in SkillTargetType)
+                {
+                    var targetName = TargetNameDic[targetEnum];
+                    var Formulamode = FormulamodeType[SkillTargetType.IndexOf(targetEnum)] == FormulaModeEnum.Up ? "提升," : "下降,";
+
+                    if (ConditionType.Count >= 1)
+                    {
+                        var SpecialSkillDic = ToolAndHelper.ToolsAndHelper.GetSpecialSkillDictionary();
+                        foreach (var VARIABLE in ConditionType.Where(VARIABLE => SpecialSkillDic.Keys.ToList().Exists(x => x == VARIABLE)))
+                        {
+                            switch (VARIABLE)
+                            {
+                                //先制
+                                case Condition.FightBegin:
+                                    //先制结界的情况（屏障）
+                                    if (SpecialSkillDic.Keys.ToList().Exists(x => x == Condition.barrier))
+                                    {
+                                        return DetailedDescription + (SpecialSkillDic[VARIABLE] + SpecialSkillDic[Condition.barrier]);
+                                        
+                                    }
+                                    return DetailedDescription + SpecialSkillDic[VARIABLE] + targetName + Formulamode + "持续八回合";
+                                //阿卡姆转世中生效，收到伤害生效，星晶兽角色生效
+                                case Condition.Arcarum:
+                                case Condition.Damaged:
+                                    DetailedDescription += SpecialSkillDic[VARIABLE] + targetName + Formulamode;
+                                    continue;
+                                case Condition.Primal:
+                                    DetailedDescription = SpecialSkillDic[VARIABLE] + targetName + Formulamode;
+                                    continue;
+                                //可以直接返回完整的详细技能描述的情况
+                                default:
+                                    return DetailedDescription + SpecialSkillDic[VARIABLE];
+                            }
+                        }
+                    }
+
+                    DetailedDescription += (SkillTargetType.IndexOf(targetEnum) == 0 ? "的" : "") + targetName + Formulamode;
+                }
+
+                return string.IsNullOrEmpty(DetailedDescription) ? DetailedDescription : DetailedDescription.Remove(DetailedDescription.Length - 1, 1);
+            }
+        }
+        /// <summary>
+        /// 技能属性
+        /// </summary>
+        public GBFElementCHSEnum SkillElement { get; set; } = GBFElementCHSEnum.未知;
         /// <summary>
         /// 技能后缀
         /// </summary>
@@ -765,58 +822,6 @@ namespace GBFDesktopTools.Model
                 var DoubleList = strArray.Select(str => Convert.ToDouble(str) / 100).ToList();
                 SkillValue[i] = DoubleList;
             }
-        }
-
-        /// <summary>
-        /// 设置详细技能描述
-        /// </summary>
-        public void SetSkillDetailedDescription()
-        {
-            var DetailedDescription = "属性角色";
-            var TargetNameDic = ToolAndHelper.ToolsAndHelper.GetSkillTargetChsNameDictionary();
-
-            foreach (var targetEnum in SkillTargetType)
-            {
-                var targetName = TargetNameDic[targetEnum];
-                var Formulamode = FormulamodeType[SkillTargetType.IndexOf(targetEnum)] == FormulaModeEnum.Up ? "提升," : "下降,";
-
-                if (ConditionType.Count >= 1)
-                {
-                    var SpecialSkillDic = ToolAndHelper.ToolsAndHelper.GetSpecialSkillDictionary();
-                    foreach (var VARIABLE in ConditionType.Where(VARIABLE => SpecialSkillDic.Keys.ToList().Exists(x => x == VARIABLE)))
-                    {
-                        switch (VARIABLE)
-                        {
-                            //先制
-                            case Condition.FightBegin:
-                                //先制结界的情况（屏障）
-                                if (SpecialSkillDic.Keys.ToList().Exists(x => x == Condition.barrier))
-                                {
-                                    CHS_DetailedDescription = DetailedDescription + (SpecialSkillDic[VARIABLE] + SpecialSkillDic[Condition.barrier]);
-                                    return;
-                                }
-                                CHS_DetailedDescription = DetailedDescription + SpecialSkillDic[VARIABLE] + targetName + Formulamode + "持续八回合";
-                                return;
-                            //阿卡姆转世中生效，收到伤害生效，星晶兽角色生效
-                            case Condition.Arcarum:
-                            case Condition.Damaged:
-                                DetailedDescription += SpecialSkillDic[VARIABLE] + targetName + Formulamode;
-                                continue;
-                            case Condition.Primal:
-                                DetailedDescription = SpecialSkillDic[VARIABLE] + targetName + Formulamode;
-                                continue;
-                            //可以直接返回完整的详细技能描述的情况
-                            default:
-                                CHS_DetailedDescription = DetailedDescription + SpecialSkillDic[VARIABLE];
-                                return;
-                        }
-                    }
-                }
-
-                DetailedDescription += (SkillTargetType.IndexOf(targetEnum) == 0 ? "的" : "") + targetName + Formulamode;
-            }
-
-            CHS_DetailedDescription = string.IsNullOrEmpty(DetailedDescription) ? DetailedDescription : DetailedDescription.Remove(DetailedDescription.Length - 1, 1);
         }
 
         /// <summary>

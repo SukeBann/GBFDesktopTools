@@ -60,6 +60,8 @@ namespace GBFDesktopTools.View
             cbWeaponCategoryList.ItemsSource = Fc.WeaponCategoryList;
             cbWeaponRarityList.ItemsSource = Fc.WeaponRarityList;
 
+            tempC.ItemsSource = Fc.WeaponElementList;
+            tempA.ItemsSource = WeaponSkillNameList;
             cbWeaponSkillNameList.ItemsSource = WeaponSkillNameList;
             cbWeaponSkillNameList.SelectedIndex = 0;
 
@@ -93,7 +95,7 @@ namespace GBFDesktopTools.View
                             WeaponSkillList.AddRange(excelReader.SkillList.ObjList);
                             WeaponSkillNameList.AddRange(excelReader.SkillList.ObjList.GroupBy(x => x.Extra_Description + x.Main_Description).Select(x => x.Key).ToList());
                             PendingBox.Close();
-                        return;
+                            return;
                         }
                     }
                     catch (Exception ex)

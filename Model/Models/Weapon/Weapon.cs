@@ -556,7 +556,7 @@ namespace GBFDesktopTools.Model
             {
                 if (WeaponSkill != null && WeaponSkill.Count >= 1)
                 {
-                    return FeGBF_Element + WeaponSkill[0].CHS_DetailedDescription;
+                    return WeaponSkill[0].CHS_DetailedDescription;
                 }
                 else
                 {
@@ -592,7 +592,7 @@ namespace GBFDesktopTools.Model
             {
                 if (WeaponSkill != null && WeaponSkill.Count >= 2)
                 {
-                    return FeGBF_Element + WeaponSkill[1].CHS_DetailedDescription;
+                    return WeaponSkill[1].CHS_DetailedDescription;
                 }
                 else
                 {
@@ -628,7 +628,7 @@ namespace GBFDesktopTools.Model
             {
                 if (WeaponSkill != null && WeaponSkill.Count >= 3)
                 {
-                    return FeGBF_Element + WeaponSkill[2].CHS_DetailedDescription;
+                    return WeaponSkill[2].CHS_DetailedDescription;
                 }
                 else
                 {

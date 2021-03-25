@@ -132,6 +132,7 @@ namespace GBFDesktopTools.Library
                     var SkillSuffix = "";
                     //后缀索引
                     short SkillSuffixIndex;
+                    var element = WeaponSkill.GBFElementCHSEnum.未知;
 
                     //判断是否为特殊技能 如果是则直接设置特殊技能
                     if (ineptitude.Exists(x => x == item))
@@ -151,7 +152,7 @@ namespace GBFDesktopTools.Library
                     //取出技能主名称
                     var SkillMainName = TempStr.FirstOrDefault();
 
-                    //当索引为1的字符串 不为数字（属性）时 ，寻找技能副名称，且索引为2的字符串为属性
+                    //当索引为1的字符串 不为数字（属性）时 ，寻找技能副名称，且索引为2的字符串为元素
                     if (!ToolsAndHelper.StringContentType(TempStr[1], 2))
                     {
                         var ExtraNameResult = ToolsAndHelper.FoundSkillExtraName(SkillMainName, TempStr[1], SkillList.ObjStrDic);
@@ -160,11 +161,11 @@ namespace GBFDesktopTools.Library
                         if (ExtraNameResult == "")
                         {
                             Skill = SkillList.ObjStrDic["errorSkill"].FirstOrDefault();
+                            Skill = Copier<WeaponSkill, WeaponSkill>.Copy(Skill);
                             Weapon.WeaponSkill.Add(Skill);
                             Weapon.SkillWarning = true;
                             continue;
                         }
-
                         //将返回值(主名称+副名称) 赋值给主名称
                         SkillMainName = ExtraNameResult;
                         //技能后缀的索引
@@ -173,7 +174,9 @@ namespace GBFDesktopTools.Library
                     else
                     {
                         //否则索引为1的字符串为元素
-                        //赋值属性，设置技能后缀索引
+                        //赋值元素，设置技能后缀索引
+                        element = (WeaponSkill.GBFElementCHSEnum)Enum.Parse(
+                            typeof(WeaponSkill.GBFElementCHSEnum), TempStr[1]);
                         SkillSuffixIndex = 2;
                     }
                     //赋值后缀
@@ -183,6 +186,14 @@ namespace GBFDesktopTools.Library
                         if (TempStr.Count > 1 + SkillSuffixIndex)
                         {
                             SkillSuffix += TempStr[1 + SkillSuffixIndex];
+                        }
+                        else
+                        {
+                            if (element == WeaponSkill.GBFElementCHSEnum.未知)
+                            {
+                                element = (WeaponSkill.GBFElementCHSEnum)Enum.Parse(
+                                    typeof(WeaponSkill.GBFElementCHSEnum), TempStr[SkillSuffixIndex]);
+                            }
                         }
                     }
                     //验证后缀
@@ -194,6 +205,7 @@ namespace GBFDesktopTools.Library
                         //搜索并设置武器的技能
                         // ReSharper disable once AssignNullToNotNullAttribute
                         Skill = SkillList.ObjStrDic[SkillMainName].FirstOrDefault(x => x.Extra_Name == SkillSuffix);
+                        Skill = Copier<WeaponSkill, WeaponSkill>.Copy(Skill);
                         if (Skill == null)
                         {
                             Skill = new WeaponSkill()
@@ -207,6 +219,8 @@ namespace GBFDesktopTools.Library
                             SkillList.ObjStrDic[SkillMainName].Add(Skill);
                             Weapon.SkillWarning = true;
                         }
+
+                        Skill.SkillElement = element;
                         Weapon.WeaponSkill.Add(Skill);
                     }
                     else
@@ -302,8 +316,6 @@ namespace GBFDesktopTools.Library
                     }
                     skill.SetSkillValue(StrList);
 
-                    //设置详细技能描述
-                    skill.SetSkillDetailedDescription();
                     skillList.Add(skill);
                 }
                 skillList.Insert(0,new WeaponSkill()
