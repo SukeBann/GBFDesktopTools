@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Net;
-using System.Windows;
-using System.IO;
-using System.Windows.Controls;
-using System.Data;
-using GBFDesktopTools.Model;
+﻿using GBFDesktopTools.Model;
 using GBFDesktopTools.Model.abstractModel;
 using GBFDesktopTools.Model.ToolAndHelper;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace GBFDesktopTools.View
 {
@@ -20,30 +20,34 @@ namespace GBFDesktopTools.View
     {
         //下载条件列表
         public List<SpiderCondition> DownList = new List<SpiderCondition>();
+
         public Navigationer<GBFSpider, pgSelectCondition> Ng = null;
+
         //下载状态
         //public DownLoadMessage Dlm = new DownLoadMessage("Welcome GBFSpiderProgram", "Click the Buttons to Use the Program");
         public bool IsSelectCondition = false;
-        
+
         //下载对象
         //技能列表
         public ObjectResult<WeaponSkill> SkillList = new ObjectResult<WeaponSkill>();
+
         //武器列表
         public ObjectResult<Weapon> WeaponList = new ObjectResult<Weapon>();
 
         #region ToolsDelegate
 
-        delegate List<string> SplitStr(string Target, short splitType = 1, string CustomStr = null, string[] CustomArray = null,StringSplitOptions IsHaveEmpty = StringSplitOptions.None);
-        SplitStr SplitString = ToolsAndHelper.SplitString;
+        private delegate List<string> SplitStr(string Target, short splitType = 1, string CustomStr = null, string[] CustomArray = null, StringSplitOptions IsHaveEmpty = StringSplitOptions.None);
 
-        #endregion
+        private SplitStr SplitString = ToolsAndHelper.SplitString;
+
+        #endregion ToolsDelegate
 
         public GBFSpider()
         {
             InitializeComponent();
             this.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             //DownLoadMessage.ItemsSource = Dlm.CustomMessage;
-            //this.PBSpiderProgress.DataContext = Dlm;  
+            //this.PBSpiderProgress.DataContext = Dlm;
             this.Loaded += new RoutedEventHandler(GBFSpider_Loaded);
         }
 
@@ -69,11 +73,12 @@ namespace GBFDesktopTools.View
                     Ng.ShowPg();
                     Ng = null;
                     break;
+
                 case "RunDownLoad":
-                    if (IsSelectCondition == false) 
-                    { 
-                        MessageBox.Show("请选择下载条件"); 
-                        return; 
+                    if (IsSelectCondition == false)
+                    {
+                        MessageBox.Show("请选择下载条件");
+                        return;
                     }
                     //String projectName = Assembly.GetExecutingAssembly().GetName().Name.ToString();string A = "https://gbf.huijiwiki.com/wiki/%E8%A7%92%E8%89%B2%E6%90%9C%E7%B4%A2%E5%99%A8?rarity=3";
                     //GetHTMLResponse(A);
@@ -104,15 +109,14 @@ namespace GBFDesktopTools.View
                     //Dlm.ProgressBarValue = 100;
                     //Dlm.AddCustomMessage("加载完成!");
                     break;
-                case "Back":
 
+                case "Back":
 
                     break;
             }
-
         }
 
-        #endregion
+        #endregion Event
 
         #region WebMethod
 
@@ -128,7 +132,7 @@ namespace GBFDesktopTools.View
             try
             {
                 WebResponse Response = WRq.GetResponse();
-                StreamReader Sr = new StreamReader(Response.GetResponseStream(),Encoding.GetEncoding("utf-8"));
+                StreamReader Sr = new StreamReader(Response.GetResponseStream(), Encoding.GetEncoding("utf-8"));
                 Result = Sr.ReadToEnd();
                 FileStream fs = new FileStream(@"E:\Temp.txt", FileMode.Create, FileAccess.Write);
                 StreamWriter sw = new StreamWriter(fs);
@@ -144,7 +148,7 @@ namespace GBFDesktopTools.View
         }
 
         //public void DownLoadRun()
-        //{   
+        //{
         //    //获取目标信息的网址
         //    Dictionary<string, string> TargetUrlDic = new Dictionary<string, string>();
         //    TargetUrlDic.Add("RoleR", "https://gbf.huijiwiki.com/wiki/%E8%A7%92%E8%89%B2%E6%90%9C%E7%B4%A2%E5%99%A8?rarity=1");
@@ -172,7 +176,7 @@ namespace GBFDesktopTools.View
         //            string WRType = Downl.ConditionTargetType.ToString();
         //            //稀有度
         //            string Rarity = Downl.ConditionRarity.ToString();
-        //            //操作类型 
+        //            //操作类型
         //            string Exc = Downl.ConditionExcType.ToString();
 
         //            #region 提取总列表的网页
@@ -180,8 +184,6 @@ namespace GBFDesktopTools.View
         //            string address = Downl.DownLoadAddress + "All" + WRType + ".html";
         //            //如果文件保存失败 生存的错误文件
         //            ErrorAddress += "Error.html";
-
-
 
         //            GetResponse(address, Url, ErrorAddress);
 
@@ -318,13 +320,12 @@ namespace GBFDesktopTools.View
 
         //        catch (Exception ex)
         //        {
-
         //        }
 
         //    }
         //}
 
-        #endregion
+        #endregion WebMethod
 
         #region 下载图片
 
@@ -435,7 +436,7 @@ namespace GBFDesktopTools.View
             return value;
         }
 
-        #endregion
+        #endregion 下载图片
 
         #region SpiderMethod
 
@@ -600,9 +601,8 @@ namespace GBFDesktopTools.View
         //        Console.ReadKey();
         //    }
 
-
         //    //正则匹配 角色档案区域 角色档案</span></h2>.+<h2 class="hide-pc">
-        //    //仔细划分 
+        //    //仔细划分
         //    //年龄 年龄.+>(\d)+岁
         //    //身高 身高.+>(\d)+cm
         //    //声优 ([\u4e00-\u9fa5])+</a>
@@ -628,10 +628,9 @@ namespace GBFDesktopTools.View
         //#endregion
 
         //#region Weapon
-        
+
         //static void Main(string[] args)
         //{
-
         //}
         //*/
         //#endregion
@@ -933,8 +932,6 @@ namespace GBFDesktopTools.View
 
         //#endregion
 
-
-
         //#region XML
 
         //public static void xmlDoc(List<GetWebMessage> GWMList)
@@ -1152,7 +1149,7 @@ namespace GBFDesktopTools.View
             try
             {
                 //先用英文逗号分割技能字符串 ，提取其中的多个技能
-                var SkillArrray = SplitString(SkillStr, 2,IsHaveEmpty:StringSplitOptions.RemoveEmptyEntries);
+                var SkillArrray = SplitString(SkillStr, 2, IsHaveEmpty: StringSplitOptions.RemoveEmptyEntries);
                 //遍历技能列表获取技能名称
                 foreach (var item in SkillArrray)
                 {
@@ -1177,16 +1174,16 @@ namespace GBFDesktopTools.View
                         Weapon.WeaponSkill.Add(Skill);
                         continue;
                     }
-                    
-                    var TempStr = SplitString(item,3);
+
+                    var TempStr = SplitString(item, 3);
                     //取出技能主名称
                     SkillMainName = TempStr.FirstOrDefault();
 
                     //当索引为1的字符串 不为数字（属性）时 ，寻找技能副名称，且索引为2的字符串为属性
-                    if (!ToolsAndHelper.StringContentType(TempStr[1],2))
+                    if (!ToolsAndHelper.StringContentType(TempStr[1], 2))
                     {
                         var ExtraNameResult = ToolsAndHelper.FoundSkillExtraName(SkillMainName, TempStr[1], SkillList.ObjStrDic);
-                        
+
                         //如果返回值为空则说明字典集中不存在副名称为SkillExtraName的技能
                         if (ExtraNameResult == "")
                         {
@@ -1220,7 +1217,7 @@ namespace GBFDesktopTools.View
                     }
                     //验证后缀
                     SkillSuffix = ToolsAndHelper.FoundSkillSuffix(SkillMainName, SkillSuffix, SkillList.ObjStrDic);
-                    
+
                     //如果技能字典集中有此技能
                     if (SkillList.ObjStrDic.Keys.ToList().Exists(x => x == SkillMainName))
                     {
@@ -1320,7 +1317,7 @@ namespace GBFDesktopTools.View
                     SkillList.Add(skill);
                 }
                 SkillList.Add(new WeaponSkill()
-                {   
+                {
                     Main_Name = WeaponSkill.SkillTypeEnum.errorSkill,
                     Main_Description = "错误技能",
                     Skill_ID = -999,
@@ -1336,7 +1333,7 @@ namespace GBFDesktopTools.View
             }
             return ObjResult;
         }
-        
+
         /// <summary>
         /// 从本地Excel加载Weapon数据
         /// </summary>
@@ -1414,10 +1411,8 @@ namespace GBFDesktopTools.View
             return resultObj;
         }
 
-        
+        #endregion Weapon
 
-        #endregion
-
-        #endregion
+        #endregion SpiderMethod
     }
 }

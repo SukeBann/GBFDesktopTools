@@ -1,9 +1,9 @@
 ﻿<Page x:Class="GBFDesktopTools.View.pgSelectCondition"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      mc:Ignorable="d" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d"
       d:DesignHeight="320" d:DesignWidth="500"
 	Title="Condition of spider">
     <Page.Resources>
@@ -11,8 +11,8 @@
         <Style x:Key="checkBoxBlue" TargetType="{x:Type CheckBox}">
             <Setter Property="SnapsToDevicePixels" Value="true" />
             <Setter Property="OverridesDefaultStyle" Value="False" />
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Height" Value="16"/>
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Height" Value="16" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="CheckBox">
@@ -20,12 +20,12 @@
                             <BulletDecorator.Bullet>
                                 <Grid x:Name="aaaa">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <Grid Width="{TemplateBinding Height}" Height="{TemplateBinding Height}">
-                                        <Rectangle x:Name="CheckBoxRectangle" Fill="LightSkyBlue" Opacity="0.3" RadiusY="3" RadiusX="3"/>
-                                        <Rectangle x:Name="CheckBoxRectangleOut" Stroke="#FF06DAD1" StrokeThickness="1" RadiusY="3" RadiusX="3"/>
+                                        <Rectangle x:Name="CheckBoxRectangle" Fill="LightSkyBlue" Opacity="0.3" RadiusY="3" RadiusX="3" />
+                                        <Rectangle x:Name="CheckBoxRectangleOut" Stroke="#FF06DAD1" StrokeThickness="1" RadiusY="3" RadiusX="3" />
                                         <Grid x:Name="CheckedMark" Width="{TemplateBinding Height}" Height="{TemplateBinding Height}" Visibility="Collapsed" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                             <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center">
                                                 <Path Margin="3" SnapsToDevicePixels="False" StrokeThickness="2"  Data="M 0 5 L 3 10 10 0" Stroke="White" VerticalAlignment="Center" HorizontalAlignment="Center" />
@@ -34,9 +34,9 @@
                                                 <RotateTransform x:Name="CheckBoxTransform" Angle="0" CenterX="10" CenterY="10"></RotateTransform>
                                             </Grid.RenderTransform>
                                         </Grid>
-                                        <Rectangle x:Name="rgDisabled" Visibility="Collapsed" Fill="LightGray"  RadiusY="3" RadiusX="3"/>
+                                        <Rectangle x:Name="rgDisabled" Visibility="Collapsed" Fill="LightGray"  RadiusY="3" RadiusX="3" />
                                     </Grid>
-                                    <ContentPresenter Margin="3,0,0,0" Grid.Column="1" HorizontalAlignment="Left" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                    <ContentPresenter Margin="3,0,0,0" Grid.Column="1" HorizontalAlignment="Left" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" />
                                 </Grid>
                             </BulletDecorator.Bullet>
                         </BulletDecorator>
@@ -64,12 +64,11 @@
             </Setter>
         </Style>
 
-        <CollectionViewSource x:Key="CvsTargetTypeL"/>
-        <CollectionViewSource x:Key="CvsRarityL"/>
-        <CollectionViewSource x:Key="CvsExcTypeL"/>
-        
+        <CollectionViewSource x:Key="CvsTargetTypeL" />
+        <CollectionViewSource x:Key="CvsRarityL" />
+        <CollectionViewSource x:Key="CvsExcTypeL" />
     </Page.Resources>
-    
+
     <Grid>
         <Border BorderThickness="1" BorderBrush="#1e90ff">
             <StackPanel>
@@ -86,7 +85,7 @@
                             <ListBox Background="White" ItemsSource="{Binding Source={StaticResource CvsTargetTypeL}}">
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <StackPanel VerticalAlignment="Top"/>
+                                        <StackPanel VerticalAlignment="Top" />
                                     </ItemsPanelTemplate>
                                 </ListBox.ItemsPanel>
                                 <ListBox.ItemContainerStyle>
@@ -107,7 +106,7 @@
                             <ListBox Background="White" ItemsSource="{Binding Source={StaticResource CvsRarityL}}">
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <StackPanel VerticalAlignment="Top"/>
+                                        <StackPanel VerticalAlignment="Top" />
                                     </ItemsPanelTemplate>
                                 </ListBox.ItemsPanel>
                                 <ListBox.ItemContainerStyle>
@@ -128,7 +127,7 @@
                             <ListBox Background="White" ItemsSource="{Binding Source={StaticResource CvsExcTypeL}}">
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <StackPanel VerticalAlignment="Top"/>
+                                        <StackPanel VerticalAlignment="Top" />
                                     </ItemsPanelTemplate>
                                 </ListBox.ItemsPanel>
                                 <ListBox.ItemContainerStyle>
@@ -144,7 +143,6 @@
                                 </ListBox.ItemContainerStyle>
                             </ListBox>
                         </Border>
-
                     </DockPanel>
                 </Border>
                 <Border BorderThickness="1,0,1,1" BorderBrush="#0087d3">
@@ -152,22 +150,21 @@
                         <Button Width="248" Tag="Continue" Content="Continue" FontFamily="Arial Rounded MT" FontWeight="Medium" Foreground="white" FontSize="15" Height="40" Click="Button_Click">
                             <Button.Background>
                                 <LinearGradientBrush StartPoint="1,0" EndPoint="1,1" Opacity="0.8">
-                                    <GradientStop Offset="0.0" Color="#66ccff"/>
-                                    <GradientStop Offset="0.65" Color="#05abff"/>
+                                    <GradientStop Offset="0.0" Color="#66ccff" />
+                                    <GradientStop Offset="0.65" Color="#05abff" />
                                 </LinearGradientBrush>
                             </Button.Background>
                         </Button>
                         <Button Tag="Back" Content="Back" FontFamily="Arial Rounded MT" FontWeight="Medium" Foreground="white" FontSize="15" Height="40" Click="Button_Click">
                             <Button.Background>
                                 <LinearGradientBrush StartPoint="1,0" EndPoint="1,1" Opacity="0.8">
-                                    <GradientStop Offset="0.0" Color="#66ccff"/>
-                                    <GradientStop Offset="0.65" Color="#05abff"/>
+                                    <GradientStop Offset="0.0" Color="#66ccff" />
+                                    <GradientStop Offset="0.65" Color="#05abff" />
                                 </LinearGradientBrush>
                             </Button.Background>
                         </Button>
                     </DockPanel>
                 </Border>
-
             </StackPanel>
         </Border>
     </Grid>

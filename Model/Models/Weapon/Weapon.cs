@@ -1,9 +1,9 @@
-﻿using System;
+﻿using GBFDesktopTools.Model.abstractModel;
+using GBFDesktopTools.Model.ToolAndHelper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using GBFDesktopTools.Model.abstractModel;
-using GBFDesktopTools.Model.ToolAndHelper;
 
 // ReSharper disable once CheckNamespace
 namespace GBFDesktopTools.Model
@@ -11,6 +11,7 @@ namespace GBFDesktopTools.Model
     public class Weapon : GBFMessageAbstractModel
     {
         #region 构造方法
+
         public Weapon(bool _isEmpty = false)
         {
             IsEmpty = _isEmpty;
@@ -18,7 +19,7 @@ namespace GBFDesktopTools.Model
             FsGBF_Nickname = new List<string>();
         }
 
-        #endregion
+        #endregion 构造方法
 
         #region Method
 
@@ -41,7 +42,7 @@ namespace GBFDesktopTools.Model
             return TempWeapon;
         }
 
-        #endregion
+        #endregion Method
 
         #region Enum
 
@@ -54,50 +55,62 @@ namespace GBFDesktopTools.Model
             ///     无效
             /// </summary>
             无效类型 = -1,
+
             /// <summary>
             /// 全部类型，筛选器词缀
             /// </summary>
             全部 = 0,
+
             /// <summary>
             ///     Sword
             /// </summary>
             剑 = 1,
+
             /// <summary>
             ///     Dagger
             /// </summary>
             匕首 = 2,
+
             /// <summary>
             ///     Spear
             /// </summary>
             长枪 = 3,
+
             /// <summary>
             ///     Axe
             /// </summary>
             斧 = 4,
+
             /// <summary>
             ///     MagicWand
             /// </summary>
             杖 = 5,
+
             /// <summary>
             ///     Pistol
             /// </summary>
             铳 = 6,
+
             /// <summary>
             ///     Fighting
             /// </summary>
             格斗 = 7,
+
             /// <summary>
             ///     Bow
             /// </summary>
             弓 = 8,
+
             /// <summary>
             ///     MusicalInstruments
             /// </summary>
             乐器 = 9,
+
             /// <summary>
             ///     Blade
             /// </summary>
             刀 = 10,
+
             /// <summary>
             ///     Material
             /// </summary>
@@ -156,7 +169,7 @@ namespace GBFDesktopTools.Model
             五星 = 5
         }
 
-        #endregion
+        #endregion Enum
 
         #region GeneralInformation
 
@@ -288,11 +301,11 @@ namespace GBFDesktopTools.Model
             }
         }
 
-        #endregion
+        #endregion GeneralInformation
 
         #region SpecialInformation
 
-        public bool IsEmpty { get;}
+        public bool IsEmpty { get; }
 
         private string _FsWeapon_SkillName;
         private long _FnWeapon_SkillID;
@@ -445,7 +458,7 @@ namespace GBFDesktopTools.Model
             }
         }
 
-        #endregion
+        #endregion SpecialInformation
 
         #region CalculatorMethod
 
@@ -459,14 +472,15 @@ namespace GBFDesktopTools.Model
             ExtraLevel = 0;
         }
 
-        #endregion
+        #endregion CalculatorMethod
 
         #region CalculatorProperty
 
         /// <summary>
         /// 最大等级
         /// </summary>
-        public int MaxLevel => FnWeapon_EvoFiveAttack != 0 ? 200 : FnWeapon_EvoFourAttack != 0 ? 150 :100;
+        public int MaxLevel => FnWeapon_EvoFiveAttack != 0 ? 200 : FnWeapon_EvoFourAttack != 0 ? 150 : 100;
+
         /// <summary>
         /// 最大技能等级
         /// </summary>
@@ -637,6 +651,6 @@ namespace GBFDesktopTools.Model
             }
         }
 
-        #endregion
+        #endregion CalculatorProperty
     }
 }

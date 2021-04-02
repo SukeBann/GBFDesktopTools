@@ -1,27 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.IO;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Navigation;
-using GBFDesktopTools.Model;
 
 namespace GBFDesktopTools.View
 {
-    using System.Threading;
-
-    public class Navigationer<P,C> where P : class where C :class
+    public class Navigationer<P, C> where P : class where C : class
     {
-        System.ComponentModel.CancelEventHandler CancelHandler = null;
-        System.ComponentModel.CancelEventArgs CancelArgs = new System.ComponentModel.CancelEventArgs();
+        private System.ComponentModel.CancelEventHandler CancelHandler = null;
+        private System.ComponentModel.CancelEventArgs CancelArgs = new System.ComponentModel.CancelEventArgs();
 
         //导航器实体
         public NavigationWindow NavigaionWin = null;
@@ -34,7 +22,7 @@ namespace GBFDesktopTools.View
         /// <param name="_PWin"></param>
         /// <param name="_CWin"></param>
         public Navigationer(P _PWin, C _CWin)
-        {   
+        {
             //要打开的窗口的父窗口
             ParentWindow = _PWin;
             //要打卡的窗口
@@ -59,7 +47,7 @@ namespace GBFDesktopTools.View
 
             Icon = new BitmapImage(new Uri(@"Resources\Icon\SpiderProgramA.ico", UriKind.Relative));
 
-            #endregion
+            #endregion 默认设置
         }
 
         /// <summary>
@@ -67,19 +55,20 @@ namespace GBFDesktopTools.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="CancelArgs">为可取消的事件提供数据</param>
-        public void CreateCancelEventHandler(object sender,System.ComponentModel.CancelEventArgs CancelArgs)
+        public void CreateCancelEventHandler(object sender, System.ComponentModel.CancelEventArgs CancelArgs)
         {
             CancelArgs.Cancel = !CanClose;
         }
+
         /// <summary>
         /// 赋值CancelEventHandler
         /// </summary>
-        void SetCancelEventHandler()
+        private void SetCancelEventHandler()
         {
             CancelHandler = new System.ComponentModel.CancelEventHandler(CreateCancelEventHandler);
         }
-        
-        #endregion
+
+        #endregion Constructor
 
         #region Window
 
@@ -92,6 +81,7 @@ namespace GBFDesktopTools.View
             get { return _ChildWindow; }
             set { _ChildWindow = value; }
         }
+
         //父窗口
         public P ParentWindow
         {
@@ -99,7 +89,7 @@ namespace GBFDesktopTools.View
             set { _ParentWindow = value; }
         }
 
-        #endregion
+        #endregion Window
 
         #region WidthAndHeight
 
@@ -113,30 +103,30 @@ namespace GBFDesktopTools.View
         public double MinWidth
         {
             get { return _MinWidth; }
-            set 
+            set
             {
                 NavigaionWin.MinWidth = value;
-                _MinWidth = value; 
+                _MinWidth = value;
             }
         }
 
         public double MaxWidth
         {
             get { return _MaxWidth; }
-            set 
+            set
             {
                 NavigaionWin.MaxWidth = value;
-                _MaxWidth = value; 
+                _MaxWidth = value;
             }
         }
 
         public double Width
         {
             get { return _Width; }
-            set 
+            set
             {
                 NavigaionWin.Width = value;
-                _Width = value; 
+                _Width = value;
             }
         }
 
@@ -170,7 +160,7 @@ namespace GBFDesktopTools.View
             }
         }
 
-        #endregion
+        #endregion WidthAndHeight
 
         #region Title,Icon And Settings
 
@@ -182,7 +172,6 @@ namespace GBFDesktopTools.View
         private bool _IsLockedParentWin;
         private bool _CanClose;
 
-
         /// <summary>
         /// 用户是否能关闭窗口 true 为 是
         /// </summary>
@@ -191,6 +180,7 @@ namespace GBFDesktopTools.View
             get { return _CanClose; }
             set { _CanClose = value; }
         }
+
         /// <summary>
         /// 是否锁定父窗口
         /// </summary>
@@ -199,6 +189,7 @@ namespace GBFDesktopTools.View
             get { return _IsLockedParentWin; }
             set { _IsLockedParentWin = value; }
         }
+
         /// <summary>
         /// 是否显示导航栏
         /// </summary>
@@ -211,6 +202,7 @@ namespace GBFDesktopTools.View
                 _ShowsNavigationUI = value;
             }
         }
+
         /// <summary>
         /// 窗口打开的位置
         /// </summary>
@@ -223,6 +215,7 @@ namespace GBFDesktopTools.View
                 _StartupLocation = value;
             }
         }
+
         /// <summary>
         /// 窗口缩放模式
         /// </summary>
@@ -235,6 +228,7 @@ namespace GBFDesktopTools.View
                 _WinResizeMode = value;
             }
         }
+
         /// <summary>
         /// 窗口图标
         /// </summary>
@@ -247,6 +241,7 @@ namespace GBFDesktopTools.View
                 _Icon = value;
             }
         }
+
         /// <summary>
         /// 窗口标题
         /// </summary>
@@ -260,7 +255,7 @@ namespace GBFDesktopTools.View
             }
         }
 
-        #endregion
+        #endregion Title,Icon And Settings
 
         #region Method
 
@@ -313,7 +308,7 @@ namespace GBFDesktopTools.View
                 }
             }
             else
-            {   
+            {
                 double PHeight = (ParentWindow as Window).Height;
                 double PWidth = (ParentWindow as Window).Width;
 
@@ -347,8 +342,7 @@ namespace GBFDesktopTools.View
             CanClose = true;
             NavigaionWin.Dispatcher.Invoke(new Action(() => { NavigaionWin.Close(); }));
         }
-    
-        #endregion
 
+        #endregion Method
     }
 }

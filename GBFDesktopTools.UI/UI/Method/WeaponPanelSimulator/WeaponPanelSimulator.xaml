@@ -1,13 +1,14 @@
 ﻿<pu:WindowX x:Class="GBFDesktopTools.View.WeaponPanelSimulator"
             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-            xmlns:ToolModel="clr-namespace:GBFDesktopTools.Model.ToolAndHelper;assembly=GBFDesktopTools.Model"
-            xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
-            xmlns:purs="clr-namespace:Panuon.UI.Silver.Resources;assembly=Panuon.UI.Silver"
-            xmlns:uif="clr-namespace:Frameworks"
-            xmlns:view="clr-namespace:GBFDesktopTools.View"
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:uif="clr-namespace:Frameworks"
+            xmlns:ToolModel="clr-namespace:GBFDesktopTools.Model.ToolAndHelper;assembly=GBFDesktopTools.Model"
+            xmlns:view="clr-namespace:GBFDesktopTools.View"
+            xmlns:purs="clr-namespace:Panuon.UI.Silver.Resources;assembly=Panuon.UI.Silver"
+            xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
+            mc:Ignorable="d"
             Title="WeaponPanelSimulator"
             Height="1000"
             MinHeight="750"
@@ -19,12 +20,11 @@
         <CollectionViewSource x:Key="cvsWeaponList" />
         <CollectionViewSource x:Key="cvsWeaponSearchTip" />
 
-        <ToolModel:CalculatorCore x:Key="CCModel"/>
-        <ToolModel:FilterCondition x:Key="FcModel"/>
-        
-        
+        <ToolModel:CalculatorCore x:Key="CCModel" />
+        <ToolModel:FilterCondition x:Key="FcModel" />
+
         <!--放置区border-->
-        <Style x:Key="CalculatorTopBorderStyle" 
+        <Style x:Key="CalculatorTopBorderStyle"
                 TargetType="Border">
             <Setter Property="CornerRadius"
                     Value="5" />
@@ -35,7 +35,7 @@
             <Setter Property="Padding"
                     Value="4,0,4,0" />
         </Style>
-        <Style x:Key="CalculatorMainBorderStyle" 
+        <Style x:Key="CalculatorMainBorderStyle"
                TargetType="Border">
             <Setter Property="CornerRadius"
                     Value="5" />
@@ -44,7 +44,7 @@
             <Setter Property="BorderBrush"
                     Value="#70a1ff" />
         </Style>
-        <Style x:Key="CalculatorExtraBorderStyle" 
+        <Style x:Key="CalculatorExtraBorderStyle"
                TargetType="Border">
             <Setter Property="BorderThickness"
                     Value="0,1,0,0" />
@@ -56,16 +56,16 @@
         <Style x:Key="CalculatorLevelLabelStyle"
                TargetType="Label"
                BasedOn="{StaticResource {x:Type Label}}">
-            <Setter Property="Height" 
-                    Value="20"/>
-            <Setter Property="Width" 
-                    Value="60"/>
+            <Setter Property="Height"
+                    Value="20" />
+            <Setter Property="Width"
+                    Value="60" />
             <Setter Property="DockPanel.Dock"
                     Value="Left" />
             <Setter Property="FontSize"
                     Value="10" />
             <Setter Property="Foreground"
-                    Value="#2a73ff"/>
+                    Value="#2a73ff" />
         </Style>
         <Style x:Key="CalculatorLevelButtonStyle"
                TargetType="Button"
@@ -75,11 +75,11 @@
             <Setter Property="DockPanel.Dock"
                     Value="Right" />
             <Setter Property="pu:IconHelper.FontFamily"
-                    Value="{StaticResource PanuonIconFont}"/>
+                    Value="{StaticResource PanuonIconFont}" />
             <Setter Property="pu:ButtonHelper.Icon"
-                    Value="&#xe990;"/>
+                    Value="&#xe990;" />
             <Setter Property="Foreground"
-                    Value="#2a73ff"/>
+                    Value="#2a73ff" />
             <Setter Property="Background"
                     Value="LightSkyBlue" />
             <Setter Property="pu:ButtonHelper.ClickStyle"
@@ -103,14 +103,14 @@
         </Style>
 
         <!--技能字体阴影-->
-        <Style x:Key="SkillLabelStyle" 
-               TargetType="Label" 
+        <Style x:Key="SkillLabelStyle"
+               TargetType="Label"
                BasedOn="{StaticResource {x:Type Label}}">
             <Setter Property="Foreground"
-                    Value="#FF4141"/>
-            <Setter Property="FontSize" 
+                    Value="#FF4141" />
+            <Setter Property="FontSize"
                     Value="14" />
-            <Setter Property="FontWeight" 
+            <Setter Property="FontWeight"
                     Value="Bold" />
             <Setter Property="Effect">
                 <Setter.Value>
@@ -150,7 +150,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
     </Window.Resources>
 
     <DockPanel LastChildFill="True">
@@ -183,7 +182,6 @@
             <Grid>
                 <Border BorderThickness="1,1,1,1"
                         BorderBrush="#70A1FF">
-
                 </Border>
             </Grid>
             <!--保存读取-->
@@ -192,7 +190,6 @@
 
                 <Border BorderThickness="1,0,1,1"
                         BorderBrush="#70A1FF">
-
                 </Border>
             </Grid>
             <!--放置区-->
@@ -324,7 +321,7 @@
                                                                 pu:ButtonHelper.ClickStyle="Sink"
                                                                 Width="30"
                                                                 DockPanel.Dock="Right" />
-                                                        <ComboBox BorderBrush="#70A1FF" 
+                                                        <ComboBox BorderBrush="#70A1FF"
                                                                   BorderThickness="1,0,1,0"
                                                                   pu:ComboBoxHelper.ComboBoxStyle="Standard"
                                                                   pu:ComboBoxHelper.DropDownCornerRadius="5"
@@ -343,7 +340,6 @@
                                                 <ImageBrush ImageSource="{Binding WeaponImgUrl_ls}" />
                                             </Border.Background>
                                         </Border>
-
                                     </DockPanel>
                                 </Border>
                             </Grid>
@@ -362,8 +358,8 @@
                                                 <!--<Border Style="{StaticResource CalculatorExtraBorderStyle}">
                                                     <DockPanel>
                                                         <Label Content="Level:"
-                                                               Style="{StaticResource CalculatorLevelLabelStyle}"/>
-                                                        <Button Style="{StaticResource CalculatorLevelButtonStyle}"/>
+                                                               Style="{StaticResource CalculatorLevelLabelStyle}" />
+                                                        <Button Style="{StaticResource CalculatorLevelButtonStyle}" />
                                                         <TextBox Text="{Binding WeaponImgUrl_m}"
                                                                  Foreground="#2a73ff"
                                                                  BorderBrush="#70A1FF"
@@ -377,7 +373,7 @@
                                                         <ComboBox Style="{StaticResource CalculatorLevelComboBoxStyle}"
                                                                   x:Name="tempC"
                                                                   FontSize="10"
-                                                                  Width="40"/>
+                                                                  Width="40" />
                                                         <ComboBox Style="{StaticResource CalculatorLevelComboBoxStyle}"
                                                                   x:Name="tempA"
                                                                   FontSize="10" />
@@ -391,15 +387,15 @@
                                                         <ComboBox Style="{StaticResource CalculatorLevelComboBoxStyle}"
                                                                   ItemsSource="{Binding Source={StaticResource cvsWeaponList}}"
                                                                   FontSize="10"
-                                                                  DisplayMemberPath="GetSkillName"/>
+                                                                  DisplayMemberPath="GetSkillName" />
                                                     </DockPanel>
                                                 </Border>
                                                 <Border Style="{StaticResource CalculatorExtraBorderStyle}">
                                                     <DockPanel>
                                                         <Label Content="Skilllv:"
-                                                               Style="{StaticResource CalculatorLevelLabelStyle}"/>
-                                                        <Button Style="{StaticResource CalculatorLevelButtonStyle}"/>
-                                                        <ComboBox Style="{StaticResource CalculatorLevelComboBoxStyle}"/>
+                                                               Style="{StaticResource CalculatorLevelLabelStyle}" />
+                                                        <Button Style="{StaticResource CalculatorLevelButtonStyle}" />
+                                                        <ComboBox Style="{StaticResource CalculatorLevelComboBoxStyle}" />
                                                     </DockPanel>
                                                 </Border>-->
                                             </StackPanel>
@@ -419,9 +415,9 @@
                                                     <Label Content="{Binding SkillOne}"
                                                            Style="{StaticResource SkillLabelStyle}" />
                                                     <Label Content="{Binding SkillTwo}"
-                                                           Style="{StaticResource SkillLabelStyle}"/>
+                                                           Style="{StaticResource SkillLabelStyle}" />
                                                     <Label Content="{Binding SkillThree}"
-                                                           Style="{StaticResource SkillLabelStyle}"/>
+                                                           Style="{StaticResource SkillLabelStyle}" />
                                                     <StackPanel.ToolTip>
                                                         <ToolTip ToolTipService.ShowDuration="3000">
                                                             <ToolTip.Template>
@@ -469,7 +465,6 @@
                                                     </StackPanel.ToolTip>
                                                 </StackPanel>
                                                 <StackPanel>
-
                                                 </StackPanel>
                                             </StackPanel>
                                         </Border>
@@ -1034,7 +1029,6 @@
                   Grid.Column="1">
                 <Border BorderThickness="0,0,1,1"
                         BorderBrush="#70A1FF">
-
                 </Border>
             </Grid>
             <!--放置源-->
@@ -1129,7 +1123,6 @@
                                                   Width="100"
                                                   Height="25" />
                                     </StackPanel>
-
                                 </WrapPanel>
                             </Border>
                         </Grid>
@@ -1152,7 +1145,7 @@
                                                           pu:IconHelper.FontFamily="{StaticResource PanuonIconFont}"
                                                           pu:ComboBoxHelper.Icon="&#xe964;"
                                                           SelectedValue="{Binding Path=WeaponSkillName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                                          Width="135"/>
+                                                          Width="135" />
                                             </DockPanel>
                                             <DockPanel>
                                                 <Label Foreground="#4b89ff"
@@ -1246,13 +1239,11 @@
                                                           Width="85"
                                                           Height="25" />
                                             </StackPanel>
-
                                         </WrapPanel>
                                     </Border>
                                 </WrapPanel>
                             </Border>
                         </Grid>
-
 
                         <Border DockPanel.Dock="Bottom"
                                 BorderBrush="Gray"
@@ -1318,14 +1309,10 @@
                                                    PaginationItemStyle="{StaticResource PaginationPaginationItemStyle}" />
                                 </Border>
                             </StackPanel>
-
                         </Viewbox>
-
-
                     </DockPanel>
                 </Border>
             </Grid>
         </Grid>
     </DockPanel>
-
 </pu:WindowX>

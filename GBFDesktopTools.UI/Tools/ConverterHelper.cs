@@ -7,7 +7,7 @@ using System.Windows.Markup;
 
 namespace GBFDesktopTools.View
 {
-    public class ConverterHelper : MarkupExtension,IValueConverter
+    public class ConverterHelper : MarkupExtension, IValueConverter
     {
         public ConverterHelper()
         {
@@ -23,6 +23,7 @@ namespace GBFDesktopTools.View
             /// 如果数据源有数据则显示 无数据隐藏 可见性
             /// </summary>
             ItemsSourceCountVisibility,
+
             /// <summary>
             /// 如果值不为null或者String.Empty 则显示，无数据则隐藏 可见性
             /// </summary>
@@ -30,6 +31,7 @@ namespace GBFDesktopTools.View
         }
 
         private ConverterEnumSelect _ConverterType;
+
         /// <summary>
         /// 使用的转换器
         /// </summary>
@@ -47,10 +49,11 @@ namespace GBFDesktopTools.View
         /// 要使用的转换类型
         /// </summary>
         public string ConverterTypeStr { get; set; }
+
         /// <summary>
         /// 封装转换方法的字典集 使用ConverterTypeStr作为索引
         /// </summary>
-        readonly Dictionary<string,Func<object, Type, object, CultureInfo, object>> ConverterFuncsDic = new Dictionary<string, Func<object, Type, object, CultureInfo, object>>();
+        private readonly Dictionary<string, Func<object, Type, object, CultureInfo, object>> ConverterFuncsDic = new Dictionary<string, Func<object, Type, object, CultureInfo, object>>();
 
         /// <summary>
         /// 获取转换方法字典集
@@ -59,7 +62,7 @@ namespace GBFDesktopTools.View
         {
             //数据源Count可见性转换
             var mscvFunc = new Func<object, Type, object, CultureInfo, object>(MItemsSourceCountVisibility);
-            ConverterFuncsDic.Add("ItemsSourceCountVisibility", mscvFunc);  
+            ConverterFuncsDic.Add("ItemsSourceCountVisibility", mscvFunc);
 
             //字符串是否为空可见性转换
             var msevFunc = new Func<object, Type, object, CultureInfo, object>(MStringIsEmptyVisibility);
@@ -91,15 +94,13 @@ namespace GBFDesktopTools.View
             return string.IsNullOrEmpty((string)value) ? Visibility.Hidden : Visibility.Visible;
         }
 
-        
-
-        #endregion
+        #endregion Method
 
         #region MainFunc
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return ConverterFuncsDic[ConverterTypeStr](value,targetType,parameter,culture);
+            return ConverterFuncsDic[ConverterTypeStr](value, targetType, parameter, culture);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -109,9 +110,9 @@ namespace GBFDesktopTools.View
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            return new ConverterHelper(){ ConverterType  =this.ConverterType};
+            return new ConverterHelper() { ConverterType = this.ConverterType };
         }
 
-        #endregion
+        #endregion MainFunc
     }
 }

@@ -1,15 +1,13 @@
 ﻿<Application x:Class="GBFDesktopTools.View.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
              Startup="Application_Startup">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="UIDictionary.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/Panuon.UI.Silver;component/Control.xaml"/>
+                <ResourceDictionary Source="UIDictionary.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Panuon.UI.Silver;component/Control.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-        
     </Application.Resources>
 </Application>

@@ -6,11 +6,15 @@ namespace GBFDesktopTools.View
 {
     public class AsyncCollection<T> : ObservableCollection<T>
     {
-        System.Windows.Threading.Dispatcher Dispatcher = System.Windows.Threading.Dispatcher.CurrentDispatcher;
+        private System.Windows.Threading.Dispatcher Dispatcher = System.Windows.Threading.Dispatcher.CurrentDispatcher;
 
-        public AsyncCollection() { }
+        public AsyncCollection()
+        {
+        }
 
-        public AsyncCollection(IEnumerable<T> list) : base(list) { }
+        public AsyncCollection(IEnumerable<T> list) : base(list)
+        {
+        }
 
         public new void Add(T item)
         {

@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System;
-using System.IO;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace GBFDesktopTools.Model.abstractModel
 {
@@ -57,6 +55,7 @@ namespace GBFDesktopTools.Model.abstractModel
         }
 
         #region IEditableObject
+
         /// <summary>
         /// 开始编辑
         /// </summary>
@@ -68,6 +67,7 @@ namespace GBFDesktopTools.Model.abstractModel
                 inTxT = true;
             }
         }
+
         /// <summary>
         /// 取消编辑
         /// </summary>
@@ -79,6 +79,7 @@ namespace GBFDesktopTools.Model.abstractModel
                 inTxT = false;
             }
         }
+
         /// <summary>
         /// 结束编辑
         /// </summary>
@@ -128,9 +129,11 @@ namespace GBFDesktopTools.Model.abstractModel
                 RaisePropertyChanged(property.Name);
             }
         }
-        #endregion
+
+        #endregion IEditableObject
 
         #region INotifyPropertyChanged
+
         /// <summary>
         /// PropertyChanged
         /// </summary>
@@ -147,7 +150,8 @@ namespace GBFDesktopTools.Model.abstractModel
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-        #endregion
+
+        #endregion INotifyPropertyChanged
 
         /// <summary>
         /// 使用NewModel 赋值本实体属性
@@ -191,6 +195,7 @@ namespace GBFDesktopTools.Model.abstractModel
             return (T)retval;
         }
     }
+
     /// <summary>
     /// Model扩展方法
     /// </summary>

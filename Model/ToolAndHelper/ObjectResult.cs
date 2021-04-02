@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace GBFDesktopTools.Model.abstractModel
-{   
+{
     /// <summary>
     /// 返回结果对象接口
     /// </summary>
@@ -14,6 +12,7 @@ namespace GBFDesktopTools.Model.abstractModel
         /// 错误代码
         /// </summary>
         int ErrorCode { get; set; }
+
         /// <summary>
         /// 错误信息
         /// </summary>
@@ -45,6 +44,7 @@ namespace GBFDesktopTools.Model.abstractModel
             this._ErrorCode = errorCode;
             return this;
         }
+
         /// <summary>
         /// 判断是否系统错误
         /// </summary>
@@ -55,6 +55,7 @@ namespace GBFDesktopTools.Model.abstractModel
                 return this.hasError && this.ErrorMsg.IndexOf("SystemError", StringComparison.OrdinalIgnoreCase) > -1;
             }
         }
+
         /// <summary>
         /// 错误信息
         /// </summary>
@@ -63,6 +64,7 @@ namespace GBFDesktopTools.Model.abstractModel
             get { return _ErrorMsg; }
             set { _ErrorMsg = value; }
         }
+
         /// <summary>
         /// 是否包含错误
         /// </summary>
@@ -73,6 +75,7 @@ namespace GBFDesktopTools.Model.abstractModel
                 return ErrorMsg != null;
             }
         }
+
         /// <summary>
         /// 错误代码
         /// </summary>
@@ -81,6 +84,7 @@ namespace GBFDesktopTools.Model.abstractModel
             get { return _ErrorCode; }
             set { _ErrorCode = value; }
         }
+
         /// <summary>
         /// 备注
         /// </summary>
@@ -90,7 +94,7 @@ namespace GBFDesktopTools.Model.abstractModel
             set { _Mark = value; }
         }
 
-        #endregion
+        #endregion ErrorAndMark
 
         #region Object
 
@@ -105,7 +109,8 @@ namespace GBFDesktopTools.Model.abstractModel
         {
             get { return _Obj; }
             set { _Obj = value; }
-        }   
+        }
+
         /// <summary>
         /// 列表对象
         /// </summary>
@@ -114,15 +119,16 @@ namespace GBFDesktopTools.Model.abstractModel
             get { return _ObjList; }
             set { _ObjList = value; }
         }
+
         /// <summary>
         /// 键:字符串 值：对象list 字典集
         /// </summary>
-        public Dictionary<string,List<T>> ObjStrDic
+        public Dictionary<string, List<T>> ObjStrDic
         {
             get { return _ObjStrDic; }
             set { _ObjStrDic = value; }
         }
-        
-        #endregion
+
+        #endregion Object
     }
 }

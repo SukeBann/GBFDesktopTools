@@ -2,11 +2,10 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using static GBFDesktopTools.Model.Weapon;
 
@@ -78,9 +77,11 @@ namespace GBFDesktopTools.Model.ToolAndHelper
                 case 1:
                     delimiter = new[] { ";", "；" };
                     break;
+
                 case 2:
                     delimiter = new[] { "," };
                     break;
+
                 case 3:
                     delimiter = new[] { "_" };
                     break;
@@ -147,6 +148,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
                     case 3:
                         regStr = @"\d{3}-\d{8}|\d{4}-\d{7}";
                         break;
+
                     default:
                         regStr = "";
                         break;
@@ -212,11 +214,10 @@ namespace GBFDesktopTools.Model.ToolAndHelper
                 {WeaponSkill.Condition.Arcarum,"在阿卡姆转世中,"},
 
                 {WeaponSkill.Condition.Damaged,"收到伤害时"},
-                
+
                 {WeaponSkill.Condition.Primal,"星晶兽角色的"},
             };
         }
-
     }
 
     /// <summary>
@@ -238,7 +239,6 @@ namespace GBFDesktopTools.Model.ToolAndHelper
         /// </summary>
         public EventHandler loadWeaponListHandler;
 
-
         #region Property
 
         private int _nowPage;
@@ -254,6 +254,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             get => _searchName;
             set { _searchName = value; this.RaisePropertyChanged(x => x.SearchName); }
         }
+
         /// <summary>
         /// 每页有多少内容
         /// </summary>
@@ -262,6 +263,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             get => _pageContentCount;
             set { _pageContentCount = value; this.RaisePropertyChanged(x => x.PageContentCount); }
         }
+
         /// <summary>
         /// 总页数
         /// </summary>
@@ -270,6 +272,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             get => _pageCount;
             set { _pageCount = value; this.RaisePropertyChanged(x => x.PageCount); }
         }
+
         /// <summary>
         /// 当前是第几页
         /// </summary>
@@ -287,51 +290,59 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             }
         }
 
-
         #region List
 
         /// <summary>
         /// 武器源列表
         /// </summary>
         public List<Weapon> TargetList = new List<Weapon>();
+
         /// <summary>
         /// 搜索提示列表
         /// </summary>
         public List<string> SearchTip = new List<string>();
+
         /// <summary>
         /// 武器类型列表
         /// </summary>
         public List<WeaponKind> WeaponKindList = new List<WeaponKind>();
+
         /// <summary>
         /// 武器属性列表
         /// </summary>
         public List<GBFMessageAbstractModel.GBFElementCHSEnum> WeaponElementList = new List<GBFMessageAbstractModel.GBFElementCHSEnum>();
+
         /// <summary>
         /// 稀有度列表
         /// </summary>
         public List<GBFMessageAbstractModel.GBFRarityEnum> WeaponRarityList = new List<GBFMessageAbstractModel.GBFRarityEnum>();
+
         /// <summary>
         /// 武器系列日文对照
         /// </summary>
         public Dictionary<string, GBFSeriesNameEnum> WeaponJpSeriesNameDic = new Dictionary<string, GBFSeriesNameEnum>();
+
         /// <summary>
         /// 武器系列列表
         /// </summary>
         public List<GBFSeriesNameEnum> WeaponSeriesNameList = new List<GBFSeriesNameEnum>();
+
         /// <summary>
         /// 武器卡池列表
         /// </summary>
         public List<GBFMessageAbstractModel.GBFCategoryEnum> WeaponCategoryList = new List<GBFMessageAbstractModel.GBFCategoryEnum>();
+
         /// <summary>
         /// 武器终突次数筛选列表
         /// </summary>
         public List<GFBSearchEvoCountEnum> WeaponSearchEvoCountList = new List<GFBSearchEvoCountEnum>();
+
         /// <summary>
         /// 武器排序类型列表
         /// </summary>
         public List<GBFMessageAbstractModel.SearchSortTypeEnum> SearchSortTypeList = new List<GBFMessageAbstractModel.SearchSortTypeEnum>();
 
-        #endregion
+        #endregion List
 
         private short _fnGbfMaxEvo;
         private string _weaponSkillName;
@@ -351,6 +362,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             get => _searchSortType;
             set { _searchSortType = value; this.RaisePropertyChanged(x => x.SearchSortType); }
         }
+
         /// <summary>
         /// 武器终突次数
         /// </summary>
@@ -359,6 +371,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             get => _searchEvoCount;
             set { _searchEvoCount = value; this.RaisePropertyChanged(x => x.SearchEvoCount); }
         }
+
         /// <summary>
         /// 武器类型
         /// </summary>
@@ -367,6 +380,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             get => _fcWeaponKind;
             set { _fcWeaponKind = value; this.RaisePropertyChanged(x => x.FcWeaponKind); }
         }
+
         /// <summary>
         /// 武器属性
         /// </summary>
@@ -375,6 +389,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             get => _fcWeaponElement;
             set { _fcWeaponElement = value; this.RaisePropertyChanged(x => x.FcWeaponElement); }
         }
+
         /// <summary>
         /// 稀有度
         /// </summary>
@@ -383,6 +398,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             get => _fcWeaponRarity;
             set { _fcWeaponRarity = value; this.RaisePropertyChanged(x => x.FcWeaponRarity); }
         }
+
         /// <summary>
         /// 武器系列
         /// </summary>
@@ -391,6 +407,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             get => _fcSeriesName;
             set { _fcSeriesName = value; this.RaisePropertyChanged(x => x.FcSeriesName); }
         }
+
         /// <summary>
         /// 武器所属卡池
         /// </summary>
@@ -399,6 +416,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             get => _weaponCategory;
             set { _weaponCategory = value; this.RaisePropertyChanged(x => x.WeaponCategory); }
         }
+
         /// <summary>
         /// 技能ID
         /// </summary>
@@ -407,6 +425,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             get => _weaponSkillName;
             set { _weaponSkillName = value; this.RaisePropertyChanged(x => x.WeaponSkillName); }
         }
+
         /// <summary>
         /// 武器突破次数
         /// </summary>
@@ -416,7 +435,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             set { _fnGbfMaxEvo = value; this.RaisePropertyChanged(x => x.FnGbfMaxEvo); }
         }
 
-        #endregion
+        #endregion Property
 
         #region Method
 
@@ -478,7 +497,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
                 SearchSortTypeList.Add((GBFMessageAbstractModel.SearchSortTypeEnum)Enum.Parse(typeof(GBFMessageAbstractModel.SearchSortTypeEnum), item));
             }
 
-            #endregion
+            #endregion 加载列表
 
             //查询条件初始化
             FcWeaponElement = GBFMessageAbstractModel.GBFElementCHSEnum.全部;
@@ -585,29 +604,33 @@ namespace GBFDesktopTools.Model.ToolAndHelper
                 {
                     case GBFMessageAbstractModel.SearchSortTypeEnum.最新登场:
                         return ((new System.Collections.CaseInsensitiveComparer()).Compare(y.FdGBF_ReleaseDate, x.FdGBF_ReleaseDate));
+
                     case GBFMessageAbstractModel.SearchSortTypeEnum.最早登场:
                         return ((new System.Collections.CaseInsensitiveComparer()).Compare(y.FdGBF_ReleaseDate, x.FdGBF_ReleaseDate));
+
                     case GBFMessageAbstractModel.SearchSortTypeEnum.最近更新:
                         dateTimeList.AddRange(new List<DateTime>() { x.FdGBF_ReleaseDate, x.FdGBF_Star4, x.FdGBF_Star5, x.FdGBF_LastDate });
                         xDate = dateTimeList.Max();
                         dateTimeList.AddRange(new List<DateTime>() { y.FdGBF_ReleaseDate, y.FdGBF_Star4, y.FdGBF_Star5, y.FdGBF_LastDate });
                         yDate = dateTimeList.Max();
                         return ((new System.Collections.CaseInsensitiveComparer()).Compare(xDate, yDate));
+
                     case GBFMessageAbstractModel.SearchSortTypeEnum.远古更新:
                         dateTimeList.AddRange(new List<DateTime>() { x.FdGBF_ReleaseDate, x.FdGBF_Star4, x.FdGBF_Star5, x.FdGBF_LastDate });
                         xDate = dateTimeList.Max();
                         dateTimeList.AddRange(new List<DateTime>() { y.FdGBF_ReleaseDate, y.FdGBF_Star4, y.FdGBF_Star5, y.FdGBF_LastDate });
                         yDate = dateTimeList.Max();
                         return ((new System.Collections.CaseInsensitiveComparer()).Compare(xDate, yDate));
+
                     case GBFMessageAbstractModel.SearchSortTypeEnum.属性:
                         return ((new System.Collections.CaseInsensitiveComparer()).Compare((int)y.FeGBF_Element, (int)x.FeGBF_Element));
+
                     case GBFMessageAbstractModel.SearchSortTypeEnum.类型:
                         return ((new System.Collections.CaseInsensitiveComparer()).Compare((int)y.FeWeapon_Kind, (int)x.FeWeapon_Kind));
                 }
                 return 0;
             }
         }
-
 
         /// <summary>
         /// 筛选器查询方法
@@ -670,7 +693,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
                 }
                 if (WeaponSkillName != "全部技能")
                 {
-                    resultList = resultList.Where(x => x.WeaponSkill.Exists(s =>s.Extra_Description + s.Main_Description == WeaponSkillName)).ToList();
+                    resultList = resultList.Where(x => x.WeaponSkill.Exists(s => s.Extra_Description + s.Main_Description == WeaponSkillName)).ToList();
                 }
                 if (SearchEvoCount != GFBSearchEvoCountEnum.全部)
                 {
@@ -680,13 +703,13 @@ namespace GBFDesktopTools.Model.ToolAndHelper
                         case 1:
                             resultList = resultList.Where(x => x.FnGBF_MaxEvo >= 4).ToList();
                             break;
+
                         case 3:
                         case 4:
                         case 5:
                             resultList = resultList.Where(x => x.FnGBF_MaxEvo == FnGbfMaxEvo).ToList();
                             break;
                     }
-
                 }
             }
             catch (Exception ex)
@@ -703,11 +726,11 @@ namespace GBFDesktopTools.Model.ToolAndHelper
                 return resultObj;
             }
             //传入排序类型 先按名称排序 再按排序类型排序
-            var weaponListReverser = new WeaponListReverserClass(SearchSortType) {IsNameSort = true};
+            var weaponListReverser = new WeaponListReverserClass(SearchSortType) { IsNameSort = true };
             resultList.Sort(weaponListReverser);
             weaponListReverser.IsNameSort = false;
             resultList.Sort(weaponListReverser);
-            
+
             //升序降序的反转
             if (SearchSortType == GBFMessageAbstractModel.SearchSortTypeEnum.最近更新 ||
                 SearchSortType == GBFMessageAbstractModel.SearchSortTypeEnum.属性 ||
@@ -747,9 +770,8 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             return resultObj;
         }
 
-        #endregion
+        #endregion Method
     }
-
 
     /// <summary>
     /// 利用表达式树实现深拷贝的类
@@ -760,6 +782,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
     {
         // 缓存委托
         private static Func<TSource, TTarget> _copyFunc;
+
         private static Action<TSource, TTarget> _copyAction;
 
         /// <summary>
@@ -911,7 +934,6 @@ namespace GBFDesktopTools.Model.ToolAndHelper
                 _copyAction = lambdaExpr.Compile();
                 _copyAction(source, target);
             }
-
         }
 
         private static MethodInfo GetCopyMethodInfo(Type source, Type target)
@@ -1002,7 +1024,6 @@ namespace GBFDesktopTools.Model.ToolAndHelper
                 if (_typeICollection.MakeGenericType(elementType).IsAssignableFrom(type))
                 {
                     return _copyICollectionMethodInfo.MakeGenericMethod(type, elementType);
-
                 }
             }
             throw new UnsupportedTypeException(type);
@@ -1063,5 +1084,4 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             return result;
         }
     }
-
 }

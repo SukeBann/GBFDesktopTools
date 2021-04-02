@@ -7,12 +7,15 @@ namespace Frameworks
     public class UniformWrapPanel : Panel
     {
         #region Fields
+
         private bool _isVertical;
-        #endregion
+
+        #endregion Fields
 
         #region Properties
 
         #region Groups
+
         public int Groups
         {
             get { return (int)GetValue(GroupsProperty); }
@@ -22,9 +25,10 @@ namespace Frameworks
         public static readonly DependencyProperty GroupsProperty =
             DependencyProperty.Register("Groups", typeof(int), typeof(UniformWrapPanel), new FrameworkPropertyMetadata(1, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsArrange, null, OnGroupsCoerceValue));
 
-        #endregion
+        #endregion Groups
 
         #region Orientation
+
         public Orientation Orientation
         {
             get { return (Orientation)GetValue(OrientationProperty); }
@@ -33,9 +37,11 @@ namespace Frameworks
 
         public static readonly DependencyProperty OrientationProperty =
             DependencyProperty.Register("Orientation", typeof(Orientation), typeof(UniformWrapPanel), new FrameworkPropertyMetadata(Orientation.Vertical, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsArrange));
-        #endregion
+
+        #endregion Orientation
 
         #region HorizontalSpacing
+
         public double HorizontalSpacing
         {
             get { return (double)GetValue(HorizontalSpacingProperty); }
@@ -45,9 +51,10 @@ namespace Frameworks
         public static readonly DependencyProperty HorizontalSpacingProperty =
             DependencyProperty.Register("HorizontalSpacing", typeof(double), typeof(UniformWrapPanel), new FrameworkPropertyMetadata(0d, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsArrange, null, OnHorizontalSpacingCoerceValue));
 
-        #endregion
+        #endregion HorizontalSpacing
 
         #region VerticalSpacing
+
         public double VerticalSpacing
         {
             get { return (double)GetValue(VerticalSpacingProperty); }
@@ -56,13 +63,15 @@ namespace Frameworks
 
         public static readonly DependencyProperty VerticalSpacingProperty =
             DependencyProperty.Register("VerticalSpacing", typeof(double), typeof(UniformWrapPanel), new FrameworkPropertyMetadata(0d, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsArrange, null, OnVerticalSpacingCoerceValue));
-        #endregion
 
-        #endregion
+        #endregion VerticalSpacing
+
+        #endregion Properties
 
         #region Overrides
 
         #region MeasureOverride
+
         protected override Size MeasureOverride(Size constraint)
         {
             UpdateComputedValues();
@@ -118,9 +127,11 @@ namespace Frameworks
                     ? height
                     : constraint.Height);
         }
-        #endregion
+
+        #endregion MeasureOverride
 
         #region ArrangeOverride
+
         protected override Size ArrangeOverride(Size finalSize)
         {
             var left = 0.0;
@@ -168,11 +179,13 @@ namespace Frameworks
 
             return finalSize;
         }
-        #endregion
 
-        #endregion
+        #endregion ArrangeOverride
+
+        #endregion Overrides
 
         #region Event Handlers
+
         private static object OnGroupsCoerceValue(DependencyObject d, object baseValue)
         {
             var Groups = (int)baseValue;
@@ -202,13 +215,16 @@ namespace Frameworks
             }
             return baseValue;
         }
-        #endregion
+
+        #endregion Event Handlers
 
         #region Functions
+
         private void UpdateComputedValues()
         {
             _isVertical = Orientation == Orientation.Vertical;
         }
-        #endregion
+
+        #endregion Functions
     }
 }

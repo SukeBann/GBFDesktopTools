@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace GBFDesktopTools.View
 {
@@ -24,7 +13,7 @@ namespace GBFDesktopTools.View
     {
         public Navigationer<MainWindow, pgLoading> NG = null;
         //private Model.DownLoadMessage DM = new Model.DownLoadMessage("Welcome GBFDesktopTools","click these button to use the program");
-        
+
         public MainWindow()
         {
             InitializeComponent();
@@ -33,13 +22,11 @@ namespace GBFDesktopTools.View
             this.Loaded += new RoutedEventHandler(MainWindow_Loaded);
         }
 
-        void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //this.DownLoadMessage.DataContext = DM.CustomMessage;
             this.Loaded -= MainWindow_Loaded;
         }
-
-        
 
         /// <summary>
         /// 功能选择
@@ -56,7 +43,7 @@ namespace GBFDesktopTools.View
                 switch (ButtonTag)
                 {
                     case "WeaponPanelSimulator":
-                        var ACT = new Action(() => 
+                        var ACT = new Action(() =>
                         {
                             var WPSWin = new WeaponPanelSimulator();
                             WPSWin.Show();
@@ -65,7 +52,7 @@ namespace GBFDesktopTools.View
                         break;
 
                     case "LocalWiki":
-                        
+
                         break;
 
                     case "DamageTest":
@@ -87,7 +74,7 @@ namespace GBFDesktopTools.View
             catch (Exception ex)
             {
                 MessageBox.Show("打开窗口时遇到错误:" + ex.Message);
-            }     
+            }
         }
     }
 }

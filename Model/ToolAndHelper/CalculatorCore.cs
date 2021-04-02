@@ -1,6 +1,6 @@
-﻿using System;
+﻿using GBFDesktopTools.Model.abstractModel;
+using System;
 using System.Reflection;
-using GBFDesktopTools.Model.abstractModel;
 
 namespace GBFDesktopTools.Model.ToolAndHelper
 {
@@ -8,11 +8,12 @@ namespace GBFDesktopTools.Model.ToolAndHelper
     /// 计算器核心
     /// </summary>
     public class CalculatorCore : abstractModel.abstractModel
-    {   
+    {
         /// <summary>
         /// 空武器模型
         /// </summary>
         public static Weapon emptyWeapon = new Weapon();
+
         /// <summary>
         /// 拖拽武器时的临时对象
         /// </summary>
@@ -40,7 +41,6 @@ namespace GBFDesktopTools.Model.ToolAndHelper
                 WeaponImgUrl_ls = path + @"VerticalEmpty.jpg",
                 WeaponImgUrl_m = path + @"HorizontalEmpty.jpg"
             };
-
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             ThreeAndThree = emptyWeapon.Clone() as Weapon;
         }
 
-        #endregion
+        #endregion BaseMethod
 
         #region RunningProperty
 
@@ -75,7 +75,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             set { _CopyOrMove = value; this.RaisePropertyChanged(x => x.CopyOrMove); }
         }
 
-        #endregion
+        #endregion RunningProperty
 
         #region SourceWeapon
 
@@ -108,6 +108,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             get => _OneAndOne;
             set { _OneAndOne = value; this.RaisePropertyChanged(x => x.OneAndOne); }
         }
+
         /// <summary>
         /// 一行第二列
         /// </summary>
@@ -116,6 +117,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             get => _OneAndTwo;
             set { _OneAndTwo = value; this.RaisePropertyChanged(x => x.OneAndTwo); }
         }
+
         /// <summary>
         /// 一行第三列
         /// </summary>
@@ -133,6 +135,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             get => _TwoAndOne;
             set { _TwoAndOne = value; this.RaisePropertyChanged(x => x.TwoAndOne); }
         }
+
         /// <summary>
         /// 二行第二列
         /// </summary>
@@ -141,6 +144,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             get => _TwoAndTwo;
             set { _TwoAndTwo = value; this.RaisePropertyChanged(x => x.TwoAndTwo); }
         }
+
         /// <summary>
         /// 二行第三列
         /// </summary>
@@ -150,7 +154,6 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             set { _TwoAndThree = value; this.RaisePropertyChanged(x => x.TwoAndThree); }
         }
 
-
         /// <summary>
         /// 三行第一列
         /// </summary>
@@ -159,6 +162,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             get => _ThreeAndOne;
             set { _ThreeAndOne = value; this.RaisePropertyChanged(x => x.ThreeAndOne); }
         }
+
         /// <summary>
         /// 三行第二列
         /// </summary>
@@ -167,6 +171,7 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             get => _ThreeAndTwo;
             set { _ThreeAndTwo = value; this.RaisePropertyChanged(x => x.ThreeAndTwo); }
         }
+
         /// <summary>
         /// 三行第三列
         /// </summary>
@@ -176,7 +181,6 @@ namespace GBFDesktopTools.Model.ToolAndHelper
             set { _ThreeAndThree = value; this.RaisePropertyChanged(x => x.ThreeAndThree); }
         }
 
-        #endregion
-
+        #endregion SourceWeapon
     }
 }

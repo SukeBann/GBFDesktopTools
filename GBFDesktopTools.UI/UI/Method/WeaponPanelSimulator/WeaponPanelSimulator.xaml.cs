@@ -1,22 +1,23 @@
-﻿using System;
+﻿using GBFDesktopTools.Model.ToolAndHelper;
+using Panuon.UI.Silver.Core;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using GBFDesktopTools.Model.ToolAndHelper;
-using Panuon.UI.Silver.Core;
+
 // ReSharper disable DelegateSubtraction
 
 namespace GBFDesktopTools.View
 {
-    using Model;
     using Library;
+    using Model;
     using Panuon.UI.Silver;
+    using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Text.RegularExpressions;
 
     /// <summary>
     /// WeaponPanelSimulator.xaml 的交互逻辑
@@ -39,9 +40,9 @@ namespace GBFDesktopTools.View
             Fc = this.Resources["FcModel"] as FilterCondition;
             CC = this.Resources["CCModel"] as CalculatorCore;
 
-            ((CollectionViewSource) this.Resources["cvsWeaponList"]).Source = WeaponList;
-            ((CollectionViewSource) this.Resources["cvsWeaponSearchTip"]).Source = WeaponSearchTip;
-            
+            ((CollectionViewSource)this.Resources["cvsWeaponList"]).Source = WeaponList;
+            ((CollectionViewSource)this.Resources["cvsWeaponSearchTip"]).Source = WeaponSearchTip;
+
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             this.Loaded += WeaponPanelSimulator_Loaded;
         }
@@ -50,7 +51,7 @@ namespace GBFDesktopTools.View
         {
             RunTaskMethod();
             // ReSharper disable once PossibleNullReferenceException
-            
+
             //筛选器下拉菜单数据
             cbSortTypeList.ItemsSource = Fc.SearchSortTypeList;
             cbWeaponKindList.ItemsSource = Fc.WeaponKindList;
@@ -76,7 +77,7 @@ namespace GBFDesktopTools.View
         {
             try
             {
-                var PendingBox = PendingBoxX.Show("正在加载武器数据，请稍等。", "Loading~",this);
+                var PendingBox = PendingBoxX.Show("正在加载武器数据，请稍等。", "Loading~", this);
                 var task = Task.Factory.StartNew(() => WeaponAndSkill.LoadWeaponPanelSimulator());
                 var act = new Action(() =>
                 {
@@ -85,7 +86,7 @@ namespace GBFDesktopTools.View
                         while (true)
                         {
                             if (!task.IsCompleted) continue;
-                            
+
                             var excelReader = task.Result;
                             if (excelReader.HasError)
                             {
@@ -149,6 +150,7 @@ namespace GBFDesktopTools.View
                 case "Search":
                     Fc.NowPage = 1;
                     break;
+
                 case "Goto":
                     var tempInt = string.IsNullOrEmpty(tbGotoValue.Text) ? 1 : Convert.ToInt32(tbGotoValue.Text);
                     if (tempInt > Fc.PageCount || tempInt < 1)
@@ -226,10 +228,9 @@ namespace GBFDesktopTools.View
             }
         }
 
-        #endregion
+        #endregion 放置源
 
         #region 实现拖放
-
 
         private DependencyObject TempControl = null;
 
@@ -238,47 +239,47 @@ namespace GBFDesktopTools.View
             switch (sender)
             {
                 case ListBox lb:
-                {
-                    var pos = e.GetPosition(lb);
-                    var result = VisualTreeHelper.HitTest(lb, pos);
-                    if (result == null)
                     {
-                        return;
+                        var pos = e.GetPosition(lb);
+                        var result = VisualTreeHelper.HitTest(lb, pos);
+                        if (result == null)
+                        {
+                            return;
+                        }
+                        CC.TempWeapon = Utils.FindVisualParent<ListBoxItem>(result.VisualHit).Content as Weapon;
+                        break;
                     }
-                    CC.TempWeapon = Utils.FindVisualParent<ListBoxItem>(result.VisualHit).Content as Weapon;
-                    break;
-                }
                 case Border bd:
-                {
-                    var pos = e.GetPosition(bd);
-                    var result = VisualTreeHelper.HitTest(bd, pos);
-                    if (result == null)
                     {
-                        return;
+                        var pos = e.GetPosition(bd);
+                        var result = VisualTreeHelper.HitTest(bd, pos);
+                        if (result == null)
+                        {
+                            return;
+                        }
+                        CC.TempWeapon = Utils.FindVisualParent<Border>(result.VisualHit).DataContext as Weapon;
+                        if (!CC.CopyOrMove)
+                        {
+                            TempControl = bd;
+                        }
+                        break;
                     }
-                    CC.TempWeapon = Utils.FindVisualParent<Border>(result.VisualHit).DataContext as Weapon;
-                    if (!CC.CopyOrMove)
-                    {
-                        TempControl = bd;
-                    }
-                    break;
-                }
                 default:
                     CC.TempWeapon = null;
                     break;
             }
 
-            if (CC.TempWeapon == null) {return;}
+            if (CC.TempWeapon == null) { return; }
             var dataObject = new DataObject(CC.TempWeapon);
-            DragDrop.DoDragDrop((DependencyObject) sender, dataObject, DragDropEffects.Copy);
+            DragDrop.DoDragDrop((DependencyObject)sender, dataObject, DragDropEffects.Copy);
         }
 
         private void WeaponDrop(object sender, DragEventArgs e)
         {
             if (TempControl == null)
             {
-               var Grid = Utils.FindVisualParent<Grid>(sender as Border);
-               Grid.DataContext = (e.Data.GetData(typeof(Weapon)) as Weapon).CopySelf();
+                var Grid = Utils.FindVisualParent<Grid>(sender as Border);
+                Grid.DataContext = (e.Data.GetData(typeof(Weapon)) as Weapon).CopySelf();
             }
             else
             {
@@ -291,8 +292,7 @@ namespace GBFDesktopTools.View
             TempControl = null;
         }
 
-        #endregion
-
+        #endregion 实现拖放
     }
 
     /// <summary>
@@ -314,7 +314,7 @@ namespace GBFDesktopTools.View
                 {
                     return obj1;
                 }
-                    
+
                 obj = VisualTreeHelper.GetParent(obj);
             }
             return null;

@@ -12,6 +12,5 @@ namespace GBFDesktopTools.View
             var Win = new MainWindow();
             Win.Show();
         }
-
     }
 }

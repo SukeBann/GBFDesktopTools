@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 // ReSharper disable All
 
 namespace GBFDesktopTools.Library
 {
-    using System.IO;
-    using System.Data;
     using Model;
     using Model.abstractModel;
     using Model.ToolAndHelper;
-   
+    using System.Data;
+    using System.IO;
+
     /// <summary>
     /// 从Excel读取武器和武器技能
     /// </summary>
     public class WeaponAndSkillExcelReader
     {
-        public WeaponAndSkillExcelReader() 
-        { 
+        public WeaponAndSkillExcelReader()
+        {
             Fc = new FilterCondition();
         }
 
@@ -26,15 +27,16 @@ namespace GBFDesktopTools.Library
 
         //技能列表
         public ObjectResult<WeaponSkill> SkillList;
+
         //武器列表
         public ObjectResult<Weapon> WeaponList;
+
         //筛选器
         public FilterCondition Fc;
 
-        delegate List<string> SplitStr(string Target, short splitType = 1, string CustomStr = null, string[] CustomArray = null, StringSplitOptions IsHaveEmpty = StringSplitOptions.None);
+        private delegate List<string> SplitStr(string Target, short splitType = 1, string CustomStr = null, string[] CustomArray = null, StringSplitOptions IsHaveEmpty = StringSplitOptions.None);
 
-        readonly SplitStr SplitString = ToolsAndHelper.SplitString;
-
+        private readonly SplitStr SplitString = ToolsAndHelper.SplitString;
 
         /// <summary>
         /// 武器盘模拟器加载方法
@@ -69,7 +71,7 @@ namespace GBFDesktopTools.Library
         /// <param name="RowIndex">武器在Excel中的行数索引</param>
         /// <param name="Rarity">稀有度</param>
         /// <param name="sheet">导入目标源Excel</param>
-        void FilePath(long ID, int RowIndex, string Rarity, Aspose.Cells.Worksheet sheet)
+        private void FilePath(long ID, int RowIndex, string Rarity, Aspose.Cells.Worksheet sheet)
         {
             DirectoryInfo directory = new DirectoryInfo(@"E:\WeaponPanelSimulator\WeaponPanelSimulator\bin\Debug\Resources\Image\Weapon\" + Rarity + @"\");
             directory.Create();
@@ -79,7 +81,7 @@ namespace GBFDesktopTools.Library
             //如果没有找到目标的资源文件夹则return
             var f = files.FirstOrDefault(x => x.Name.Remove(x.Name.IndexOf("_", StringComparison.Ordinal)) == ID.ToString());
             if (f == null) { return; }
-            
+
             var pathOfFile = f.FullName;
             var fileName = files.FirstOrDefault(x => x.Name.Remove(x.Name.IndexOf("_", StringComparison.Ordinal)) == ID.ToString())?.Name;
             if (string.IsNullOrEmpty(fileName)) { return; }
@@ -113,7 +115,7 @@ namespace GBFDesktopTools.Library
         /// </summary>
         /// <param name="SkillStr">Excel中的技能短字符串</param>
         /// <param name="Weapon">被设置技能的武器</param>
-        void SetSkillNew(String SkillStr, Weapon Weapon)
+        private void SetSkillNew(String SkillStr, Weapon Weapon)
         {
             if (SkillStr == "") return;
             //不确定的技能名单
@@ -240,7 +242,7 @@ namespace GBFDesktopTools.Library
         /// </summary>
         /// RowCount，ColumnCount : 读取的行数和列数 维护时请删除Excel内的空白行 以提高性能
         /// <returns></returns>
-        ObjectResult<WeaponSkill> LoadFromLocalSkill()
+        private ObjectResult<WeaponSkill> LoadFromLocalSkill()
         {
             var ObjResult = new ObjectResult<WeaponSkill>();
             List<WeaponSkill> skillList = new List<WeaponSkill>();
@@ -263,10 +265,10 @@ namespace GBFDesktopTools.Library
                 DataTable dt = sheet.Cells.ExportDataTable(0, 0, RowCount, ColumnCount);
                 for (var i = 2; i < dt.Rows.Count; i++)
                 {
-                    WeaponSkill skill = new WeaponSkill 
+                    WeaponSkill skill = new WeaponSkill
                     {
                         Skill_ID = Convert.ToInt32(dt.Rows[i][0]),
-                        Main_Name = (WeaponSkill.SkillTypeEnum) Enum.Parse(typeof(WeaponSkill.SkillTypeEnum),
+                        Main_Name = (WeaponSkill.SkillTypeEnum)Enum.Parse(typeof(WeaponSkill.SkillTypeEnum),
                             dt.Rows[i][1].ToString()),
                         Extra_Name = dt.Rows[i][2].ToString() == string.Empty ? "" : dt.Rows[i][2].ToString(),
                         Main_Description = dt.Rows[i][3].ToString() == string.Empty ? "" : dt.Rows[i][3].ToString(),
@@ -280,14 +282,14 @@ namespace GBFDesktopTools.Library
                         Extra_Comment = dt.Rows[i][13].ToString() == string.Empty ? "" : dt.Rows[i][13].ToString(),
                         DurationType = dt.Rows[i][14].ToString() == string.Empty
                             ? WeaponSkill.DurationEnum.NoHave
-                            : (WeaponSkill.DurationEnum) Enum.Parse(typeof(WeaponSkill.DurationEnum),
+                            : (WeaponSkill.DurationEnum)Enum.Parse(typeof(WeaponSkill.DurationEnum),
                                 dt.Rows[i][14].ToString()),
                         DurationValue = dt.Rows[i][15].ToString() == string.Empty
-                            ? (short) -1
+                            ? (short)-1
                             : Convert.ToInt16(dt.Rows[i][15].ToString()),
                         SummonType = dt.Rows[i][16].ToString() == string.Empty
                             ? WeaponSkill.SummonEnum.Normal
-                            : (WeaponSkill.SummonEnum) Enum.Parse(typeof(WeaponSkill.SummonEnum),
+                            : (WeaponSkill.SummonEnum)Enum.Parse(typeof(WeaponSkill.SummonEnum),
                                 dt.Rows[i][16].ToString())
                     };
                     //设置持续时间类型
@@ -295,7 +297,6 @@ namespace GBFDesktopTools.Library
                     skill.SetConditionType(dt.Rows[i][17].ToString());
                     skill.MaxValue = dt.Rows[i][18].ToString() == string.Empty ? 0 : Convert.ToDouble(dt.Rows[i][18].ToString());
                     skill.BaseLimit = dt.Rows[i][19].ToString() == string.Empty ? -1.0 : Convert.ToDouble(dt.Rows[i][19].ToString());
-
 
                     //设置技能目标
                     if (dt.Rows[i][11].ToString() != string.Empty)
@@ -318,7 +319,7 @@ namespace GBFDesktopTools.Library
 
                     skillList.Add(skill);
                 }
-                skillList.Insert(0,new WeaponSkill()
+                skillList.Insert(0, new WeaponSkill()
                 {
                     Main_Name = WeaponSkill.SkillTypeEnum.allSkill,
                     Main_Description = "全部技能",
@@ -348,7 +349,7 @@ namespace GBFDesktopTools.Library
         /// 从本地Excel加载Weapon数据
         /// </summary>
         /// <returns></returns>
-        ObjectResult<Weapon> LoadFromLocalWeapon(bool IsUpdateImage = false)
+        private ObjectResult<Weapon> LoadFromLocalWeapon(bool IsUpdateImage = false)
         {
             ObjectResult<Weapon> resultObj = new ObjectResult<Weapon>();
             List<Weapon> weaponList = new List<Weapon>();
@@ -366,7 +367,7 @@ namespace GBFDesktopTools.Library
                 const int columnCount = 80;
 
                 var dt = sheet.Cells.ExportDataTable(0, 0, rowsCount, columnCount);
-                
+
                 for (var i = 2; i < dt.Rows.Count; i++)
                 {
                     var path = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
@@ -386,18 +387,18 @@ namespace GBFDesktopTools.Library
                             : SplitString(dt.Rows[i][8].ToString()),
                         FeGBF_Element = dt.Rows[i][9].ToString() == string.Empty
                             ? Weapon.GBFElementCHSEnum.无属性
-                            : (Weapon.GBFElementCHSEnum) Enum.Parse(typeof(Weapon.GBFElementCHSEnum),
+                            : (Weapon.GBFElementCHSEnum)Enum.Parse(typeof(Weapon.GBFElementCHSEnum),
                                 dt.Rows[i][9].ToString()),
                         FeWeapon_Kind = dt.Rows[i][10].ToString() == string.Empty
                             ? Weapon.WeaponKind.无效类型
-                            : (Weapon.WeaponKind) Enum.Parse(typeof(Weapon.WeaponKind), dt.Rows[i][10].ToString()),
+                            : (Weapon.WeaponKind)Enum.Parse(typeof(Weapon.WeaponKind), dt.Rows[i][10].ToString()),
                         FeGBF_Rarity = dt.Rows[i][11].ToString() == string.Empty
                             ? Weapon.GBFRarityEnum.Unknown
-                            : (Weapon.GBFRarityEnum) Enum.Parse(typeof(Weapon.GBFRarityEnum),
+                            : (Weapon.GBFRarityEnum)Enum.Parse(typeof(Weapon.GBFRarityEnum),
                                 dt.Rows[i][11].ToString()),
                         FsGBF_Category = dt.Rows[i][12].ToString() == string.Empty
                             ? Weapon.GBFCategoryEnum.未知
-                            : (Weapon.GBFCategoryEnum) Enum.Parse(typeof(Weapon.GBFCategoryEnum),
+                            : (Weapon.GBFCategoryEnum)Enum.Parse(typeof(Weapon.GBFCategoryEnum),
                                 dt.Rows[i][12].ToString()),
                         FsGBF_Tag = dt.Rows[i][13].ToString() == string.Empty ? "" : dt.Rows[i][13].ToString(),
                         FdGBF_ReleaseDate = dt.Rows[i][14].ToString() == string.Empty
@@ -418,7 +419,7 @@ namespace GBFDesktopTools.Library
                         FsGBF_LinkGamewith = dt.Rows[i][19].ToString() == string.Empty ? "" : dt.Rows[i][19].ToString(),
                         FsGBF_LinkEnwiki = dt.Rows[i][20].ToString() == string.Empty ? "" : dt.Rows[i][20].ToString(),
                         FnGBF_UserLevel = dt.Rows[i][21].ToString() == string.Empty
-                            ? (short) 0
+                            ? (short)0
                             : Convert.ToInt16(dt.Rows[i][21]),
                         FnWeapon_MaxHp =
                             dt.Rows[i][22].ToString() == string.Empty ? 0 : Convert.ToInt32(dt.Rows[i][22]),
@@ -438,10 +439,10 @@ namespace GBFDesktopTools.Library
                             ? 0
                             : Convert.ToInt32(dt.Rows[i][27]),
                         FnGBF_BaseEvo = dt.Rows[i][28].ToString() == string.Empty
-                            ? (short) 0
+                            ? (short)0
                             : Convert.ToInt16(dt.Rows[i][28]),
                         FnGBF_MaxEvo = dt.Rows[i][29].ToString() == string.Empty
-                            ? (short) 0
+                            ? (short)0
                             : Convert.ToInt16(dt.Rows[i][29]),
                         FbGBF_IsArchaic =
                             dt.Rows[i][30].ToString() != string.Empty && Convert.ToBoolean(dt.Rows[i][30]),
@@ -481,6 +482,5 @@ namespace GBFDesktopTools.Library
             }
             return resultObj;
         }
-
     }
 }

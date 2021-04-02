@@ -1,7 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:GBFDesktopTools.View">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-
-    <BitmapImage x:Key="MainIcon" UriSource="Resources\Icon\FuJiang.ico"/>
+    <BitmapImage x:Key="MainIcon" UriSource="Resources\Icon\FuJiang.ico" />
 </ResourceDictionary>

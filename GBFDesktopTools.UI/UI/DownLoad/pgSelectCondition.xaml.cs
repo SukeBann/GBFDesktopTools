@@ -8,19 +8,23 @@ using System.Windows.Data;
 namespace GBFDesktopTools.View
 {
     using Model.abstractModel;
+
     /// <summary>
     /// pgSelectCondition.xaml 的交互逻辑
     /// </summary>
     public partial class pgSelectCondition : Page
     {
         //下载的目标类型 Role,Weapon,SummonGem
-        AsyncCollection<SpiderCondition> ConditionTargetTypeList = new AsyncCollection<SpiderCondition>();
+        private AsyncCollection<SpiderCondition> ConditionTargetTypeList = new AsyncCollection<SpiderCondition>();
+
         //稀有度类型 R,SR,SSR,LIMIT
-        AsyncCollection<SpiderCondition> ConditionRarityList = new AsyncCollection<SpiderCondition>();
+        private AsyncCollection<SpiderCondition> ConditionRarityList = new AsyncCollection<SpiderCondition>();
+
         //操作类型 Normal,DownLoadXML
-        AsyncCollection<SpiderCondition> ConditionExcTypeList = new AsyncCollection<SpiderCondition>();
+        private AsyncCollection<SpiderCondition> ConditionExcTypeList = new AsyncCollection<SpiderCondition>();
+
         //父窗口 用于赋值操作类型
-        GBFSpider ParentWindow = null;
+        private GBFSpider ParentWindow = null;
 
         public pgSelectCondition(GBFSpider _ParentWindow)
         {
@@ -30,7 +34,7 @@ namespace GBFDesktopTools.View
             (this.Resources["CvsExcTypeL"] as CollectionViewSource).Source = ConditionExcTypeList;
 
             ParentWindow = _ParentWindow;
-            ParentWindow.DownList.Clear(); 
+            ParentWindow.DownList.Clear();
             ParentWindow.IsSelectCondition = false;
             this.Loaded += new RoutedEventHandler(pgSelectCondition_Loaded);
         }
@@ -55,11 +59,11 @@ namespace GBFDesktopTools.View
             GetEnumList = null;
         }
 
-        #endregion
+        #endregion Method
 
         #region Event
 
-        void pgSelectCondition_Loaded(object sender, RoutedEventArgs e)
+        private void pgSelectCondition_Loaded(object sender, RoutedEventArgs e)
         {
             LoadConditionList();
             this.Loaded -= pgSelectCondition_Loaded;
@@ -75,7 +79,7 @@ namespace GBFDesktopTools.View
                     var TargetTypeList = ConditionTargetTypeList.Where(x => x.IsChecked == true).Select(x => x.ConditionTargetType).ToList();
                     var RarityList = ConditionRarityList.Where(x => x.IsChecked == true).Select(x => x.ConditionRarity).ToList();
                     var ExcList = ConditionExcTypeList.Where(x => x.IsChecked == true && x.ConditionExcType != SpiderCondition.SpiderConditionExcType.AllMessage).Select(x => x.ConditionExcType).ToList();
-                    
+
                     //判断是否选择了条件
                     if (TargetTypeList.Count == 0 || RarityList.Count == 0 || ExcList.Count == 0)
                     {
@@ -88,7 +92,7 @@ namespace GBFDesktopTools.View
                     List<SpiderCondition> ConditionList = new List<SpiderCondition>();
                     this.ParentWindow.DownList = ConditionList;
                     foreach (var Tar in TargetTypeList)
-                    {                        
+                    {
                         foreach (var Exc in ExcList)
                         {
                             foreach (var Rar in RarityList)
@@ -99,8 +103,8 @@ namespace GBFDesktopTools.View
                                 sc.ConditionRarity = Rar;
                                 //sc.SetAddress();
                                 ConditionList.Add(sc);
-                            }   
-                        } 
+                            }
+                        }
                     }
 
                     this.ParentWindow.IsSelectCondition = true;
@@ -119,7 +123,7 @@ namespace GBFDesktopTools.View
             if (ConditionExcTypeList.Where(x => x.ConditionExcType.ToString() == "AllMessage").ToList()[0].IsChecked == true)
             {
                 foreach (var item in ConditionExcTypeList)
-                {   
+                {
                     if (item.ConditionExcType.ToString() != "AllMessage")
                     {
                         item.IsChecked = true;
@@ -128,7 +132,7 @@ namespace GBFDesktopTools.View
                         {
                             item.IsChecked = false;
                         }
-                    }  
+                    }
                 }
                 foreach (var item in ConditionRarityList)
                 {
@@ -161,7 +165,7 @@ namespace GBFDesktopTools.View
             }
         }
 
-        #endregion
+        #endregion Event
     }
 
     /// <summary>
@@ -179,7 +183,7 @@ namespace GBFDesktopTools.View
         }
 
         public enum SpiderConditionRarity
-        {   
+        {
             N = 1,
             R = 2,
             SR = 3,
@@ -193,8 +197,8 @@ namespace GBFDesktopTools.View
             DownLoadImage = 3,
             LoadFromLocal = 4
         }
-        
-        #endregion
+
+        #endregion SpiderConditionEnum
 
         #region Constructor
 
@@ -204,7 +208,7 @@ namespace GBFDesktopTools.View
             IsEnabled = true;
         }
 
-        #endregion
+        #endregion Constructor
 
         #region Property
 
@@ -221,33 +225,36 @@ namespace GBFDesktopTools.View
             get { return _ConditionExcType; }
             set { _ConditionExcType = value; PropertyChangedBaseEx.RaisePropertyChanged(this, x => x._ConditionExcType); }
         }
+
         //绑定用的枚举类型列表(稀有度)
         public SpiderConditionRarity ConditionRarity
         {
             get { return _ConditionRarity; }
             set { _ConditionRarity = value; PropertyChangedBaseEx.RaisePropertyChanged(this, x => x._ConditionRarity); }
         }
+
         //绑定用的枚举类型列表(目标类型)
         public SpiderConditionTargetType ConditionTargetType
         {
             get { return _ConditionTargetType; }
             set { _ConditionTargetType = value; PropertyChangedBaseEx.RaisePropertyChanged(this, x => x._ConditionTargetType); }
         }
-        
+
         //主程序路径
         public string Address
         {
             get { return _Address; }
             set { _Address = value; }
         }
+
         //下载路径
         public string DownLoadAddress
         {
             get { return _DownLoadAddress; }
             set { _DownLoadAddress = value; }
         }
-        
-        #endregion
+
+        #endregion Property
 
         #region Indexer
 
@@ -259,10 +266,13 @@ namespace GBFDesktopTools.View
                 {
                     case "SpiderConditionTargetType":
                         return ConditionTargetType as object;
+
                     case "SpiderConditionRarity":
                         return ConditionRarity as object;
+
                     case "SpiderConditionExcType":
                         return ConditionExcType as object;
+
                     default:
                         throw new ArgumentOutOfRangeException("index");//抛出异常
                 }
@@ -275,20 +285,22 @@ namespace GBFDesktopTools.View
                     case "SpiderConditionTargetType":
                         ConditionTargetType = (SpiderConditionTargetType)value;
                         break;
+
                     case "SpiderConditionRarity":
                         ConditionRarity = (SpiderConditionRarity)value;
                         break;
+
                     case "SpiderConditionExcType":
                         ConditionExcType = (SpiderConditionExcType)value;
                         break;
+
                     default:
                         throw new ArgumentOutOfRangeException("index");//抛出异常
                 }
             }
         }
 
-
-        #endregion
+        #endregion Indexer
 
         #region Method
 
@@ -308,7 +320,7 @@ namespace GBFDesktopTools.View
             }
             return TargetList;
         }
-        
+
         /// <summary>
         /// 设置下载地址
         /// </summary>
@@ -323,7 +335,6 @@ namespace GBFDesktopTools.View
         //    DownLoadAddress = resoureePath + (ConditionExcType == SpiderConditionExcType.DownLoadImage ? "Image\\" : "XML\\");
         //}
 
-        #endregion
+        #endregion Method
     }
-
 }
